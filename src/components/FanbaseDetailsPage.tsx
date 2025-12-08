@@ -1,4 +1,3 @@
-import React from 'react';
 import { ArrowLeft, Users, Star, Calendar, ExternalLink } from 'lucide-react';
 
 interface FanbaseDetailsPageProps {
