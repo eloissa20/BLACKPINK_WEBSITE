@@ -45,7 +45,7 @@ type PlatformKey =
   | 'apple' | 'spotify' | 'youtube' | 'ytmusic' | 'deezer'
   | 'pandora' | 'stationhead' | 'qobuz' | 'amazon' | 'tidal';
 
-const platformData: Record<PlatformKey, any> = {
+const platformData: Record<PlatformKey, { name: string; logo: string }> = {
   apple: { name: 'Apple Music', logo: '/src/assets/logos/apple-music.png' },
   spotify: { name: 'Spotify', logo: '/src/assets/logos/spotify.png' },
   youtube: { name: 'YouTube', logo: '/src/assets/logos/youtube.png' },
@@ -56,19 +56,6 @@ const platformData: Record<PlatformKey, any> = {
   qobuz: { name: 'Qobuz', logo: '/src/assets/logos/qobuz.png' },
   amazon: { name: 'Amazon Music', logo: '/src/assets/logos/amazon-music.png' },
   tidal: { name: 'Tidal', logo: '/src/assets/logos/tidal.png' },
-};
-
-const platformComponents = {
-  apple: AppleMusicDetails,
-  spotify: SpotifyDetails,
-  youtube: YouTubeDetails,
-  ytmusic: YouTubeMusicDetails,
-  deezer: DeezerDetails,
-  pandora: PandoraDetails,
-  stationhead: StationheadDetails,
-  qobuz: QobuzDetails,
-  amazon: AmazonMusicDetails,
-  tidal: TidalDetails,
 };
 
 const digitalStores = [
@@ -89,6 +76,12 @@ export function GuidelinesPage({ onSelectChart }: GuidelinesPageProps) {
   const [selectedPlatform, setSelectedPlatform] = useState<PlatformKey | null>(null);
   const playSound = useSound();
 
+  // Shared props for all detail components
+  const detailProps = {
+    onBack: () => setSelectedPlatform(null),
+    playSound,
+  };
+
   const sections = [
     { id: 'streaming' as const, title: 'Streaming Methods', icon: Music },
     { id: 'buying' as const, title: 'Buying Methods', icon: CreditCard },
@@ -103,9 +96,32 @@ export function GuidelinesPage({ onSelectChart }: GuidelinesPageProps) {
     { id: 'uk' as ContinentType, title: 'UK CHARTS', description: 'Official UK charts' },
   ];
 
+  // FIXED: Properly render selected platform with props
   if (selectedPlatform) {
-    const DetailsComponent = platformComponents[selectedPlatform];
-    return <DetailsComponent onBack={() => setSelectedPlatform(null)} playSound={playSound} />;
+    switch (selectedPlatform) {
+      case 'apple':
+        return <AppleMusicDetails {...detailProps} />;
+      case 'spotify':
+        return <SpotifyDetails {...detailProps} />;
+      case 'youtube':
+        return <YouTubeDetails {...detailProps} />;
+      case 'ytmusic':
+        return <YouTubeMusicDetails {...detailProps} />;
+      case 'deezer':
+        return <DeezerDetails {...detailProps} />;
+      case 'pandora':
+        return <PandoraDetails {...detailProps} />;
+      case 'stationhead':
+        return <StationheadDetails {...detailProps} />;
+      case 'qobuz':
+        return <QobuzDetails {...detailProps} />;
+      case 'amazon':
+        return <AmazonMusicDetails {...detailProps} />;
+      case 'tidal':
+        return <TidalDetails {...detailProps} />;
+      default:
+        return <SpotifyDetails {...detailProps} />;
+    }
   }
 
   return (
@@ -163,11 +179,13 @@ export function GuidelinesPage({ onSelectChart }: GuidelinesPageProps) {
                   <h3 className="text-4xl font-black text-white">US BLINKS → Billboard Hot 100</h3>
                 </div>
                 <div className="grid grid-cols-2 md:grid-cols-5 gap-8">
-                  {Object.values(platformData).filter(p => ['apple','spotify','youtube','ytmusic','pandora','stationhead','amazon','tidal'].includes(p.name.toLowerCase().replace(' ',''))).map(p => (
-                    <div key={p.name} className="bg-transparent rounded-3xl p-6 border-2 border-pink-500 backdrop-blur-sm">
-                      <img src={p.logo} alt="" className="w-32 h-32 mx-auto object-contain" />
-                    </div>
-                  ))}
+                  {Object.values(platformData)
+                    .filter(p => ['apple','spotify','youtube','ytmusic','pandora','stationhead','amazon','tidal'].includes(p.name.toLowerCase().replace(/ /g,'')))
+                    .map(p => (
+                      <div key={p.name} className="bg-transparent rounded-3xl p-6 border-2 border-pink-500 backdrop-blur-sm">
+                        <img src={p.logo} alt="" className="w-32 h-32 mx-auto object-contain" />
+                      </div>
+                    ))}
                 </div>
               </div>
 

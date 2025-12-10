@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+// App.tsx
+import { useState } from 'react';
 import { Header } from './components/Header';
+import { BottomNav } from './components/BottomNav';
 import { HomePage } from './components/HomePage';
 import { AlbumPage } from './components/AlbumPage';
 import { GuidelinesPage } from './components/GuidelinesPage';
@@ -20,7 +22,19 @@ function App() {
   const [selectedChart, setSelectedChart] = useState<ContinentType | null>(null);
   const [selectedFanbase, setSelectedFanbase] = useState<string | null>(null);
 
+  // Check if we're in a "detail" sub-page
+  const isInSubPage = selectedContinent || selectedChart || selectedFanbase;
+
+  const handleTabChange = (tab: TabType) => {
+    // Reset all sub-pages when changing main tab
+    setSelectedContinent(null);
+    setSelectedChart(null);
+    setSelectedFanbase(null);
+    setActiveTab(tab);
+  };
+
   const renderContent = () => {
+    // Sub-pages (higher priority)
     if (selectedContinent) {
       return (
         <AlbumDetailsPage
@@ -48,9 +62,10 @@ function App() {
       );
     }
 
+    // Main tabs
     switch (activeTab) {
       case 'home':
-        return <HomePage onNavigate={setActiveTab} />;
+        return <HomePage onNavigate={handleTabChange} />;
       case 'album':
         return <AlbumPage onSelectContinent={setSelectedContinent} />;
       case 'guidelines':
@@ -62,21 +77,33 @@ function App() {
       case 'music-shows':
         return <MusicShowsPage />;
       default:
-        return <HomePage onNavigate={setActiveTab} />;
+        return <HomePage onNavigate={handleTabChange} />;
     }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-pink-900 flex flex-col">
-      <Header 
-        activeTab={activeTab} 
-        onTabChange={setActiveTab}
-        showNavigation={!selectedContinent && !selectedChart && !selectedFanbase}
+    <div className="min-h-screen bg-black text-white flex flex-col">
+      {/* Header - Hidden navigation in sub-pages */}
+      <Header
+        activeTab={activeTab}
+        onTabChange={handleTabChange}
+        showNavigation={!isInSubPage}
       />
-      <main className="flex-1 h-[calc(100vh-160px)] overflow-hidden">
-        {renderContent()}
+
+      {/* Main Content Area - Safe padding for mobile */}
+      <main className="flex-1 pb-20 lg:pb-0 overflow-y-auto">
+        <div className="h-full">
+          {renderContent()}
+        </div>
       </main>
+
+      {/* Footer (optional - only if you want credits or links) */}
       <Footer />
+
+      {/* Beautiful Bottom Navigation - Only on Mobile & Tablet */}
+      {!isInSubPage && (
+        <BottomNav activeTab={activeTab} onTabChange={handleTabChange} />
+      )}
     </div>
   );
 }

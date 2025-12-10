@@ -1,4 +1,3 @@
-import React from 'react';
 import { ArrowLeft, BarChart3, TrendingUp, Award } from 'lucide-react';
 import { ContinentType } from '../App';
 

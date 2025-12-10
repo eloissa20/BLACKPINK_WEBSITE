@@ -1,4 +1,5 @@
-import { ArrowLeft } from 'lucide-react';
+// src/components/AppleMusicDetails.tsx
+import { ArrowLeft, Check, X, ChevronDown } from 'lucide-react';
 
 interface Props {
   onBack: () => void;
@@ -16,84 +17,252 @@ export function AppleMusicDetails({ onBack, playSound }: Props) {
       rosé: 'https://music.apple.com/us/artist/rosé/1486129974',
       lisa: 'https://music.apple.com/us/artist/lalisa/1587033465',
     },
-    freeRules: ['No free tier'],
-    premiumRules: ['100% counts'],
   };
+
+  const doList = [
+    'Search “BLACKPINK Title Song” on Apple Music and play it.',
+    'Click 3 dots on the song (right side)',
+    'Click “Add to a playlist”',
+    'Click “New Playlist”',
+    'Click “Done” (and now you have a playlist with 1 song)',
+    'To add more songs: Search for them > press 3 dots > add to a playlist > choose a playlist that you had created > press on it > and the song will be added there.',
+    'We advise you to create long playlists full of BLACKPINK music up to 24 hours.',
+    'Stream the song/s inside the made playlist (TIP: if you make a playlist long enough, you can leave it overnight).',
+    'When a new music is released we suggest using gaps of 1 song before putting the same song again.',
+    'Offline streams count only when your mobile data is on.',
+    'Share song on all your social media',
+  ];
+
+  const singleExample = '“New Title Track” > KTL > New TT > D4 > New TT > AIIYL > New TT…';
+  const albumExample = 'Album song: (All album songs in order) + (few older Title tracks) + (All album songs in order) + (few older Title Tracks)...';
+
+  const dontList = [
+    'DON\'T download the songs or your streams would not count.',
+    'If you have already downloaded (see an arrow next to the song), please delete them, press 3 dots > press remove > press remove download.',
+    'DON\'T use VPN as it blocks your IP address.',
+    'DON\'T mute while streaming. Use earphones if you have to.',
+    'DON\'T use loop function to loop songs, instead use just 1 long playlist.',
+  ];
+
+  const specialLines = new Set([
+    'When a new music is released we suggest using gaps of 1 song before putting the same song again.',
+  ]);
+
+  const faqItems = [
+    'Apple Music only counts streams from paid accounts (Individual, Family, Student).',
+    'Free trial accounts DO count during the trial period.',
+    'You must play at least 30 seconds for a stream to register.',
+    'Downloaded songs DO NOT count — always delete downloads!',
+    'Offline streams only count when you reconnect to the internet.',
+    'Volume must be above 0% (even 1% is enough).',
+    'Sharing songs on social media helps with chart performance.',
+    'Pre-add upcoming releases for maximum impact on release day.',
+    'Family Plan allows 6 accounts — use all of them!',
+    'For questions → contact your local BLINK streaming team.',
+  ];
 
   return (
     <div className="h-full p-8 overflow-y-auto bg-gradient-to-br from-black via-purple-900/30 to-black">
       <div className="max-w-5xl mx-auto">
-        <button
-          onClick={onBack}
-          className="flex items-center gap-3 text-pink-400 hover:text-pink-300 mb-10 font-semibold"
-        >
+
+        {/* Back Button */}
+        <button onClick={onBack} className="flex items-center gap-3 text-pink-400 hover:text-pink-300 mb-10 font-semibold transition">
           <ArrowLeft className="w-6 h-6" /> Back to Guidelines
         </button>
 
+        {/* Header */}
         <div className="text-center mb-12">
-          <img
-            src={platform.logo}
-            alt={platform.name}
-            className="w-32 h-32 mx-auto mb-6 rounded-2xl shadow-2xl border-2 border-pink-500"
-            onMouseEnter={playSound}
-          />
-          <h1 className="text-5xl font-black text-white">{platform.name}</h1>
-          <p className="text-xl text-gray-400 mt-2">Streaming Guide for BLINKs</p>
+          <img src={platform.logo} alt="Apple Music" className="w-32 h-32 mx-auto mb-6 rounded-2xl shadow-2xl" onMouseEnter={playSound} />
+          <h1 className="text-5xl font-black text-white">Apple Music</h1>
+          <p className="text-xl text-gray-400 mt-4">Streaming Guide for BLINKs</p>
         </div>
 
+        {/* DO'S & DON'T */}
         <div className="grid lg:grid-cols-2 gap-8 mb-12">
-          <div className="bg-transparent backdrop-blur-xl rounded-3xl p-8 border-2 border-pink-500 shadow-2xl">
-            <h2 className="text-3xl font-bold text-pink-400 mb-6">Free Tier</h2>
-            <ul className="space-y-4 text-gray-200 text-lg">
-              {platform.freeRules.map((rule, i) => (
-                <li key={i} className="flex gap-3">
-                  <span className="text-pink-400">•</span> {rule}
+          {/* DO'S */}
+          <div className="bg-black/60 backdrop-blur-xl rounded-3xl p-8 border-2 border-green-500 shadow-2xl">
+            <h2 className="text-4xl font-black text-green-400 mb-8 text-center flex items-center justify-center gap-3">
+              DO'S <Check className="w-10 h-10" />
+            </h2>
+            <ul className="space-y-3 text-gray-200 text-lg">
+              {doList.map((item, i) => {
+                const isSpecial = specialLines.has(item);
+                return (
+                  <li key={i} className={`flex items-start gap-3 ${isSpecial ? 'mt-7' : ''}`}>
+                    {isSpecial ? (
+                      <span className="font-black text-pink-400 text-xl">{item}</span>
+                    ) : (
+                      <>
+                        <Check className="w-6 h-6 text-green-400 flex-shrink-0 mt-0.5" />
+                        <span>{item}</span>
+                      </>
+                    )}
+                  </li>
+                );
+              })}
+            </ul>
+
+            {/* PINK EXAMPLES */}
+            <div className="mt-10 p-8 bg-black/50 rounded-2xl border-2 border-pink-500">
+              <p className="text-2xl font-black text-pink-400 mb-4 text-center">SINGLE RELEASE EXAMPLE</p>
+              <p className="text-xl text-pink-300 font-bold text-center">{singleExample}</p>
+              <p className="text-2xl font-black text-pink-400 mt-8 mb-4 text-center">ALBUM RELEASE EXAMPLE</p>
+              <p className="text-xl text-pink-300 font-bold text-center">{albumExample}</p>
+            </div>
+
+            <div className="mt-10 p-6 bg-red-900/50 border-2 border-red-500 rounded-2xl text-center shadow-2xl">
+              <p className="text-yellow-300 font-black text-xl">
+                ALWAYS DELETE DOWNLOADED SONGS — ONLINE STREAMS ONLY!
+              </p>
+            </div>
+          </div>
+
+          {/* DON'T */}
+          <div className="bg-black/60 backdrop-blur-xl rounded-3xl p-8 border-2 border-red-600 shadow-2xl">
+            <h2 className="text-4xl font-black text-red-500 mb-8 text-center flex items-center justify-center gap-3">
+              DON'T <X className="w-12 h-12" />
+            </h2>
+            <ul className="space-y-4 text-gray-200 text-lg mb-10">
+              {dontList.map((item, i) => (
+                <li key={i} className="flex items-center gap-3">
+                  <X className="w-7 h-7 text-red-500 flex-shrink-0" />
+                  <span>{item}</span>
                 </li>
               ))}
             </ul>
-          </div>
 
-          <div className="bg-transparent backdrop-blur-xl rounded-3xl p-8 border-2 border-purple-500 shadow-2xl">
-            <h2 className="text-3xl font-bold text-purple-400 mb-6">Premium Tier</h2>
-            <ul className="space-y-4 text-gray-200 text-lg">
-              {platform.premiumRules.map((rule, i) => (
-                <li key={i} className="flex gap-3">
-                  <span className="text-purple-400">•</span> {rule}
+            <div className="mt-12 pt-8 border-t-2 border-red-800/50">
+              <h3 className="text-3xl font-black text-pink-400 text-center mb-6">
+                STREAMING RULE NOTES
+              </h3>
+              <ul className="space-y-4 text-gray-200 text-lg">
+                <li className="flex items-start gap-3">
+                  <span className="text-pink-400">•</span>
+                  <span><strong>Never download songs</strong> — streams from downloaded files DO NOT count.</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <span className="text-pink-400">•</span>
+                  <span>Offline streams only count when you <strong>turn on mobile data/internet</strong> again.</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <span className="text-pink-400">•</span>
+                  <span>Go to Settings → Music → Turn OFF <strong>Automatic Downloads</strong>.</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        {/* IMPORTANT REMINDERS - APPLE MUSIC SPECIFIC */}
+        <div className="mb-16">
+          <h2 className="text-4xl font-black text-center text-white mb-10 tracking-widest">
+            IMPORTANT REMINDERS
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="bg-gradient-to-br from-red-600/20 to-pink-600/20 backdrop-blur-xl border-2 border-red-500 rounded-3xl p-6 text-center shadow-2xl">
+              <p className="text-red-300 font-bold text-xl mb-2">No Downloads</p>
+              <p className="text-gray-200">Delete all downloaded songs</p>
+            </div>
+            <div className="bg-gradient-to-br from-pink-600/20 to-purple-600/20 backdrop-blur-xl border-2 border-pink-500 rounded-3xl p-6 text-center shadow-2xl">
+              <p className="text-pink-300 font-bold text-xl mb-2">No VPN Ever</p>
+              <p className="text-gray-200">Apple blocks filtered streams</p>
+            </div>
+            <div className="bg-gradient-to-br from-purple-600/20 to-indigo-600/20 backdrop-blur-xl border-2 border-purple-500 rounded-3xl p-6 text-center shadow-2xl">
+              <p className="text-purple-300 font-bold text-xl mb-2">Volume ≥ 1%</p>
+              <p className="text-gray-200">Never mute Apple Music</p>
+            </div>
+            <div className="bg-gradient-to-br from-yellow-600/20 to-orange-600/20 backdrop-blur-xl border-2 border-yellow-500 rounded-3xl p-6 text-center shadow-2xl">
+              <p className="text-yellow-300 font-bold text-xl mb-2">Turn On Internet</p>
+              <p className="text-gray-200">For offline streams to count</p>
+            </div>
+            <div className="bg-gradient-to-br from-green-600/20 to-teal-600/20 backdrop-blur-xl border-2 border-green-500 rounded-3xl p-6 text-center shadow-2xl">
+              <p className="text-green-300 font-bold text-xl mb-2">Long Playlists</p>
+              <p className="text-gray-200">24-hour BLACKPINK only</p>
+            </div>
+            <div className="bg-gradient-to-br from-cyan-600/20 to-blue-600/20 backdrop-blur-xl border-2 border-cyan-500 rounded-3xl p-6 text-center shadow-2xl">
+              <p className="text-cyan-300 font-bold text-xl mb-2">Share Daily</p>
+              <p className="text-gray-200">Helps chart performance</p>
+            </div>
+          </div>
+        </div>
+
+        {/* FAQ SECTION */}
+        <div className="my-24">
+          <h2 className="text-5xl font-black text-center text-pink-400 mb-12 tracking-widest flex items-center justify-center gap-4">
+            FAQ <ChevronDown className="w-12 h-12 animate-bounce" />
+          </h2>
+
+          <div className="bg-black/60 backdrop-blur-xl rounded-3xl p-10 border-2 border-pink-500 shadow-2xl">
+            <ul className="space-y-5 text-gray-200 text-lg leading-relaxed">
+              {faqItems.map((item, i) => (
+                <li key={i} className="flex items-start gap-4">
+                  <span className="text-pink-400 font-bold mt-1">Q{i + 1}.</span>
+                  <span>{item}</span>
                 </li>
               ))}
             </ul>
           </div>
         </div>
 
-        <div className="space-y-8">
-          <h2 className="text-4xl font-black text-white text-center">Official Links</h2>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
-            <a
-              href={platform.blackpink}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-gradient-to-br from-pink-600 to-purple-700 p-10 rounded-3xl text-center hover:scale-105 transition text-2xl font-bold text-white shadow-xl border-2 border-pink-500"
-              onMouseEnter={playSound}
-            >
-              BLACKPINK
-            </a>
+        {/* OFFICIAL ARTIST LINKS */}
+        <div className="mt-32 pb-20">
+          <h2 className="text-5xl font-black text-center text-white mb-16 tracking-widest">
+            Official Artist Links
+          </h2>
 
-            {Object.entries(platform.members)
-              .filter(([_, url]) => url)
-              .map(([member, url]) => (
-                <a
-                  key={member}
-                  href={url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="bg-gray-800/90 p-10 rounded-3xl text-center hover:bg-gray-700 transition text-xl font-bold text-white capitalize shadow-xl border-2 border-pink-500"
-                  onMouseEnter={playSound}
-                >
-                  {member}
-                </a>
-              ))}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-10 max-w-6xl mx-auto items-center">
+            <div className="flex justify-center md:justify-end">
+              <a
+                href={platform.blackpink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group relative bg-transparent rounded-3xl p-6 transition-all duration-500 
+                         hover:scale-110 hover:z-10 active:scale-95 border-2 border-pink-500"
+                style={{
+                  background: 'rgba(255,105,180,0.1)',
+                  backdropFilter: 'blur(10px)',
+                  boxShadow: '0 0 40px rgba(236, 72, 153, 0.4)',
+                }}
+                onMouseEnter={playSound}
+              >
+                <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-pink-500/30 to-purple-500/30 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+                <div className="relative z-10 text-center">
+                  <p className="text-5xl font-black text-white tracking-widest">BLACKPINK</p>
+                  <p className="text-pink-300 text-lg mt-2">Official Group</p>
+                </div>
+              </a>
+            </div>
+
+            <div className="md:col-span-2">
+              <div className="grid grid-cols-2 gap-6">
+                {Object.entries(platform.members).map(([member, url]) => (
+                  <a
+                    key={member}
+                    href={url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group relative bg-transparent rounded-3xl p-6 transition-all duration-500 
+                             hover:scale-110 hover:z-10 active:scale-95 border-2 border-pink-500"
+                    style={{
+                      background: 'rgba(255,105,180,0.1)',
+                      backdropFilter: 'blur(10px)',
+                      boxShadow: '0 0 40px rgba(236, 72, 153, 0.4)',
+                    }}
+                    onMouseEnter={playSound}
+                  >
+                    <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-pink-500/30 to-purple-500/30 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+                    <div className="relative z-10 text-center">
+                      <p className="text-4xl font-black text-white tracking-widest">
+                        {member === 'rosé' ? 'ROSÉ' : member.toUpperCase()}
+                      </p>
+                    </div>
+                  </a>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
+
       </div>
     </div>
   );
