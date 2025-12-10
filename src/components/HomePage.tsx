@@ -1,143 +1,151 @@
-// src/components/AppleMusicDetails.tsx
-import { ArrowLeft, Check, X } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
+import { Music, ShoppingBag, Zap, Volume2, VolumeX, Play } from 'lucide-react';
+import { NewsFeed } from './NewsFeed';
+import { TabType } from '../App';
+import bgVideo from '../assets/bg-home-bp.mp4';
 
-interface Props {
-  onBack: () => void;
-  playSound: () => void;
+interface HomePageProps {
+  onNavigate: (tab: TabType) => void;
 }
 
-export function AppleMusicDetails({ onBack, playSound }: Props) {
-  const platform = {
-    name: 'Apple Music',
-    logo: '/src/assets/logos/apple-music.png',
-    blackpink: 'https://music.apple.com/us/artist/blackpink/1252555207',
-    members: {
-      jisoo: 'https://music.apple.com/us/artist/jisoo/1630130415',
-      jennie: 'https://music.apple.com/us/artist/jennie/1486136387',
-      rosé: 'https://music.apple.com/us/artist/rosé/1486129974',
-      lisa: 'https://music.apple.com/us/artist/lalisa/1587033465',
-    },
+export function HomePage({ onNavigate }: HomePageProps) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [isMuted, setIsMuted] = useState(true); // Start muted for autoplay policy
+
+  // Autoplay video (muted) on mount
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    video.muted = true; // Required for autoplay on most browsers
+    video.playsInline = true;
+
+    const playPromise = video.play();
+
+    if (playPromise !== undefined) {
+      playPromise
+        .then(() => {
+          setIsPlaying(true);
+        })
+        .catch((error) => {
+          console.log('Autoplay prevented:', error);
+          setIsPlaying(false);
+        });
+    }
+
+    return () => {
+      video.pause();
+    };
+  }, []);
+
+  const handlePlay = () => {
+    if (videoRef.current) {
+      videoRef.current.play().then(() => setIsPlaying(true));
+    }
   };
 
-  const doRules = [
-    'Search “BLACKPINK Title Song” on Apple Music and play it.',
-    'Click 3 dots on the song (right side)',
-    'Click “Add to a playlist”',
-    'Click “New Playlist”',
-    'Click “Done” (and now you have a playlist with 1 song)',
-    'To add more songs: Search for them → press 3 dots → add to a playlist → choose your playlist',
-    'We advise you to create long playlists full of BLACKPINK music up to 24 hours.',
-    'Stream the song/s inside the made playlist (long enough → leave overnight).',
-    'When new music is released: use gaps of 1 song before repeating the same song.',
-    'Share song on all your social media',
-  ];
-
-  const singleExample = 'New Title Track → KTL → New TT → D4 → New TT → AIIYL → New TT…';
-  const albumExample = '(All album songs in order) + (few older Title tracks) + (All album songs in order) + (few older Title Tracks)...';
-
-  const dontRules = [
-    'DON’T download the songs or your streams will not count.',
-    'If already downloaded (arrow next to song) → 3 dots → Remove → Remove Download',
-    'DON’T use VPN (blocks your IP)',
-    'DON’T mute while streaming. Use earphones if needed.',
-    'DON’T use loop function — use one long playlist instead',
-  ];
+  const toggleMute = () => {
+    if (videoRef.current) {
+      videoRef.current.muted = !videoRef.current.muted;
+      setIsMuted(videoRef.current.muted);
+    }
+  };
 
   return (
-    <div className="h-full p-8 overflow-y-auto bg-gradient-to-br from-black via-purple-900/30 to-black">
-      <div className="max-w-5xl mx-auto">
+    <div className="flex flex-col h-screen bg-black text-white">
+      {/* Main Layout - Stack on Mobile, Side-by-Side on Large Screens */}
+      <div className="flex flex-1 flex-col lg:flex-row overflow-hidden">
+        
+        {/* News Feed Sidebar - Hidden on mobile, visible on lg+ */}
+        <div className="hidden lg:block lg:w-80 xl:w-96 h-full overflow-y-auto border-r border-pink-800 bg-black/50 backdrop-blur-sm">
+          <NewsFeed />
+        </div>
 
-        {/* Back Button */}
-        <button
-          onClick={onBack}
-          className="flex items-center gap-3 text-pink-400 hover:text-pink-300 mb-10 font-semibold transition"
-        >
-          <ArrowLeft className="w-6 h-6" /> Back to Guidelines
-        </button>
-
-        {/* Header */}
-        <div className="text-center mb-12">
-          <img
-            src={platform.logo}
-            alt="Apple Music"
-            className="w-32 h-32 mx-auto mb-6 rounded-2xl shadow-2xl"
-            onMouseEnter={playSound}
+        {/* Main Hero Section */}
+        <div className="relative flex-1 flex flex-col justify-center items-center overflow-hidden">
+          {/* Background Video */}
+          <video
+            ref={videoRef}
+            className="absolute inset-0 w-full h-full object-cover"
+            src={bgVideo}
+            autoPlay
+            loop
+            muted
+            playsInline
           />
-          <h1 className="text-5xl font-black text-white">Apple Music</h1>
-          <p className="text-xl text-gray-400 mt-2">Streaming Guide for BLINKs</p>
-        </div>
 
-        {/* DO'S */}
-        <div className="bg-transparent backdrop-blur-xl rounded-3xl p-10 border-2 border-green-500 shadow-2xl mb-12">
-          <h2 className="text-4xl font-black text-green-400 mb-8 text-center flex items-center justify-center gap-4">
-            DO'S <Check className="w-10 h-10" />
-          </h2>
-          <ul className="space-y-5 text-gray-200 text-lg leading-relaxed">
-            {doRules.map((item, i) => (
-              <li key={i} className="flex items-start gap-4">
-                <Check className="w-6 h-6 text-green-400 flex-shrink-0 mt-1" />
-                <span>{item}</span>
-              </li>
-            ))}
-          </ul>
+          {/* Dark Overlay */}
+          <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/60 to-black/90 z-10" />
 
-          {/* Pink Examples */}
-          <div className="mt-10 space-y-6 bg-black/50 rounded-2xl p-8 border border-pink-500">
-            <div>
-              <p className="text-2xl font-black text-pink-400 mb-3">SINGLE RELEASE EXAMPLE</p>
-              <p className="text-lg text-pink-300 font-bold tracking-wide">{singleExample}</p>
-            </div>
-            <div>
-              <p className="text-2xl font-black text-pink-400 mb-3">ALBUM RELEASE EXAMPLE</p>
-              <p className="text-lg text-pink-300 font-bold tracking-wide">{albumExample}</p>
-            </div>
-          </div>
-        </div>
-
-        {/* DON'TS */}
-        <div className="bg-transparent backdrop-blur-xl rounded-3xl p-10 border-2 border-red-600 shadow-2xl mb-12">
-          <h2 className="text-4xl font-black text-red-500 mb-8 text-center flex items-center justify-center gap-4">
-            DON'T <X className="w-12 h-12" />
-          </h2>
-          <ul className="space-y-5 text-gray-200 text-lg leading-relaxed">
-            {dontRules.map((item, i) => (
-              <li key={i} className="flex items-start gap-4">
-                <X className="w-7 h-7 text-red-500 flex-shrink-0 mt-1" />
-                <span>{item}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        {/* Official Links */}
-        <div className="space-y-8">
-          <h2 className="text-4xl font-black text-white text-center">Official Links</h2>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
-            <a
-              href={platform.blackpink}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-gradient-to-br from-pink-600 to-purple-700 p-10 rounded-3xl text-center hover:scale-105 transition text-2xl font-bold text-white shadow-xl border-2 border-pink-500"
-              onMouseEnter={playSound}
-            >
-              BLACKPINK
-            </a>
-
-            {Object.entries(platform.members).map(([member, url]) => (
-              <a
-                key={member}
-                href={url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="bg-gray-800/90 p-10 rounded-3xl text-center hover:bg-gray-700 transition text-xl font-bold text-white capitalize shadow-xl border-2 border-pink-500"
-                onMouseEnter={playSound}
+          {/* Floating Controls (Top Left) */}
+          <div className="absolute top-4 left-4 z-30 flex gap-3">
+            {!isPlaying && (
+              <button
+                onClick={handlePlay}
+                className="bg-pink-600/90 hover:bg-pink-500 backdrop-blur-sm text-white p-3 rounded-full shadow-lg transition"
+                aria-label="Play video"
               >
-                {member === 'rosé' ? 'ROSÉ' : member.toUpperCase()}
-              </a>
-            ))}
+                <Play className="w-5 h-5" />
+              </button>
+            )}
+            <button
+              onClick={toggleMute}
+              className="bg-pink-600/90 hover:bg-pink-500 backdrop-blur-sm text-white p-3 rounded-full shadow-lg transition"
+              aria-label={isMuted ? 'Unmute' : 'Mute'}
+            >
+              {isMuted ? <VolumeX className="w-5 h-5" /> : <Volume2 className="w-5 h-5" />}
+            </button>
+          </div>
+
+          {/* Content */}
+          <div className="relative z-20 text-center px-6 py-12 max-w-4xl mx-auto">
+            <div className="flex items-center justify-center gap-4 mb-8 flex-wrap">
+              <Zap className="w-10 h-10 md:w-14 md:h-14 text-pink-400 animate-pulse" />
+              <h1 className="text-4xl md:text-6xl lg:text-7xl font-extrabold tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-pink-300 to-pink-500">
+                WELCOME BLINKS
+              </h1>
+              <Zap className="w-10 h-10 md:w-14 md:h-14 text-pink-400 animate-pulse" />
+            </div>
+
+            <p className="text-lg md:text-xl text-gray-200 mb-10 max-w-2xl mx-auto">
+              Join the BLACKPINK community and support your queens!
+            </p>
+
+            {/* Action Buttons */}
+            <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
+              <button
+                onClick={() => onNavigate('guidelines')}
+                className="group relative overflow-hidden bg-gradient-to-r from-pink-500 to-pink-700 hover:from-pink-400 hover:to-pink-600 text-white font-bold py-5 px-12 rounded-2xl transition-all duration-300 transform hover:scale-105 shadow-2xl w-72 sm:w-auto"
+              >
+                <div className="flex items-center justify-center gap-3">
+                  <Music className="w-7 h-7" />
+                  <span className="text-xl">LET'S STREAM</span>
+                </div>
+                <div className="absolute inset-0 bg-white/20 transform translate-y-full group-hover:translate-y-0 transition-transform duration-500" />
+              </button>
+
+              <button
+                onClick={() => onNavigate('album')}
+                className="group relative overflow-hidden bg-gradient-to-r from-pink-800 to-black hover:from-pink-700 hover:to-gray-900 text-white font-bold py-5 px-12 rounded-2xl transition-all duration-300 transform hover:scale-105 shadow-2xl w-72 sm:w-auto border border-pink-600"
+              >
+                <div className="flex items-center justify-center gap-3">
+                  <ShoppingBag className="w-7 h-7" />
+                  <span className="text-l">LET'S BUY</span>
+                </div>
+                <div className="absolute inset-0 bg-white/10 transform translate-y-full group-hover:translate-y-0 transition-transform duration-500" />
+              </button>
+            </div>
+
+            {/* Mobile News Feed Preview (Optional) */}
+            <div className="mt-12 lg:hidden">
+              <h3 className="text-lg font-semibold mb-4 text-pink-300">Latest News</h3>
+              <div className="max-h-64 overflow-y-auto bg-black/40 backdrop-blur rounded-xl p-4 border border-pink-900">
+                <NewsFeed />
+              </div>
+            </div>
           </div>
         </div>
-
       </div>
     </div>
   );
