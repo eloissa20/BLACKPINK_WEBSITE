@@ -9,12 +9,12 @@ export function AppleMusicDetails({ onBack, playSound }: Props) {
   const platform = {
     name: 'Apple Music',
     logo: '/src/assets/logos/apple-music.png',
-    blackpink: 'https://music.apple.com/us/artist/blackpink/1252555207',
+    blackpink: 'https://music.apple.com/ph/artist/blackpink/1141774019',
     members: {
-      jisoo: 'https://music.apple.com/us/artist/jisoo/1630130415',
-      jennie: 'https://music.apple.com/us/artist/jennie/1486136387',
-      rosé: 'https://music.apple.com/us/artist/rosé/1486129974',
-      lisa: 'https://music.apple.com/us/artist/lalisa/1587033465',
+      jisoo: 'https://music.apple.com/ph/artist/jisoo/1548008317',
+      jennie: 'https://music.apple.com/ph/artist/jennie/913944',
+      rosé: 'https://music.apple.com/ph/artist/ros%C3%A9/1406242696',
+      lisa: 'https://music.apple.com/ph/artist/lisa/1583908668',
     },
   };
 
@@ -32,7 +32,7 @@ export function AppleMusicDetails({ onBack, playSound }: Props) {
     'Share song on all your social media',
   ];
 
-  const singleExample = '“New Title Track” > KTL > New TT > D4 > New TT > AIIYL > New TT…';
+  const singleExample = '“New Title Track” > JUMP > New TT > PV > New TT > SHUTDOWN > New TT…';
   const albumExample = 'Album song: (All album songs in order) + (few older Title tracks) + (All album songs in order) + (few older Title Tracks)...';
 
   const dontList = [
@@ -74,6 +74,14 @@ export function AppleMusicDetails({ onBack, playSound }: Props) {
           <img src={platform.logo} alt="Apple Music" className="w-32 h-32 mx-auto mb-6 rounded-2xl shadow-2xl" onMouseEnter={playSound} />
           <h1 className="text-5xl font-black text-white">Apple Music</h1>
           <p className="text-xl text-gray-400 mt-4">Streaming Guide for BLINKs</p>
+
+          {/* NEW SCROLL PROMPT */}
+          <p className="text-2xl font-medium text-white mt-8">
+            Scroll to see important tips to maximise{' '}
+            <span className="text-pink-400 font-black">APPLE MUSIC</span>{' '}
+            streams for{' '}
+            <span className="text-pink-400 font-black">BLACKPINK</span>.
+          </p>
         </div>
 
         {/* DO'S & DON'TS */}
@@ -108,23 +116,17 @@ export function AppleMusicDetails({ onBack, playSound }: Props) {
               <p className="text-2xl font-black text-pink-400 mt-8 mb-4 text-center">ALBUM RELEASE EXAMPLE</p>
               <p className="text-xl text-pink-300 font-bold text-center">{albumExample}</p>
             </div>
-
-            <div className="mt-10 p-6 bg-red-900/50 border-2 border-red-500 rounded-2xl text-center shadow-2xl">
-              <p className="text-yellow-300 font-black text-xl">
-                ALWAYS DELETE DOWNLOADED SONGS — ONLINE STREAMS ONLY!
-              </p>
-            </div>
           </div>
 
           {/* DON'TS */}
           <div className="bg-black/60 backdrop-blur-xl rounded-3xl p-8 border-2 border-[#ff0436] shadow-2xl">
-            <h2 className="text-4xl font-black text-[#FF4E6B] mb-8 text-center flex items-center justify-center gap-3">
+            <h2 className="text-4xl font-black text-[#f94c57] mb-8 text-center flex items-center justify-center gap-3">
               DON'T <X className="w-12 h-12" />
             </h2>
             <ul className="space-y-4 text-gray-200 text-lg">
               {dontList.map((item, i) => (
                 <li key={i} className="flex items-center gap-3">
-                  <X className="w-7 h-7 text-[#ff0436] flex-shrink-0" />
+                  <X className="w-7 h-7 text-[#f94c57] flex-shrink-0" />
                   <span>{item}</span>
                 </li>
               ))}
@@ -134,7 +136,7 @@ export function AppleMusicDetails({ onBack, playSound }: Props) {
 
         {/* STREAMING RULE NOTES – INDEPENDENT FULL-WIDTH SECTION */}
         <div className="my-24">
-          <h2 className="text-5xl font-black text-pink-400 text-center mb-14 tracking-widest flex items-center justify-center gap-5">
+          <h2 className="text-5xl font-black text-white text-center mb-14 tracking-widest flex items-center justify-center gap-5">
             <Info className="w-12 h-12" />
             STREAMING RULE NOTES
           </h2>
@@ -160,7 +162,7 @@ export function AppleMusicDetails({ onBack, playSound }: Props) {
 
             {/* RIGHT: DOWNLOADED */}
             <div className="bg-gradient-to-br from-[#ff0436]/20 to-transparent rounded-3xl p-10 border-2 border-[#ff0436] backdrop-blur-xl shadow-2xl">
-              <h3 className="text-3xl font-black text-[#ff0436] text-center mb-8">
+              <h3 className="text-3xl font-black text-[#f94c57] text-center mb-8">
                 IF YOU DOWNLOADED THE SONGS
               </h3>
               <ol className="space-y-5 text-gray-100 text-lg list-decimal list-inside ml-6">
@@ -185,7 +187,7 @@ export function AppleMusicDetails({ onBack, playSound }: Props) {
         </div>
         {/* IMPORTANT REMINDERS */}
         <div className="mb-16">
-          <h2 className="text-4xl font-black text-center text-white mb-10 tracking-widest">
+          <h2 className="text-5xl font-black text-center text-white mb-10 tracking-widest">
             IMPORTANT REMINDERS
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -216,20 +218,16 @@ export function AppleMusicDetails({ onBack, playSound }: Props) {
           </div>
         </div>
 
-        {/* FAQ & Official Links remain unchanged */}
-        {/* ... (FAQ and Official Links sections are exactly the same as before) */}
-        {/* I kept them identical to save space — just copy them from the previous version */}
-
         {/* FAQ */}
         <div className="my-24">
-          <h2 className="text-5xl font-black text-center text-pink-400 mb-12 tracking-widest flex items-center justify-center gap-4">
+          <h2 className="text-5xl font-black text-center text-white mb-12 tracking-widest flex items-center justify-center gap-4">
             FAQ <ChevronDown className="w-12 h-12 animate-bounce" />
           </h2>
-          <div className="bg-black/60 backdrop-blur-xl rounded-3xl p-10 border-2 border-pink-500 shadow-2xl">
+          <div className="bg-black/60 backdrop-blur-xl rounded-3xl p-10 border-2 border-[#ff0436] shadow-2xl">
             <ul className="space-y-5 text-gray-200 text-lg leading-relaxed">
               {faqItems.map((item, i) => (
                 <li key={i} className="flex items-start gap-4">
-                  <span className="text-pink-400 font-bold mt-1">Q{i + 1}.</span>
+                  <span className="text-[#f94c57] font-bold mt-1">Q{i + 1}.</span>
                   <span>{item}</span>
                 </li>
               ))}
@@ -245,13 +243,13 @@ export function AppleMusicDetails({ onBack, playSound }: Props) {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-10 max-w-6xl mx-auto items-center">
             <div className="flex justify-center md:justify-end">
               <a href={platform.blackpink} target="_blank" rel="noopener noreferrer"
-                className="group relative bg-transparent rounded-3xl p-6 transition-all duration-500 hover:scale-110 hover:z-10 active:scale-95 border-2 border-pink-500"
-                style={{ background: 'rgba(255,105,180,0.1)', backdropFilter: 'blur(10px)', boxShadow: '0 0 40px rgba(236,72,153,0.4)' }}
+                className="group relative bg-transparent rounded-3xl p-6 transition-all duration-500 hover:scale-110 hover:z-10 active:scale-95 border-2 border-[#ff0436]"
+                style={{ background: 'rgba(255,105,180,0.1)', backdropFilter: 'blur(10px)'}}
                 onMouseEnter={playSound}>
                 <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-pink-500/30 to-purple-500/30 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
                 <div className="relative z-10 text-center">
-                  <p className="text-5xl font-black text-white tracking-widest">BLACKPINK</p>
-                  <p className="text-pink-300 text-lg mt-2">Official Group</p>
+                  <p className="text-5xl font-black text-[#f94c57] tracking-widest">BLACKPINK</p>
+                  <p className="text-white text-lg mt-2">Official Group</p>
                 </div>
               </a>
             </div>
@@ -260,12 +258,12 @@ export function AppleMusicDetails({ onBack, playSound }: Props) {
               <div className="grid grid-cols-2 gap-6">
                 {Object.entries(platform.members).map(([member, url]) => (
                   <a key={member} href={url} target="_blank" rel="noopener noreferrer"
-                    className="group relative bg-transparent rounded-3xl p-6 transition-all duration-500 hover:scale-110 hover:z-10 active:scale-95 border-2 border-pink-500"
-                    style={{ background: 'rgba(255,105,180,0.1)', backdropFilter: 'blur(10px)', boxShadow: '0 0 40px rgba(236,72,153,0.4)' }}
+                    className="group relative bg-transparent rounded-3xl p-6 transition-all duration-500 hover:scale-110 hover:z-10 active:scale-95 border-2 border-[#ff0436]"
+                    style={{ background: 'rgba(255,105,180,0.1)', backdropFilter: 'blur(10px)'}}
                     onMouseEnter={playSound}>
                     <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-pink-500/30 to-purple-500/30 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
                     <div className="relative z-10 text-center">
-                      <p className="text-4xl font-black text-white tracking-widest">
+                      <p className="text-4xl font-black text-[#f94c57] tracking-widest">
                         {member === 'rosé' ? 'ROSÉ' : member.toUpperCase()}
                       </p>
                     </div>

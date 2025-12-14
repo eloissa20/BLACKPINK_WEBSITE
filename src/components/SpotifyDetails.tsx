@@ -1,4 +1,4 @@
-import { ArrowLeft, Check, X, ChevronDown } from 'lucide-react';
+import { ArrowLeft, Check, X, ChevronDown, Info } from 'lucide-react';
 
 interface Props {
   onBack: () => void;
@@ -45,6 +45,9 @@ export function SpotifyDetails({ onBack, playSound }: Props) {
     'Post-comeback: 50–60% new + 40–50% old',
     'Turn OFF Autoplay (Home > Settings > Autoplay).',
   ];
+
+  const singleExample = '“New Title Track” > JUMP > New TT > PV > New TT > SHUTDOWN > New TT…';
+  const albumExample = 'Album song: (All album songs in order) + (few older Title tracks) + (All album songs in order) + (few older Title Tracks)...';
 
   const dontList = [
     'Don’t shuffle the playlist.',
@@ -106,16 +109,25 @@ export function SpotifyDetails({ onBack, playSound }: Props) {
           <img src={platform.logo} alt="Spotify" className="w-32 h-32 mx-auto mb-6 rounded-2xl shadow-2xl" onMouseEnter={playSound} />
           <h1 className="text-5xl font-black text-white">Spotify</h1>
           <p className="text-xl text-gray-400 mt-4">Streaming Guide for BLINKs</p>
+
+           {/* NEW SCROLL PROMPT */}
+           <p className="text-2xl font-medium text-white mt-8">
+            Scroll to see important tips to maximise {' '}
+            <span className="text-pink-400 font-black">SPOTIFY</span>{' '}
+            streams for{' '}
+            <span className="text-pink-400 font-black">BLACKPINK</span>.
+          </p>
         </div>
 
-        {/* DO'S & DON'T (with Streaming Rule Notes inside DON'T) */}
-        <div className="grid lg:grid-cols-2 gap-8 mb-12">
+        {/* DO'S & DON'TS */}
+        <div className="grid lg:grid-cols-2 gap-8 mb-20">
+
           {/* DO'S */}
-          <div className="bg-black/60 backdrop-blur-xl rounded-3xl p-8 border-2 border-green-500 shadow-2xl">
-            <h2 className="text-4xl font-black text-green-400 mb-8 text-center flex items-center justify-center gap-3">
-              DO'S <Check className="w-10 h-10" />
+          <div className="bg-black/60 backdrop-blur-xl rounded-3xl p-8 border-2 border-[#1db954] shadow-2xl">
+            <h2 className="text-4xl font-black text-[#1db954] mb-8 text-center flex items-center justify-center gap-3">
+              DO'S <Check className="w-10 h-10 text-[#1db954]" />
             </h2>
-            <ul className="space-y-3 text-gray-200 text-lg">
+            <ul className="space-y-3 text-gray-200 text-lg mt-10">
               {doList.map((item, i) => {
                 const isSpecial = specialLines.has(item);
                 return (
@@ -124,7 +136,7 @@ export function SpotifyDetails({ onBack, playSound }: Props) {
                       <span className="font-black text-pink-400 text-xl">{item}</span>
                     ) : (
                       <>
-                        <Check className="w-6 h-6 text-green-400 flex-shrink-0 mt-0.5" />
+                        <Check className="w-6 h-6 text-[#1db954] flex-shrink-0 mt-0.5" />
                         <span>{item}</span>
                       </>
                     )}
@@ -133,94 +145,125 @@ export function SpotifyDetails({ onBack, playSound }: Props) {
               })}
             </ul>
 
-            <div className="mt-10 p-6 bg-red-900/50 border-2 border-red-500 rounded-2xl text-center shadow-2xl">
-              <p className="text-yellow-300 font-black text-xl">
-                REMEMBER: SWITCH ACCOUNTS AFTER EVERY PLAYLIST WITH 20× REPEATS OF THE NEW SONG!
-              </p>
+            <div className="mt-10 p-8 bg-black/50 rounded-2xl border-2 border-pink-500">
+              <p className="text-2xl font-black text-pink-400 mb-4 text-center">SINGLE RELEASE EXAMPLE</p>
+              <p className="text-xl text-pink-300 font-bold text-center">{singleExample}</p>
+              <p className="text-2xl font-black text-pink-400 mt-8 mb-4 text-center">ALBUM RELEASE EXAMPLE</p>
+              <p className="text-xl text-pink-300 font-bold text-center">{albumExample}</p>
             </div>
           </div>
 
-          {/* DON'T + STREAMING RULE NOTES */}
-          <div className="bg-black/60 backdrop-blur-xl rounded-3xl p-8 border-2 border-red-600 shadow-2xl">
-            <h2 className="text-4xl font-black text-red-500 mb-8 text-center flex items-center justify-center gap-3">
+          {/* DON'TS */}
+          <div className="bg-black/60 backdrop-blur-xl rounded-3xl p-8 border-2 border-[#ff0436] shadow-2xl">
+            <h2 className="text-4xl font-black text-[#f94c57] mb-8 text-center flex items-center justify-center gap-3">
               DON'T <X className="w-12 h-12" />
             </h2>
-            <ul className="space-y-4 text-gray-200 text-lg mb-10">
+            <ul className="space-y-4 text-gray-200 text-lg">
               {dontList.map((item, i) => (
                 <li key={i} className="flex items-center gap-3">
-                  <X className="w-7 h-7 text-red-500 flex-shrink-0" />
+                  <X className="w-7 h-7 text-[#f94c57] flex-shrink-0" />
                   <span>{item}</span>
                 </li>
               ))}
             </ul>
+          </div>
+        </div>
 
-            <div className="mt-12 pt-8 border-t-2 border-red-800/50">
-              <h3 className="text-3xl font-black text-pink-400 text-center mb-6">
-                STREAMING RULE NOTES
+        {/* STREAMING RULE NOTES – INDEPENDENT FULL-WIDTH SECTION */}
+        <div className="my-24">
+          <h2 className="text-5xl font-black text-white text-center mb-14 tracking-widest flex items-center justify-center gap-5">
+            <Info className="w-12 h-12" />
+            STREAMING RULE NOTES
+          </h2>
+
+          <div className="grid md:grid-cols-2 gap-10 max-w-7xl mx-auto">
+
+            {/* LEFT: PURE BLACKPINK PLAYLIST */}
+            <div className="bg-gradient-to-br from-[#1db954]/20 to-transparent rounded-3xl p-10 border-2 border-[#1db954] backdrop-blur-xl shadow-2xl">
+              <h3 className="text-3xl font-black text-[#1db954] text-center mb-8">
+                PURE BLACKPINK PLAYLIST (RECOMMENDED)
               </h3>
-              <ul className="space-y-4 text-gray-200 text-lg">
-                <li className="flex items-start gap-3">
-                  <span className="text-pink-400">•</span>
-                  <span>We <strong>BAN</strong> use of any other artist songs that is not (BLACKPINK or it’s Soloist) Music in focused playlists.</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <span className="text-pink-400">•</span>
-                  <span>Premium users must reconnect to the internet within <strong>24 hours</strong> to count offline streams.</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <span className="text-pink-400">•</span>
-                  <span>Go to "Library" & Click on playlists or Click on "Search" & enter <strong>BLACKPINK FOCUS</strong> → click Profile → choose playlists.</span>
-                </li>
-              </ul>
+              <ol className="space-y-5 text-gray-100 text-lg list-decimal list-inside ml-6">
+                <li>Create a playlist with <strong>ONLY BLACKPINK + solo songs</strong>.</li>
+                <li>No other artists allowed in focused playlists.</li>
+                <li>Make it 24 hours long for overnight streaming.</li>
+                <li>During comeback: 80% new release + 20% old titles.</li>
+                <li>Post-comeback: 50–60% new + 40–50% old.</li>
+                <li>Turn OFF Autoplay to prevent outside songs.</li>
+                <li>Like (heart) every BLACKPINK song.</li>
+                <li>Play in order — no shuffle.</li>
+              </ol>
+            </div>
+
+            {/* RIGHT: ACCOUNT SWITCHING */}
+            <div className="bg-gradient-to-br from-[#ff0436]/20 to-transparent rounded-3xl p-10 border-2 border-[#ff0436] backdrop-blur-xl shadow-2xl">
+              <h3 className="text-3xl font-black text-[#f94c57] text-center mb-8">
+                ACCOUNT & CAP RULES
+              </h3>
+              <ol className="space-y-5 text-gray-100 text-lg list-decimal list-inside ml-6">
+                <li>Use <strong>at least 5 accounts</strong> per fan.</li>
+                <li>Max <strong>20 filtered streams</strong> per account per song version per day.</li>
+                <li>Switch accounts after every playlist with 20× repeats of the new song.</li>
+                <li>Premium streams are weighted higher on charts.</li>
+                <li>Family Plan: up to 6 accounts from same IP is safe.</li>
+                <li>Reconnect to internet within 24h for offline Premium streams to count.</li>
+              </ol>
+
+              <div className="mt-10 space-y-5 text-center">
+                <p className="text-yellow-300 font-black text-2xl">
+                  SWITCH ACCOUNTS AFTER EVERY 20× NEW SONG PLAYLIST!
+                </p>
+                <p className="text-cyan-300 font-bold text-xl">
+                  TIP: Use multiple browsers or Chrome profiles on desktop
+                </p>
+              </div>
             </div>
           </div>
         </div>
 
         {/* IMPORTANT REMINDERS */}
         <div className="mb-16">
-          <h2 className="text-4xl font-black text-center text-white mb-10 tracking-widest">
+          <h2 className="text-5xl font-black text-center text-white mb-10 tracking-widest">
             IMPORTANT REMINDERS
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {/* your 6 reminder cards */}
-            <div className="bg-gradient-to-br from-yellow-600/20 to-orange-600/20 backdrop-blur-xl border-2 border-yellow-500 rounded-3xl p-6 text-center shadow-2xl">
-              <p className="text-yellow-300 font-bold text-xl mb-2">Switch Account</p>
-              <p className="text-gray-200">After every 20× new song playlist</p>
+            <div className="bg-gradient-to-br from-red-600/20 to-pink-600/20 backdrop-blur-xl border-2 border-red-500 rounded-3xl p-6 text-center shadow-2xl">
+              <p className="text-red-300 font-bold text-xl mb-2">No Other Artists</p>
+              <p className="text-gray-200">In focused playlists</p>
             </div>
             <div className="bg-gradient-to-br from-pink-600/20 to-purple-600/20 backdrop-blur-xl border-2 border-pink-500 rounded-3xl p-6 text-center shadow-2xl">
               <p className="text-pink-300 font-bold text-xl mb-2">No VPN Ever</p>
-              <p className="text-gray-200">Spotify filters all VPN streams</p>
+              <p className="text-gray-200">Spotify blocks filtered streams</p>
             </div>
             <div className="bg-gradient-to-br from-purple-600/20 to-indigo-600/20 backdrop-blur-xl border-2 border-purple-500 rounded-3xl p-6 text-center shadow-2xl">
               <p className="text-purple-300 font-bold text-xl mb-2">Volume ≥ 1%</p>
-              <p className="text-gray-200">Mute phone OK — never mute Spotify</p>
+              <p className="text-gray-200">Never mute Spotify app</p>
             </div>
-            <div className="bg-gradient-to-br from-red-600/20 to-pink-600/20 backdrop-blur-xl border-2 border-red-500 rounded-3xl p-6 text-center shadow-2xl">
-              <p className="text-red-300 font-bold text-xl mb-2">No Shuffling</p>
-              <p className="text-gray-200">Play in order only</p>
+            <div className="bg-gradient-to-br from-yellow-600/20 to-orange-600/20 backdrop-blur-xl border-2 border-yellow-500 rounded-3xl p-6 text-center shadow-2xl">
+              <p className="text-yellow-300 font-bold text-xl mb-2">Switch Accounts</p>
+              <p className="text-gray-200">After 20 streams per song</p>
             </div>
             <div className="bg-gradient-to-br from-green-600/20 to-teal-600/20 backdrop-blur-xl border-2 border-green-500 rounded-3xl p-6 text-center shadow-2xl">
-              <p className="text-green-300 font-bold text-xl mb-2">Like Every Song</p>
-              <p className="text-gray-200">Heart all BLACKPINK tracks</p>
+              <p className="text-green-300 font-bold text-xl mb-2">Long Playlists</p>
+              <p className="text-gray-200">24-hour BLACKPINK only</p>
             </div>
             <div className="bg-gradient-to-br from-cyan-600/20 to-blue-600/20 backdrop-blur-xl border-2 border-cyan-500 rounded-3xl p-6 text-center shadow-2xl">
-              <p className="text-cyan-300 font-bold text-xl mb-2">Turn OFF Autoplay</p>
-              <p className="text-gray-200">Prevents other artists</p>
+              <p className="text-cyan-300 font-bold text-xl mb-2">Share Daily</p>
+              <p className="text-gray-200">Helps Viral 50 charts</p>
             </div>
           </div>
         </div>
 
-        {/* FAQ SECTION */}
+        {/* FAQ */}
         <div className="my-24">
-          <h2 className="text-5xl font-black text-center text-pink-400 mb-12 tracking-widest flex items-center justify-center gap-4">
+          <h2 className="text-5xl font-black text-center text-white mb-12 tracking-widest flex items-center justify-center gap-4">
             FAQ <ChevronDown className="w-12 h-12 animate-bounce" />
           </h2>
-
-          <div className="bg-black/60 backdrop-blur-xl rounded-3xl p-10 border-2 border-pink-500 shadow-2xl">
+          <div className="bg-black/60 backdrop-blur-xl rounded-3xl p-10 border-2 border-[#1db954] shadow-2xl">
             <ul className="space-y-5 text-gray-200 text-lg leading-relaxed">
               {faqItems.map((item, i) => (
                 <li key={i} className="flex items-start gap-4">
-                  <span className="text-pink-400 font-bold mt-1">Q{i + 1}.</span>
+                  <span className="text-[#1db954] font-bold mt-1">Q{i + 1}.</span>
                   <span>{item}</span>
                 </li>
               ))}
@@ -228,57 +271,35 @@ export function SpotifyDetails({ onBack, playSound }: Props) {
           </div>
         </div>
 
-        {/* OFFICIAL ARTIST LINKS – LAST SECTION */}
+        {/* OFFICIAL ARTIST LINKS */}
         <div className="mt-32 pb-20">
           <h2 className="text-5xl font-black text-center text-white mb-16 tracking-widest">
             Official Artist Links
           </h2>
-
           <div className="grid grid-cols-1 md:grid-cols-3 gap-10 max-w-6xl mx-auto items-center">
-            {/* BLACKPINK – LEFT */}
             <div className="flex justify-center md:justify-end">
-              <a
-                href={platform.blackpink}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group relative bg-transparent rounded-3xl p-6 transition-all duration-500 
-                         hover:scale-110 hover:z-10 active:scale-95 border-2 border-pink-500"
-                style={{
-                  background: 'rgba(255,105,180,0.1)',
-                  backdropFilter: 'blur(10px)',
-                  boxShadow: '0 0 40px rgba(236, 72, 153, 0.4)',
-                }}
-                onMouseEnter={playSound}
-              >
+              <a href={platform.blackpink} target="_blank" rel="noopener noreferrer"
+                className="group relative bg-transparent rounded-3xl p-6 transition-all duration-500 hover:scale-110 hover:z-10 active:scale-95 border-2 border-[#1db954]"
+                style={{ background: 'rgba(255,105,180,0.1)', backdropFilter: 'blur(10px)'}}
+                onMouseEnter={playSound}>
                 <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-pink-500/30 to-purple-500/30 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
                 <div className="relative z-10 text-center">
-                  <p className="text-5xl font-black text-white tracking-widest">BLACKPINK</p>
-                  <p className="text-pink-300 text-lg mt-2">Official Group</p>
+                  <p className="text-5xl font-black text-[#1db954] tracking-widest">BLACKPINK</p>
+                  <p className="text-white text-lg mt-2">Official Group</p>
                 </div>
               </a>
             </div>
 
-            {/* MEMBERS – RIGHT 2×2 */}
             <div className="md:col-span-2">
               <div className="grid grid-cols-2 gap-6">
                 {Object.entries(platform.members).map(([member, url]) => (
-                  <a
-                    key={member}
-                    href={url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="group relative bg-transparent rounded-3xl p-6 transition-all duration-500 
-                             hover:scale-110 hover:z-10 active:scale-95 border-2 border-pink-500"
-                    style={{
-                      background: 'rgba(255,105,180,0.1)',
-                      backdropFilter: 'blur(10px)',
-                      boxShadow: '0 0 40px rgba(236, 72, 153, 0.4)',
-                    }}
-                    onMouseEnter={playSound}
-                  >
+                  <a key={member} href={url} target="_blank" rel="noopener noreferrer"
+                    className="group relative bg-transparent rounded-3xl p-6 transition-all duration-500 hover:scale-110 hover:z-10 active:scale-95 border-2 border-[#1db954]"
+                    style={{ background: 'rgba(255,105,180,0.1)', backdropFilter: 'blur(10px)'}}
+                    onMouseEnter={playSound}>
                     <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-pink-500/30 to-purple-500/30 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
                     <div className="relative z-10 text-center">
-                      <p className="text-4xl font-black text-white tracking-widest">
+                      <p className="text-4xl font-black text-[#1db954] tracking-widest">
                         {member === 'rosé' ? 'ROSÉ' : member.toUpperCase()}
                       </p>
                     </div>
