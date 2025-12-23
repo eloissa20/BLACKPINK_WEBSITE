@@ -1,7 +1,10 @@
 // src/components/Header.tsx
-import { Crown, Menu, X } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 import { useState } from 'react';
 import { TabType } from '../App';
+
+// Import the BP logo image (add this file to your src/assets folder)
+import bpLogo from '../assets/bp-logo.png'; // Recommended: Use a pink "BP" logo PNG with transparent background
 
 interface HeaderProps {
   activeTab: TabType;
@@ -30,17 +33,27 @@ export function Header({
     setIsMobileMenuOpen(false);
   };
 
+  const handleLogoClick = () => {
+    onTabChange('home');
+    setIsMobileMenuOpen(false);
+  };
+
   return (
     <>
       {/* Fixed Header */}
       <header className="fixed top-0 left-0 right-0 z-50 h-20 bg-black/95 backdrop-blur-2xl border-b border-pink-500/30 px-6 flex items-center justify-between shadow-2xl supports-[backdrop-filter]:bg-black/80">
-        {/* Logo */}
-        <div className="flex items-center space-x-3">
-          <Crown className="w-9 h-9 text-pink-500 drop-shadow-lg" />
-          <h1 className="text-2xl md:text-3xl font-black tracking-widest bg-gradient-to-r from-pink-400 to-purple-500 bg-clip-text text-transparent">
-            BLACKPINK
-          </h1>
-        </div>
+        {/* Logo - Now clickable to go HOME */}
+        <button
+          onClick={handleLogoClick}
+          className="flex items-center space-x-3 hover:opacity-80 transition-opacity"
+          aria-label="Go to Home"
+        >
+          <img
+            src={bpLogo}
+            alt="BP Logo"
+            className="w-10 h-10 md:w-12 md:h-12 object-contain drop-shadow-lg"
+          />
+        </button>
 
         {/* Desktop Navigation */}
         {showNavigation && (
@@ -58,7 +71,7 @@ export function Header({
                 >
                   {tab.label}
                   {activeTab === tab.id && (
-                    <span className="absolute -bottom-1 left-0 w-full h-1 bg-gradient-to-r from-pink-500 to-purple-500 rounded-full shadow-lg" />
+                    <span className="absolute -bottom-1 left-0 w-full h-1 bg-pink-500 rounded-full shadow-lg" />
                   )}
                 </button>
               ))}
@@ -97,7 +110,7 @@ export function Header({
         </div>
       )}
 
-      {/* THIS PREVENTS CONTENT FROM BEING HIDDEN UNDER THE HEADER */}
+      {/* Spacer to prevent content from being hidden under header */}
       <div className="h-20 w-full" />
     </>
   );
