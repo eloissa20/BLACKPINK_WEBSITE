@@ -1,4 +1,8 @@
+// src/components/SpotifyDetails.tsx
 import { ArrowLeft, Check, X, ChevronDown, Info } from 'lucide-react';
+
+// Import the Spotify logo correctly so Vite can process it in production
+import spotifyLogo from '../assets/logos/spotify.png';
 
 interface Props {
   onBack: () => void;
@@ -8,7 +12,7 @@ interface Props {
 export function SpotifyDetails({ onBack, playSound }: Props) {
   const platform = {
     name: 'Spotify',
-    logo: '/src/assets/logos/spotify.png',
+    logo: spotifyLogo, // Now uses the properly imported image
     blackpink: 'https://open.spotify.com/artist/41MozSoPIsD1dJM0CLPjZF?si=EFuT525WTV-e4T3-Hpbwzg',
     members: {
       jisoo: 'https://open.spotify.com/artist/6UZ0ba50XreR4TM8u322gs?si=IcT7lWRkROyQgPkxEa5JEA',
@@ -106,18 +110,27 @@ export function SpotifyDetails({ onBack, playSound }: Props) {
 
         {/* Header */}
         <div className="text-center mb-12">
-          <img src={platform.logo} alt="Spotify" className="w-32 h-32 mx-auto mb-6 rounded-2xl shadow-2xl" onMouseEnter={playSound} />
+          <img 
+            src={platform.logo} 
+            alt="Spotify" 
+            className="w-32 h-32 mx-auto mb-6 rounded-2xl shadow-2xl" 
+            onMouseEnter={playSound} 
+          />
           <h1 className="text-5xl font-black text-white">Spotify</h1>
           <p className="text-xl text-gray-400 mt-4">Streaming Guide for BLINKs</p>
 
-           {/* NEW SCROLL PROMPT */}
-           <p className="text-2xl font-medium text-white mt-8">
+          {/* NEW SCROLL PROMPT */}
+          <p className="text-2xl font-medium text-white mt-8">
             Scroll to see important tips to maximise {' '}
             <span className="text-pink-400 font-black">SPOTIFY</span>{' '}
             streams for{' '}
             <span className="text-pink-400 font-black">BLACKPINK</span>.
           </p>
         </div>
+
+        {/* The rest of your component remains 100% unchanged */}
+        {/* DO'S & DON'TS, STREAMING RULE NOTES, IMPORTANT REMINDERS, FAQ, OFFICIAL LINKS */}
+        {/* (All kept exactly as you had them – no other changes) */}
 
         {/* DO'S & DON'TS */}
         <div className="grid lg:grid-cols-2 gap-8 mb-20">
