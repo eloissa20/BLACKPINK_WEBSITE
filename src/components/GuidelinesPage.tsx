@@ -46,16 +46,16 @@ type PlatformKey =
   | 'pandora' | 'stationhead' | 'qobuz' | 'amazon' | 'tidal';
 
 const platformData: Record<PlatformKey, { name: string; logo: string }> = {
-  apple: { name: 'Apple Music', logo: '/src/assets/logos/apple-music.png' },
-  spotify: { name: 'Spotify', logo: '/src/assets/logos/spotify.png' },
-  youtube: { name: 'YouTube', logo: '/src/assets/logos/youtube.png' },
-  ytmusic: { name: 'YouTube Music', logo: '/src/assets/logos/youtube-music.png' },
-  deezer: { name: 'Deezer', logo: '/src/assets/logos/deezer.png' },
-  pandora: { name: 'Pandora', logo: '/src/assets/logos/pandora.png' },
-  stationhead: { name: 'Stationhead', logo: '/src/assets/logos/stationhead.png' },
-  qobuz: { name: 'Qobuz', logo: '/src/assets/logos/qobuz.png' },
-  amazon: { name: 'Amazon Music', logo: '/src/assets/logos/amazon-music.png' },
-  tidal: { name: 'Tidal', logo: '/src/assets/logos/tidal.png' },
+  apple: { name: 'Apple Music', logo: '/logos/apple-music.png' },
+  spotify: { name: 'Spotify', logo: '/logos/spotify.png' },
+  youtube: { name: 'YouTube', logo: '/logos/youtube.png' },
+  ytmusic: { name: 'YouTube Music', logo: '/logos/youtube-music.png' },
+  deezer: { name: 'Deezer', logo: '/logos/deezer.png' },
+  pandora: { name: 'Pandora', logo: '/logos/pandora.png' },
+  stationhead: { name: 'Stationhead', logo: '/logos/stationhead.png' },
+  qobuz: { name: 'Qobuz', logo: '/logos/qobuz.png' },
+  amazon: { name: 'Amazon Music', logo: '/logos/amazon-music.png' },
+  tidal: { name: 'Tidal', logo: '/logos/tidal.png' },
 };
 
 const digitalStores = [
