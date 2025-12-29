@@ -5,12 +5,13 @@ import {
   CreditCard,
   BarChart3,
   TrendingUp,
-  ExternalLink,
   Globe,
   Flag,
 } from 'lucide-react';
 import { ContinentType } from '../App';
 
+import { DigitalBuying } from './DigitalBuying';
+import { PhysicalBuying } from './PhysicalBuying';
 import { AppleMusicDetails } from './AppleMusicDetails';
 import { SpotifyDetails } from './SpotifyDetails';
 import { YouTubeDetails } from './YouTubeDetails';
@@ -22,7 +23,7 @@ import { QobuzDetails } from './QobuzDetails';
 import { AmazonMusicDetails } from './AmazonMusicDetails';
 import { TidalDetails } from './TidalDetails';
 
-// ✅ Import all logos correctly (relative from src/components/)
+// Import all streaming platform logos
 import appleMusicLogo from '../assets/logos/apple-music.png';
 import spotifyLogo from '../assets/logos/spotify.png';
 import youtubeLogo from '../assets/logos/youtube.png';
@@ -54,11 +55,16 @@ interface GuidelinesPageProps {
   onSelectChart: (region: ContinentType) => void;
 }
 
-type PlatformKey =
+// Separate type for streaming platforms only (they have logos)
+type StreamingPlatformKey =
   | 'apple' | 'spotify' | 'youtube' | 'ytmusic' | 'deezer'
   | 'pandora' | 'stationhead' | 'qobuz' | 'amazon' | 'tidal';
 
-const platformData: Record<PlatformKey, { name: string; logo: any }> = {
+// Full type for what can be selected (includes buying sections)
+type SelectedPlatformKey = StreamingPlatformKey | 'digital' | 'physical';
+
+// platformData only contains streaming platforms → perfect type match
+const platformData: Record<StreamingPlatformKey, { name: string; logo: string }> = {
   apple: { name: 'Apple Music', logo: appleMusicLogo },
   spotify: { name: 'Spotify', logo: spotifyLogo },
   youtube: { name: 'YouTube', logo: youtubeLogo },
@@ -71,26 +77,11 @@ const platformData: Record<PlatformKey, { name: string; logo: any }> = {
   tidal: { name: 'Tidal', logo: tidalLogo },
 };
 
-
-const digitalStores = [
-  { name: 'iTunes Store', url: 'https://music.apple.com/us/artist/blackpink/1252555207', region: 'Global' },
-  { name: 'Amazon Music', url: 'https://music.amazon.com/artists/B01LWZY8S7/blackpink', region: 'Global' },
-  { name: '7digital', url: 'https://www.7digital.com/', region: 'Global' },
-];
-
-const physicalStores = [
-  { name: 'Target', url: 'https://www.target.com/s?searchTerm=blackpink', region: 'USA' },
-  { name: 'Walmart', url: 'https://www.walmart.com/search?query=blackpink%20album', region: 'USA' },
-  { name: 'Amazon', url: 'https://www.amazon.com/s?k=blackpink+album', region: 'Global' },
-  { name: 'YG Shop', url: 'https://shop.ygfamily.com/', region: 'Official' },
-];
-
 export function GuidelinesPage({ onSelectChart }: GuidelinesPageProps) {
   const [activeSection, setActiveSection] = useState<'streaming' | 'buying' | 'payment' | 'charts'>('streaming');
-  const [selectedPlatform, setSelectedPlatform] = useState<PlatformKey | null>(null);
+  const [selectedPlatform, setSelectedPlatform] = useState<SelectedPlatformKey | null>(null);
   const playSound = useSound();
 
-  // Shared props for all detail components
   const detailProps = {
     onBack: () => setSelectedPlatform(null),
     playSound,
@@ -110,7 +101,7 @@ export function GuidelinesPage({ onSelectChart }: GuidelinesPageProps) {
     { id: 'uk' as ContinentType, title: 'UK CHARTS', description: 'Official UK charts' },
   ];
 
-  // FIXED: Properly render selected platform with props
+  // Render selected detail page
   if (selectedPlatform) {
     switch (selectedPlatform) {
       case 'apple':
@@ -133,6 +124,10 @@ export function GuidelinesPage({ onSelectChart }: GuidelinesPageProps) {
         return <AmazonMusicDetails {...detailProps} />;
       case 'tidal':
         return <TidalDetails {...detailProps} />;
+      case 'digital':
+        return <DigitalBuying {...detailProps} />;
+      case 'physical':
+        return <PhysicalBuying {...detailProps} />;
       default:
         return <SpotifyDetails {...detailProps} />;
     }
@@ -145,6 +140,7 @@ export function GuidelinesPage({ onSelectChart }: GuidelinesPageProps) {
           STREAMING & BUYING GUIDELINES
         </h1>
 
+        {/* Section Tabs */}
         <div className="flex justify-center mb-16">
           <div className="backdrop-blur-md rounded-3xl p-3 flex flex-wrap justify-center gap-4">
             {sections.map((s) => {
@@ -168,6 +164,7 @@ export function GuidelinesPage({ onSelectChart }: GuidelinesPageProps) {
           </div>
         </div>
 
+        {/* Streaming Section */}
         {activeSection === 'streaming' && (
           <div className="space-y-16">
             <h2 className="text-5xl font-black text-white text-center mb-12">Streaming Platforms</h2>
@@ -175,7 +172,7 @@ export function GuidelinesPage({ onSelectChart }: GuidelinesPageProps) {
               {Object.entries(platformData).map(([key, plat]) => (
                 <button
                   key={key}
-                  onClick={() => { playSound(); setSelectedPlatform(key as PlatformKey); }}
+                  onClick={() => { playSound(); setSelectedPlatform(key as StreamingPlatformKey); }}
                   onMouseEnter={playSound}
                   className="group relative bg-transparent rounded-3xl p-8 transition-all duration-500 hover:scale-110 border-2 border-pink-500"
                   style={{ background: 'rgba(255,105,180,0.1)', backdropFilter: 'blur(10px)', boxShadow: '0 0 40px rgba(236, 72, 153, 0.4)' }}
@@ -186,6 +183,7 @@ export function GuidelinesPage({ onSelectChart }: GuidelinesPageProps) {
               ))}
             </div>
 
+            {/* US & Worldwide chart focus */}
             <div className="space-y-16 mt-24">
               <div className="bg-transparent border-2 border-pink-500 rounded-3xl p-10 backdrop-blur-xl">
                 <div className="flex items-center justify-center gap-4 mb-10">
@@ -220,53 +218,88 @@ export function GuidelinesPage({ onSelectChart }: GuidelinesPageProps) {
           </div>
         )}
 
+        {/* Modern Buying Methods Section */}
         {activeSection === 'buying' && (
-          <div className="space-y-10">
-            <h2 className="text-4xl font-black text-white text-center mb-10">Buying Guidelines</h2>
-            <div className="grid md:grid-cols-2 gap-10">
-              <div className="bg-gray-900/60 backdrop-blur-xl rounded-3xl p-8 border-2 border-pink-400">
-                <h3 className="text-2xl font-bold text-pink-400 mb-6">Digital Stores</h3>
-                {digitalStores.map((store, i) => (
-                  <a
-                    key={i}
-                    href={store.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center justify-between p-4 bg-gray-800/50 rounded-xl hover:bg-gray-700/60 transition mb-3 group"
-                    onMouseEnter={playSound}
-                  >
-                    <div>
-                      <span className="text-white font-semibold">{store.name}</span>
-                      <span className="text-gray-400 text-sm ml-2">({store.region})</span>
-                    </div>
-                    <ExternalLink className="w-5 h-5 text-gray-400 group-hover:text-pink-400" />
-                  </a>
-                ))}
+          <div className="space-y-16">
+            <h2 className="text-5xl font-black text-white text-center mb-12">Buying Guidelines</h2>
+            
+            {/* Important Reminder Banner */}
+            <div className="max-w-5xl mx-auto mb-20">
+              <div className="bg-gradient-to-r from-pink-900/50 to-purple-900/50 backdrop-blur-xl rounded-3xl p-10 border-2 border-pink-500/70 shadow-2xl shadow-pink-500/30">
+                <h3 className="text-4xl font-black text-pink-300 text-center mb-6">
+                  ⚠️ IMPORTANT REMINDER FOR BLINKS
+                </h3>
+                <p className="text-xl text-gray-200 text-center leading-relaxed max-w-4xl mx-auto">
+                  Digital Music Buying and Physical Albums Buying are <span className="text-pink-400 font-bold">completely separate</span> with different rules and chart contributions.
+                  <br /><br />
+                  Some platforms have <span className="text-yellow-300 font-bold">strict limitations</span> (e.g., region restrictions, shipping, chart eligibility).
+                  <br /><br />
+                  <span className="text-pink-400 font-bold">Always read carefully</span> before purchasing to ensure your support counts toward BLACKPINK's charts!
+                </p>
               </div>
+            </div>
 
-              <div className="bg-gray-900/60 backdrop-blur-xl rounded-3xl p-8 border-2 border-purple-400">
-                <h3 className="text-2xl font-bold text-purple-400 mb-6">Physical Albums</h3>
-                {physicalStores.map((store, i) => (
-                  <a
-                    key={i}
-                    href={store.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center justify-between p-4 bg-gray-800/50 rounded-xl hover:bg-gray-700/60 transition mb-3 group"
-                    onMouseEnter={playSound}
-                  >
-                    <div>
-                      <span className="text-white font-semibold">{store.name}</span>
-                      <span className="text-gray-400 text-sm ml-2">({store.region})</span>
-                    </div>
-                    <ExternalLink className="w-5 h-5 text-gray-400 group-hover:text-purple-400" />
-                  </a>
-                ))}
-              </div>
+            <div className="grid md:grid-cols-2 gap-16 max-w-7xl mx-auto">
+              {/* Digital Music Buying Card */}
+              <button
+                onClick={() => { playSound(); setSelectedPlatform('digital'); }}
+                onMouseEnter={playSound}
+                className="group relative bg-black/60 backdrop-blur-2xl rounded-3xl p-16 overflow-hidden border-2 border-[#F70776]/60 shadow-2xl transition-all duration-700 hover:scale-110 hover:border-[#F70776] hover:shadow-2xl hover:shadow-[#F70776]/60"
+              >
+                <div className="absolute inset-0 bg-gradient-to-br from-[#F70776]/80 to-purple-600/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                <div className="relative z-10 text-center">
+                  <div className="w-48 h-48 mx-auto mb-10 rounded-3xl overflow-hidden shadow-2xl border-4 border-pink-500/30">
+                    <img 
+                      src="https://logos-world.net/wp-content/uploads/2020/11/Apple-Music-Logo-2015-present.png" 
+                      alt="Digital Music" 
+                      className="w-full h-full object-contain bg-black/50"
+                    />
+                  </div>
+                  <h3 className="text-5xl font-black mb-6 transition-colors duration-500 group-hover:text-white text-[#F11A7B]">
+                    Digital Music Buying
+                  </h3>
+                  <p className="text-2xl text-gray-300 mb-4">iTunes, Amazon Digital, 7digital and more</p>
+                  <p className="text-xl text-gray-400">Instant downloads • Global availability</p>
+                </div>
+              </button>
+
+              {/* Physical Albums Buying Card */}
+              <button
+                onClick={() => { playSound(); setSelectedPlatform('physical'); }}
+                onMouseEnter={playSound}
+                className="group relative bg-black/60 backdrop-blur-2xl rounded-3xl p-16 overflow-hidden border-2 border-[#FA58B6]/60 shadow-2xl transition-all duration-700 hover:scale-110 hover:border-[#FA58B6] hover:shadow-2xl hover:shadow-[#FA58B6]/60"
+              >
+                <div className="absolute inset-0 bg-gradient-to-br from-[#FA58B6]/80 to-pink-600/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                <div className="relative z-10 text-center">
+                  <div className="w-48 h-48 mx-auto mb-10 rounded-3xl overflow-hidden shadow-2xl border-4 border-purple-500/30">
+                    <img 
+                      src="https://i.redd.it/9fplyk9jxhg61.jpg" 
+                      alt="Physical Albums" 
+                      className="w-full h-full object-cover brightness-90"
+                    />
+                  </div>
+                  <h3 className="text-5xl font-black mb-6 transition-colors duration-500 group-hover:text-white text-[#F94892]">
+                    Physical Albums Buying
+                  </h3>
+                  <p className="text-2xl text-gray-300 mb-4">Official stores by region • Counts toward charts</p>
+                  <p className="text-xl text-gray-400">Global • Korea • USA • UK</p>
+                </div>
+              </button>
+            </div>
+
+            {/* Large Footer Spacing + Final Note */}
+            <div className="mt-32 pb-20 text-center">
+              <p className="text-2xl text-gray-400 max-w-4xl mx-auto leading-relaxed">
+                Your purchases and streams are the greatest support for BLACKPINK.
+                <br />
+                <span className="text-pink-400 font-bold">Every BLINK makes a difference — let's push them higher together!</span> 💗
+              </p>
             </div>
           </div>
         )}
 
+
+        {/* Payment Methods Section */}
         {activeSection === 'payment' && (
           <div className="max-w-4xl mx-auto">
             <h2 className="text-4xl font-black text-white text-center mb-10">Payment Methods</h2>
@@ -304,6 +337,7 @@ export function GuidelinesPage({ onSelectChart }: GuidelinesPageProps) {
           </div>
         )}
 
+        {/* Charts Section */}
         {activeSection === 'charts' && (
           <div className="space-y-10">
             <h2 className="text-4xl font-black text-white text-center mb-10">Choose Your Chart</h2>
