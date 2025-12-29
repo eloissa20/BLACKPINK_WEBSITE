@@ -1,7 +1,7 @@
 // src/components/SpotifyDetails.tsx
 import { ArrowLeft, Check, X, ChevronDown, Info } from 'lucide-react';
 
-// Import the Spotify logo correctly so Vite can process it in production
+// ✅ Correct way: Import the image just like in Header.tsx
 import spotifyLogo from '../assets/logos/spotify.png';
 
 interface Props {
@@ -12,7 +12,7 @@ interface Props {
 export function SpotifyDetails({ onBack, playSound }: Props) {
   const platform = {
     name: 'Spotify',
-    logo: spotifyLogo, // Now uses the properly imported image
+    logo: spotifyLogo, // ✅ Use the imported variable (not a string path)
     blackpink: 'https://open.spotify.com/artist/41MozSoPIsD1dJM0CLPjZF?si=EFuT525WTV-e4T3-Hpbwzg',
     members: {
       jisoo: 'https://open.spotify.com/artist/6UZ0ba50XreR4TM8u322gs?si=IcT7lWRkROyQgPkxEa5JEA',
@@ -21,6 +21,8 @@ export function SpotifyDetails({ onBack, playSound }: Props) {
       lisa: 'https://open.spotify.com/artist/41MozSoPIsD1dJM0CLPjZF?si=EFuT525WTV-e4T3-Hpbwzg',
     },
   };
+
+  // ... (all your lists stay exactly the same – no changes needed below)
 
   const doList = [
     'Log in to your Spotify account',
@@ -102,14 +104,12 @@ export function SpotifyDetails({ onBack, playSound }: Props) {
   return (
     <div className="h-full p-8 overflow-y-auto bg-gradient-to-br from-black via-purple-900/30 to-black">
       <div className="max-w-5xl mx-auto">
-
-        {/* Back Button */}
         <button onClick={onBack} className="flex items-center gap-3 text-pink-400 hover:text-pink-300 mb-10 font-semibold transition">
           <ArrowLeft className="w-6 h-6" /> Back to Guidelines
         </button>
 
-        {/* Header */}
         <div className="text-center mb-12">
+          {/* ✅ This will now work on Vercel just like the BP logo */}
           <img 
             src={platform.logo} 
             alt="Spotify" 
@@ -119,7 +119,6 @@ export function SpotifyDetails({ onBack, playSound }: Props) {
           <h1 className="text-5xl font-black text-white">Spotify</h1>
           <p className="text-xl text-gray-400 mt-4">Streaming Guide for BLINKs</p>
 
-          {/* NEW SCROLL PROMPT */}
           <p className="text-2xl font-medium text-white mt-8">
             Scroll to see important tips to maximise {' '}
             <span className="text-pink-400 font-black">SPOTIFY</span>{' '}
@@ -127,7 +126,6 @@ export function SpotifyDetails({ onBack, playSound }: Props) {
             <span className="text-pink-400 font-black">BLACKPINK</span>.
           </p>
         </div>
-
         {/* The rest of your component remains 100% unchanged */}
         {/* DO'S & DON'TS, STREAMING RULE NOTES, IMPORTANT REMINDERS, FAQ, OFFICIAL LINKS */}
         {/* (All kept exactly as you had them – no other changes) */}
