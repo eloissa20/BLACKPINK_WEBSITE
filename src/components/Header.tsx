@@ -3,8 +3,7 @@ import { Menu, X } from 'lucide-react';
 import { useState } from 'react';
 import { TabType } from '../App';
 
-// Import the BP logo image (add this file to your src/assets folder)
-import bpLogo from '../assets/bp-logo.png'; // Recommended: Use a pink "BP" logo PNG with transparent background
+import bpLogo from '../assets/logos/bplogo.png';
 
 interface HeaderProps {
   activeTab: TabType;
@@ -42,7 +41,7 @@ export function Header({
     <>
       {/* Fixed Header */}
       <header className="fixed top-0 left-0 right-0 z-50 h-20 bg-black/95 backdrop-blur-2xl border-b border-pink-500/30 px-6 flex items-center justify-between shadow-2xl supports-[backdrop-filter]:bg-black/80">
-        {/* Logo - Now clickable to go HOME */}
+        {/* Logo - Clickable to go HOME */}
         <button
           onClick={handleLogoClick}
           className="flex items-center space-x-3 hover:opacity-80 transition-opacity"
@@ -50,8 +49,8 @@ export function Header({
         >
           <img
             src={bpLogo}
-            alt="BP Logo"
-            className="w-10 h-10 md:w-12 md:h-12 object-contain drop-shadow-lg"
+            alt="BLACKPINK Logo"
+            className="w-14 h-14 md:w-16 md:h-16 object-contain drop-shadow-lg"
           />
         </button>
 
@@ -110,7 +109,7 @@ export function Header({
         </div>
       )}
 
-      {/* Spacer to prevent content from being hidden under header */}
+      {/* Spacer to prevent content overlap */}
       <div className="h-20 w-full" />
     </>
   );
