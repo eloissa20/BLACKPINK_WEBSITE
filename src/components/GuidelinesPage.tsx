@@ -1,3 +1,4 @@
+// src/components/GuidelinesPage.tsx
 import { useState, useEffect } from 'react';
 import {
   Music,
@@ -20,6 +21,18 @@ import { StationheadDetails } from './StationheadDetails';
 import { QobuzDetails } from './QobuzDetails';
 import { AmazonMusicDetails } from './AmazonMusicDetails';
 import { TidalDetails } from './TidalDetails';
+
+// ✅ Import all logos correctly (relative from src/components/)
+import appleMusicLogo from '../assets/logos/apple-music.png';
+import spotifyLogo from '../assets/logos/spotify.png';
+import youtubeLogo from '../assets/logos/youtube.png';
+import youtubeMusicLogo from '../assets/logos/youtube-music.png';
+import deezerLogo from '../assets/logos/deezer.png';
+import pandoraLogo from '../assets/logos/pandora.png';
+import stationheadLogo from '../assets/logos/stationhead.png';
+import qobuzLogo from '../assets/logos/qobuz.png';
+import amazonMusicLogo from '../assets/logos/amazon-music.png';
+import tidalLogo from '../assets/logos/tidal.png';
 
 const useSound = () => {
   const audio = new Audio('https://cdn.glitch.global/8d5e2c8d-5e2c-8d5e-2c8d-5e2c8d5e2c8d/ddudu-whistle.mp3');
@@ -45,18 +58,19 @@ type PlatformKey =
   | 'apple' | 'spotify' | 'youtube' | 'ytmusic' | 'deezer'
   | 'pandora' | 'stationhead' | 'qobuz' | 'amazon' | 'tidal';
 
-const platformData: Record<PlatformKey, { name: string; logo: string }> = {
-  apple: { name: 'Apple Music', logo: '/logos/apple-music.png' },
-  spotify: { name: 'Spotify', logo: '/logos/spotify.png' },
-  youtube: { name: 'YouTube', logo: '/logos/youtube.png' },
-  ytmusic: { name: 'YouTube Music', logo: '/logos/youtube-music.png' },
-  deezer: { name: 'Deezer', logo: '/logos/deezer.png' },
-  pandora: { name: 'Pandora', logo: '/logos/pandora.png' },
-  stationhead: { name: 'Stationhead', logo: '/logos/stationhead.png' },
-  qobuz: { name: 'Qobuz', logo: '/logos/qobuz.png' },
-  amazon: { name: 'Amazon Music', logo: '/logos/amazon-music.png' },
-  tidal: { name: 'Tidal', logo: '/logos/tidal.png' },
+const platformData: Record<PlatformKey, { name: string; logo: any }> = {
+  apple: { name: 'Apple Music', logo: appleMusicLogo },
+  spotify: { name: 'Spotify', logo: spotifyLogo },
+  youtube: { name: 'YouTube', logo: youtubeLogo },
+  ytmusic: { name: 'YouTube Music', logo: youtubeMusicLogo },
+  deezer: { name: 'Deezer', logo: deezerLogo },
+  pandora: { name: 'Pandora', logo: pandoraLogo },
+  stationhead: { name: 'Stationhead', logo: stationheadLogo },
+  qobuz: { name: 'Qobuz', logo: qobuzLogo },
+  amazon: { name: 'Amazon Music', logo: amazonMusicLogo },
+  tidal: { name: 'Tidal', logo: tidalLogo },
 };
+
 
 const digitalStores = [
   { name: 'iTunes Store', url: 'https://music.apple.com/us/artist/blackpink/1252555207', region: 'Global' },
