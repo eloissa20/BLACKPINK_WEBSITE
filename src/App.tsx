@@ -11,7 +11,8 @@ import { MusicShowsPage } from './components/MusicShowsPage';
 import { AlbumDetailsPage } from './components/AlbumDetailsPage';
 import { ChartDetailsPage } from './components/ChartDetailsPage';
 import { FanbaseDetailsPage } from './components/FanbaseDetailsPage';
-import { Footer } from './components/Footer';
+import Footer from './components/Footer';
+
 
 export type TabType = 'home' | 'album' | 'guidelines' | 'medias' | 'blink-hub' | 'music-shows';
 export type ContinentType = 'global' | 'korea' | 'usa' | 'uk';
