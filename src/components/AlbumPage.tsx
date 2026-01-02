@@ -14,14 +14,15 @@ interface AlbumPageProps {
 }
 
 /* =========================
-   HIGH-QUALITY FLAG & GLOBE IMAGES
-   (All direct PNG links with transparent background)
+   FLAGS & GLOBE ICONS
+   - Global: Clean 3D globe icon with stand (icon/illustration style)
+   - Countries: Realistic waving flags (same style series for consistency)
 ========================= */
 
 const FlagGlobal = () => (
   <img
-    src="https://static.vecteezy.com/system/resources/previews/038/362/941/non_2x/3d-world-globe-icon-with-stand-icon-illustration-png.png"
-    alt="3D Globe Icon"
+    src="https://png.pngtree.com/png-vector/20230905/ourmid/pngtree-metallic-globe-3d-planet-png-image_9942792.png"
+    alt="3D Globe Icon with Stand"
     className="w-full h-full object-contain drop-shadow-2xl"
   />
 );
