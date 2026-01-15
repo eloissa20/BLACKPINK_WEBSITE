@@ -1,8 +1,21 @@
 import { useEffect, useRef, useState } from 'react';
-import { Music, ShoppingBag, Zap, Volume2, VolumeX, Youtube, Heart, Sparkles, Star, TrendingUp } from 'lucide-react';
+import {
+  Music,
+  ShoppingBag,
+  Zap,
+  Volume2,
+  VolumeX,
+  Youtube,
+  Heart,
+  Sparkles,
+  Star,
+  TrendingUp,
+} from 'lucide-react';
+
+import { TabType } from '../types';   // ← changed to ../types (go up one level)
 
 type HomePageProps = {
-  onNavigate: (tab: 'guidelines' | 'album' | string) => void;
+  onNavigate: (tab: TabType) => void;
   bgImage?: string;
 };
 
@@ -44,12 +57,10 @@ export function HomePage({ onNavigate, bgImage }: HomePageProps) {
     const video = videoRef.current;
     if (!video) return;
 
-    // Force video to be muted and set up for autoplay
     video.muted = true;
     video.playsInline = true;
     video.setAttribute('webkit-playsinline', 'true');
-    
-    // Try to play the video
+
     const attemptPlay = () => {
       const playPromise = video.play();
       if (playPromise !== undefined) {
@@ -59,13 +70,11 @@ export function HomePage({ onNavigate, bgImage }: HomePageProps) {
           })
           .catch((error) => {
             console.warn('Autoplay was prevented:', error);
-            // Retry after a short delay
             setTimeout(attemptPlay, 100);
           });
       }
     };
 
-    // Wait for video to be loaded
     if (video.readyState >= 3) {
       attemptPlay();
     } else {
@@ -88,39 +97,47 @@ export function HomePage({ onNavigate, bgImage }: HomePageProps) {
   const newsPosts = [
     {
       title: '3rd Mini Album "DEADLINE" - PRE-ORDER NOW!',
-      content: 'Pre-order BLACKPINK\'s highly anticipated 3rd mini album "DEADLINE" now! Available in five versions with exclusive selfie photocards and posters!',
+      content:
+        'Pre-order BLACKPINK\'s highly anticipated 3rd mini album "DEADLINE" now! Available in multiple versions with exclusive photo cards and posters. Ships January 2026!',
       author: 'YG Entertainment',
       timestamp: 'Jan 15, 2026',
       link: 'https://orcd.co/blackpink-deadline',
-      image: 'https://cafe24img.poxo.com/ygnext/web/product/big/202601/1df098494a816d5bcb8306d6f71d9824.jpg',
+      image:
+        'https://cafe24img.poxo.com/ygnext/web/product/big/202601/1df098494a816d5bcb8306d6f71d9824.jpg',
     },
     {
       title: 'BLACKPINK 3rd Mini Album "DEADLINE" Announced!',
-      content: 'BREAKING: BLACKPINK is releasing their 3rd mini album "DEADLINE" on February 27, 2026! YG Entertainment: "We would like to express our deep gratitude to the fans (BLINKS) who have waited for us for such a long time. We plan to repay you with high-quality music."',
+      content:
+        'BREAKING: BLACKPINK is releasing their 3rd mini album "DEADLINE" on February 27, 2026! YG Entertainment: "We would like to express our deep gratitude to the fans (BLINKS) who have waited for us for such a long time. We plan to repay you with high-quality music."',
       author: 'YG Entertainment',
-      timestamp: 'Jan 15, 2026',
+      timestamp: 'Jan 14, 2026',
       link: 'https://www.youtube.com/watch?v=6gi87AUDs0M',
       image: 'https://pbs.twimg.com/media/G-qnKDRbQAYq3KZ?format=jpg&name=large',
     },
     {
       title: 'BLACKPINK Original Tamagotchi Launches TODAY!',
-      content: 'Limited-edition BLACKPINK Tamagotchi nano now available on KakaoTalk Gift! Raise Jennie, Jisoo, Rosé, and Lisa as cute digital pets ♡ Physical version coming 2026.',
+      content:
+        'Limited-edition BLACKPINK Tamagotchi nano now available on KakaoTalk Gift! Raise Jennie, Jisoo, Rosé, and Lisa as cute digital pets ♡ Physical version coming 2026.',
       author: 'Bandai Namco / YG Plus',
       timestamp: 'Dec 23, 2025',
       link: 'https://gift.kakao.com/brand/14367',
-      image: 'https://www.allkpop.com/upload/2025/12/content/191449/web_data/allkpop_1766173858_allkpop-header-photo.jpg',
+      image:
+        'https://www.allkpop.com/upload/2025/12/content/191449/web_data/allkpop_1766173858_allkpop-header-photo.jpg',
     },
     {
       title: 'fragment design x BLACKPINK Second Collab Drops',
-      content: 'DEADLINE tour-inspired collection: hoodies, stadium jackets, tees, totes & more – available now!',
+      content:
+        'DEADLINE tour-inspired collection: hoodies, stadium jackets, tees, totes & more – available now!',
       author: 'Hiroshi Fujiwara x BLACKPINK',
       timestamp: 'Dec 22, 2025',
       link: 'https://blackpinkofficial.com/shop',
-      image: 'https://image-cdn.hypb.st/https%3A%2F%2Fhypebeast.com%2Fwp-content%2Fblogs.dir%2F6%2Ffiles%2F2025%2F12%2F30%2Fblackpink-fragment-design-deadline-tour-merch-collection-hiroshi-fujiwara-where-to-buy-ft.jpg?w=960&cbr=1&q=90&fit=max',
+      image:
+        'https://image-cdn.hypb.st/https%3A%2F%2Fhypebeast.com%2Fwp-content%2Fblogs.dir%2F6%2Ffiles%2F2025%2F12%2F30%2Fblackpink-fragment-design-deadline-tour-merch-collection-hiroshi-fujiwara-where-to-buy-ft.jpg?w=960&cbr=1&q=90&fit=max',
     },
     {
       title: '"JUMP" MV Surpasses 300 Million Views',
-      content: 'The 2025 comeback single hits 300M views in just 161 days! Thank you BLINKs ♡',
+      content:
+        'The 2025 comeback single hits 300M views in just 161 days! Thank you BLINKs ♡',
       author: 'YG Entertainment',
       timestamp: 'Dec 19, 2025',
       link: 'https://www.youtube.com/watch?v=CgCVZdcKcqY',
@@ -128,18 +145,25 @@ export function HomePage({ onNavigate, bgImage }: HomePageProps) {
     },
     {
       title: 'Deadline World Tour Finale',
-      content: 'Final shows: Tokyo Dome (Jan 16-18, 2026) and Hong Kong (Jan 24-26). Last chance to see them!',
+      content:
+        'Final shows: Tokyo Dome (Jan 16-18, 2026) and Hong Kong (Jan 24-26). Last chance to see them!',
       author: 'BLACKPINK Official',
       timestamp: '2025-2026',
       link: 'https://blackpinkofficial.com/concert',
-      image: 'https://kpopofficial.com/wp-content/uploads/2025/07/BLACKPINK-Deadline-World-tour-schedule.webp',
+      image:
+        'https://kpopofficial.com/wp-content/uploads/2025/07/BLACKPINK-Deadline-World-tour-schedule.webp',
     },
   ];
 
   const NewsFeed = () => (
     <div
       className="relative w-full h-full bg-cover bg-no-repeat bg-center"
-      style={{ backgroundImage: `url(${bgImage || 'https://4kwallpapers.com/images/wallpapers/blackpink-3840x2160-19348.jpg'})` }}
+      style={{
+        backgroundImage: `url(${
+          bgImage ||
+          'https://4kwallpapers.com/images/wallpapers/blackpink-3840x2160-19348.jpg'
+        })`,
+      }}
     >
       <div className="absolute inset-0 bg-gradient-to-br from-black/80 via-black/70 to-pink-900/40" />
       <div className="relative z-10 h-full overflow-y-auto p-8 scrollbar-thin scrollbar-thumb-pink-500 scrollbar-track-transparent">
@@ -161,14 +185,21 @@ export function HomePage({ onNavigate, bgImage }: HomePageProps) {
               key={index}
               className="group bg-gradient-to-br from-gray-900/80 to-black/80 backdrop-blur-xl rounded-2xl overflow-hidden shadow-2xl border-2 border-pink-500/20 transition-all duration-500 hover:border-pink-500/60 hover:shadow-pink-500/30 hover:-translate-y-2"
             >
-              <a href={post.link} target="_blank" rel="noopener noreferrer" className="block relative overflow-hidden">
+              <a
+                href={post.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block relative overflow-hidden"
+              >
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 <img
                   src={post.image}
                   alt={post.title}
                   className="w-full h-56 object-cover transition-transform duration-700 group-hover:scale-110"
                   onError={(e) => {
-                    e.currentTarget.src = bgImage || 'https://4kwallpapers.com/images/wallpapers/blackpink-3840x2160-19348.jpg';
+                    e.currentTarget.src =
+                      bgImage ||
+                      'https://4kwallpapers.com/images/wallpapers/blackpink-3840x2160-19348.jpg';
                   }}
                 />
                 <Star className="absolute top-4 right-4 w-6 h-6 text-pink-400 opacity-0 group-hover:opacity-100 animate-spin transition-opacity duration-300 z-20" />
@@ -182,7 +213,9 @@ export function HomePage({ onNavigate, bgImage }: HomePageProps) {
                 >
                   {post.title}
                 </a>
-                <p className="text-gray-300 text-sm leading-relaxed mb-4">{post.content}</p>
+                <p className="text-gray-300 text-sm leading-relaxed mb-4">
+                  {post.content}
+                </p>
                 <div className="flex justify-between items-center text-xs text-gray-400 border-t border-pink-500/20 pt-4">
                   <span className="font-semibold">{post.author}</span>
                   <span>{post.timestamp}</span>
