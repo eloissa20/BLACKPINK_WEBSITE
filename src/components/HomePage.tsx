@@ -1,10 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 import { Music, ShoppingBag, Zap, Volume2, VolumeX, Youtube, Heart, Sparkles, Star, TrendingUp } from 'lucide-react';
-import bgVideoFile from '../assets/bg-home-bp.mp4'; // <-- Adjust this relative path if needed (../ or ../../)
 
 type HomePageProps = {
   onNavigate: (tab: 'guidelines' | 'album' | string) => void;
-  bgImage?: string; // Optional: pass your own sidebar background if desired
+  bgImage?: string;
 };
 
 export function HomePage({ onNavigate, bgImage }: HomePageProps) {
@@ -37,7 +36,7 @@ export function HomePage({ onNavigate, bgImage }: HomePageProps) {
     };
 
     fetchStats();
-    const interval = setInterval(fetchStats, 600000); // every 10 minutes
+    const interval = setInterval(fetchStats, 600000);
     return () => clearInterval(interval);
   }, []);
 
@@ -45,17 +44,38 @@ export function HomePage({ onNavigate, bgImage }: HomePageProps) {
     const video = videoRef.current;
     if (!video) return;
 
+    // Force video to be muted and set up for autoplay
     video.muted = true;
     video.playsInline = true;
+    video.setAttribute('webkit-playsinline', 'true');
+    
+    // Try to play the video
+    const attemptPlay = () => {
+      const playPromise = video.play();
+      if (playPromise !== undefined) {
+        playPromise
+          .then(() => {
+            console.log('Video autoplay started successfully');
+          })
+          .catch((error) => {
+            console.warn('Autoplay was prevented:', error);
+            // Retry after a short delay
+            setTimeout(attemptPlay, 100);
+          });
+      }
+    };
 
-    const playPromise = video.play();
-    if (playPromise !== undefined) {
-      playPromise.catch((e) => {
-        console.warn('Autoplay was prevented:', e);
-      });
+    // Wait for video to be loaded
+    if (video.readyState >= 3) {
+      attemptPlay();
+    } else {
+      video.addEventListener('loadeddata', attemptPlay);
     }
 
-    return () => video.pause();
+    return () => {
+      video.pause();
+      video.removeEventListener('loadeddata', attemptPlay);
+    };
   }, []);
 
   const toggleMute = () => {
@@ -66,6 +86,22 @@ export function HomePage({ onNavigate, bgImage }: HomePageProps) {
   };
 
   const newsPosts = [
+    {
+      title: '3rd Mini Album "DEADLINE" - PRE-ORDER NOW!',
+      content: 'Pre-order BLACKPINK\'s highly anticipated 3rd mini album "DEADLINE" now! Available in five versions with exclusive selfie photocards and posters!',
+      author: 'YG Entertainment',
+      timestamp: 'Jan 15, 2026',
+      link: 'https://orcd.co/blackpink-deadline',
+      image: 'https://cafe24img.poxo.com/ygnext/web/product/big/202601/1df098494a816d5bcb8306d6f71d9824.jpg',
+    },
+    {
+      title: 'BLACKPINK 3rd Mini Album "DEADLINE" Announced!',
+      content: 'BREAKING: BLACKPINK is releasing their 3rd mini album "DEADLINE" on February 27, 2026! YG Entertainment: "We would like to express our deep gratitude to the fans (BLINKS) who have waited for us for such a long time. We plan to repay you with high-quality music."',
+      author: 'YG Entertainment',
+      timestamp: 'Jan 15, 2026',
+      link: 'https://www.youtube.com/watch?v=6gi87AUDs0M',
+      image: 'https://pbs.twimg.com/media/G-qnKDRbQAYq3KZ?format=jpg&name=large',
+    },
     {
       title: 'BLACKPINK Original Tamagotchi Launches TODAY!',
       content: 'Limited-edition BLACKPINK Tamagotchi nano now available on KakaoTalk Gift! Raise Jennie, Jisoo, Rosé, and Lisa as cute digital pets ♡ Physical version coming 2026.',
@@ -91,14 +127,6 @@ export function HomePage({ onNavigate, bgImage }: HomePageProps) {
       image: 'https://i.ytimg.com/vi/CgCVZdcKcqY/maxresdefault.jpg',
     },
     {
-      title: 'Full Group Comeback Album Confirmed for January 2026',
-      content: 'First full BLACKPINK album since Born Pink – coming very soon!',
-      author: 'YG Entertainment',
-      timestamp: 'Nov 2025',
-      link: 'https://yg-life.com',
-      image: 'https://www.rollingstone.com/wp-content/uploads/2025/06/blackpink-deadline-tour-trailer-teaser.jpg?w=1581&h=1054&crop=1',
-    },
-    {
       title: 'Deadline World Tour Finale',
       content: 'Final shows: Tokyo Dome (Jan 16-18, 2026) and Hong Kong (Jan 24-26). Last chance to see them!',
       author: 'BLACKPINK Official',
@@ -122,7 +150,7 @@ export function HomePage({ onNavigate, bgImage }: HomePageProps) {
               Latest News
             </h2>
             <div className="text-pink-300 text-sm font-semibold bg-pink-900/30 px-4 py-2 rounded-full border border-pink-500/30">
-              Updated: Jan 01, 2026
+              Updated: Jan 15, 2026
             </div>
           </div>
         </header>
@@ -216,7 +244,6 @@ export function HomePage({ onNavigate, bgImage }: HomePageProps) {
       />
 
       <div className="flex flex-col h-screen bg-black text-white overflow-hidden">
-        {/* Sparkle Overlay */}
         <div className="fixed inset-0 pointer-events-none z-40">
           <div className="absolute inset-0 bg-gradient-to-t from-pink-900/30 via-transparent to-purple-900/30" />
           <Sparkles className="absolute top-20 left-10 w-8 h-8 text-pink-400 animate-pulse animate-float" />
@@ -227,27 +254,25 @@ export function HomePage({ onNavigate, bgImage }: HomePageProps) {
         </div>
 
         <div className="flex flex-1 flex-col lg:flex-row overflow-hidden">
-          {/* Desktop Sidebar */}
           <div className="hidden lg:block lg:w-80 xl:w-96 h-full overflow-hidden border-r-4 border-pink-500/30 shadow-2xl shadow-pink-500/20">
             <NewsFeed />
           </div>
 
-          {/* Main Hero */}
           <div className="relative flex-1 flex flex-col justify-center items-center overflow-hidden">
             <video
               ref={videoRef}
               className="absolute inset-0 w-full h-full object-cover"
-              src={bgVideoFile}
+              src="/src/assets/bg-home-bp.mp4"
               loop
               muted
               playsInline
               autoPlay
+              preload="auto"
             />
 
             <div className="absolute inset-0 bg-gradient-to-br from-black/70 via-pink-900/30 to-purple-900/40 z-10" />
             <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/60 z-10" />
 
-            {/* Mute/Unmute Button Only */}
             <div className="absolute top-6 left-6 z-30 flex gap-4">
               <button
                 onClick={toggleMute}
@@ -257,7 +282,6 @@ export function HomePage({ onNavigate, bgImage }: HomePageProps) {
               </button>
             </div>
 
-            {/* Main Content */}
             <div className="relative z-20 text-center px-6 py-8 max-w-6xl mx-auto space-y-12">
               <div className="space-y-4">
                 <div className="flex items-center justify-center gap-6 mb-6 flex-wrap">
@@ -322,7 +346,6 @@ export function HomePage({ onNavigate, bgImage }: HomePageProps) {
                 )}
               </div>
 
-              {/* Mobile News */}
               <div className="mt-20 lg:hidden">
                 <h3 className="text-3xl font-bold text-pink-400 mb-8 flex items-center justify-center gap-3">
                   <TrendingUp className="w-8 h-8 animate-bounce" />
