@@ -36,7 +36,7 @@ export default function Footer() {
     setMessage('');
 
     try {
-      const response = await fetch('http://localhost:3001/api/signup', {
+      const response = await fetch('https://blinkhourcity-backend.vercel.app/api/signup', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

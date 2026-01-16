@@ -28,7 +28,7 @@ export function HomePage({ onNavigate, bgImage }: HomePageProps) {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const response = await fetch('http://localhost:3001/api/stats');
+        const response = await fetch('https://blinkhourcity-backend.vercel.app/api/stats');
         if (!response.ok) throw new Error('Fetch failed');
         const data = await response.json();
         setStats({
