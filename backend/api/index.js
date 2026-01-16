@@ -87,26 +87,199 @@ function censorEmail(email) {
 }
 
 async function sendWelcomeEmail(email, username, socialPlatform) {
-  if (!emailEnabled || !transporter) return false;
+  if (!emailEnabled || !transporter) {
+    console.log('⚠️ Email not configured, skipping send');
+    return false;
+  }
 
   try {
     const mailOptions = {
       from: `"BLINKHOURCITY 💖" <${EMAIL_USER}>`,
       to: email,
-      subject: '💖 Welcome to BLINKHOURCITY!',
+      subject: '💖 WELCOME TO THE BLINK FAMILY! 💖',
       html: `
-        <h1 style="color:#ec4899">Hey ${username}!</h1>
-        <p style="font-size:18px">Welcome to the BLINK family! 💖</p>
-        <p>You joined via <strong>${socialPlatform}</strong></p>
-        <p>Thank you for being part of BLINKHOURCITY!</p>
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>WELCOME TO THE BLINK FAMILY!</title>
+          <style>
+            body {
+              margin: 0;
+              padding: 0;
+              font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+              background-color: #000;
+              color: #ffffff;
+              line-height: 1.6;
+            }
+            .container {
+              max-width: 600px;
+              margin: 0 auto;
+              background: #000;
+              border-radius: 24px;
+              overflow: hidden;
+              box-shadow: 0 20px 60px rgba(236, 72, 153, 0.4);
+            }
+            .header {
+              background: linear-gradient(135deg, #ec4899, #c026d3, #a855f7);
+              padding: 60px 30px 40px;
+              text-align: center;
+            }
+            .header h1 {
+              margin: 0;
+              font-size: 42px;
+              font-weight: 900;
+              color: #fff;
+              text-transform: uppercase;
+              letter-spacing: 2px;
+              text-shadow: 0 4px 20px rgba(0,0,0,0.6);
+            }
+            .emoji {
+              font-size: 48px;
+              margin: 0 8px;
+            }
+            .content {
+              padding: 40px 30px;
+              text-align: center;
+            }
+            .greeting {
+              font-size: 32px;
+              font-weight: 800;
+              color: #ec4899;
+              margin-bottom: 20px;
+            }
+            .intro {
+              font-size: 18px;
+              color: #e5e5e5;
+              margin-bottom: 30px;
+            }
+            .highlight {
+              color: #ec4899;
+              font-weight: bold;
+            }
+            .perks {
+              background: rgba(236, 72, 153, 0.08);
+              border-radius: 16px;
+              padding: 30px;
+              margin: 30px 0;
+              text-align: left;
+            }
+            .perks h3 {
+              font-size: 22px;
+              color: #fff;
+              margin-bottom: 20px;
+              text-align: center;
+            }
+            .perk-item {
+              display: flex;
+              align-items: center;
+              margin-bottom: 16px;
+              font-size: 16px;
+              color: #e5e5e5;
+            }
+            .perk-icon {
+              font-size: 24px;
+              margin-right: 16px;
+              min-width: 30px;
+              text-align: center;
+            }
+            .buttons {
+              margin: 40px 0;
+              display: flex;
+              flex-wrap: wrap;
+              gap: 16px;
+              justify-content: center;
+            }
+            .button {
+              display: inline-block;
+              padding: 16px 32px;
+              background: linear-gradient(135deg, #ec4899, #a855f7);
+              color: white !important;
+              font-weight: 800;
+              font-size: 16px;
+              border-radius: 50px;
+              text-decoration: none;
+              box-shadow: 0 8px 25px rgba(236, 72, 153, 0.4);
+              transition: all 0.3s;
+            }
+            .button:hover {
+              transform: translateY(-3px);
+              box-shadow: 0 12px 35px rgba(236, 72, 153, 0.6);
+            }
+            .footer {
+              background: #000;
+              padding: 30px;
+              text-align: center;
+              font-size: 14px;
+              color: #888;
+              border-top: 1px solid #333;
+            }
+          </style>
+        </head>
+        <body>
+          <div class="container">
+            <div class="header">
+              <h1>
+                <span class="emoji">💖</span>
+                WELCOME TO THE BLINK FAMILY!
+                <span class="emoji">💖</span>
+              </h1>
+            </div>
+
+            <div class="content">
+              <div class="greeting">Hey blink! 👋</div>
+
+              <div class="intro">
+                We're so excited to have you join the <span class="highlight">BLACKPINK</span> 
+                <span class="highlight">'BLINKHOURCITY'</span> fan community!<br>
+                You're now part of millions of BLINKs worldwide who share the love for 
+                <span class="highlight">JISOO, JENNIE, ROSÉ, and LISA!</span>
+              </div>
+
+              <div class="perks">
+                <h3>Here's what you'll get:</h3>
+                <div class="perk-item">
+                  <span class="perk-icon">✨</span> Exclusive updates and announcements
+                </div>
+                <div class="perk-item">
+                  <span class="perk-icon">🎵</span> Behind-the-scenes content
+                </div>
+                <div class="perk-item">
+                  <span class="perk-icon">🎤</span> Early access to comeback news
+                </div>
+                <div class="perk-item">
+                  <span class="perk-icon">💌</span> Special fan events and giveaways
+                </div>
+                <div class="perk-item">
+                  <span class="perk-icon">🌟</span> Connect with fellow BLINKs on <strong>${socialPlatform}</strong>
+                </div>
+              </div>
+
+              <div class="buttons">
+                <a href="https://www.youtube.com/c/BLACKPINKOFFICIAL" class="button">
+                  🎬 VISIT BLACKPINK'S YOUTUBE
+                </a>
+                <a href="https://forms.sonymusicfans.com/campaign/blackpink-deadline/" class="button">
+                  📦 PRE-ORDER BLACKPINK's 3RD MINI ALBUM [DEADLINE]
+                </a>
+              </div>
+            </div>
+
+            <div class="footer">
+              Made with 💖 for BLINKs worldwide 🌎
+            </div>
+          </div>
+        </body>
+        </html>
       `
     };
 
     await transporter.sendMail(mailOptions);
-    console.log(`✅ Email sent to ${censorEmail(email)}`);
+    console.log(`✅ Welcome email sent to ${censorEmail(email)}`);
     return true;
-  } catch (err) {
-    console.error('❌ Email failed:', err.message);
+  } catch (error) {
+    console.error('❌ Email send failed:', error.message);
     return false;
   }
 }
