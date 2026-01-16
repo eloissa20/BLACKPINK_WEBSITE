@@ -12,7 +12,7 @@ import {
   TrendingUp,
 } from 'lucide-react';
 
-import { TabType } from '../types';   // ← changed to ../types (go up one level)
+import { TabType } from '../types';
 
 type HomePageProps = {
   onNavigate: (tab: TabType) => void;
@@ -33,14 +33,14 @@ export function HomePage({ onNavigate, bgImage }: HomePageProps) {
         const data = await response.json();
         setStats({
           streams: data.streams || 5300000,
-          blinks: data.blinks || 8000000,
+          blinks: data.blinks || 0, // Changed to 0 - will show signup count
           views: data.views || 40900000000,
         });
       } catch (error) {
         console.error('Error fetching stats:', error);
         setStats({
           streams: 5300000,
-          blinks: 8000000,
+          blinks: 0, // Changed to 0
           views: 40900000000,
         });
       } finally {
@@ -49,7 +49,7 @@ export function HomePage({ onNavigate, bgImage }: HomePageProps) {
     };
 
     fetchStats();
-    const interval = setInterval(fetchStats, 600000);
+    const interval = setInterval(fetchStats, 10000); // Check every 10 seconds for real-time updates
     return () => clearInterval(interval);
   }, []);
 
@@ -361,7 +361,7 @@ export function HomePage({ onNavigate, bgImage }: HomePageProps) {
                 ) : (
                   [
                     { value: stats.streams, label: 'Streams Today', icon: Music, color: 'from-pink-500 to-rose-500' },
-                    { value: stats.blinks, label: 'Active BLINKs', icon: Heart, color: 'from-pink-500 to-purple-500' },
+                    { value: stats.blinks, label: 'Newsletter Signups', icon: Heart, color: 'from-pink-500 to-purple-500' },
                     { value: stats.views, label: 'Total Views', icon: Youtube, color: 'from-red-500 to-pink-500' },
                   ].map((stat, i) => (
                     <div

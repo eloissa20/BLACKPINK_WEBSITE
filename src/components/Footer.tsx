@@ -1,6 +1,48 @@
 import { Instagram, Youtube, Music, Twitter, Sparkles, Heart } from 'lucide-react';
+import { useState } from 'react';
 
 export default function Footer() {
+  const [email, setEmail] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [message, setMessage] = useState('');
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!email || !email.includes('@')) {
+      setMessage('❌ Please enter a valid email!');
+      return;
+    }
+
+    setIsSubmitting(true);
+    setMessage('');
+
+    try {
+      const response = await fetch('http://localhost:3001/api/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setMessage('✨ Welcome to the BLINK family! Check your email!');
+        setEmail('');
+      } else {
+        setMessage(data.message || '❌ Something went wrong!');
+      }
+    } catch (error) {
+      console.error('Signup error:', error);
+      setMessage('❌ Unable to connect. Please try again!');
+    } finally {
+      setIsSubmitting(false);
+      setTimeout(() => setMessage(''), 5000);
+    }
+  };
+
   const socialLinks = [
     {
       name: 'Instagram',
@@ -137,16 +179,28 @@ export default function Footer() {
             <p className="text-gray-300 text-sm mb-6 leading-relaxed">
               Get exclusive updates, behind-the-scenes content, and be the first to know about everything BLACKPINK! 💌
             </p>
-            <div className="flex flex-col gap-3 max-w-sm mx-auto md:ml-auto md:mr-0">
+            <form onSubmit={handleSubmit} className="flex flex-col gap-3 max-w-sm mx-auto md:ml-auto md:mr-0">
               <input
                 type="email"
                 placeholder="✉️ Your email address"
-                className="px-5 py-3 bg-gray-800/80 backdrop-blur-sm border-2 border-gray-700 rounded-xl text-white text-sm placeholder-gray-400 focus:outline-none focus:border-pink-500 focus:ring-2 focus:ring-pink-500/50 transition-all duration-300"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                disabled={isSubmitting}
+                className="px-5 py-3 bg-gray-800/80 backdrop-blur-sm border-2 border-gray-700 rounded-xl text-white text-sm placeholder-gray-400 focus:outline-none focus:border-pink-500 focus:ring-2 focus:ring-pink-500/50 transition-all duration-300 disabled:opacity-50"
               />
-              <button className="px-6 py-3 bg-gradient-to-r from-pink-500 via-purple-500 to-pink-500 rounded-xl text-white text-sm font-bold hover:shadow-2xl hover:shadow-pink-500/50 transition-all duration-300 transform hover:scale-105 hover:-translate-y-1 bg-size-200 bg-pos-0 hover:bg-pos-100">
-                🚀 JOIN THE BLINK FAMILY!
+              <button 
+                type="submit"
+                disabled={isSubmitting}
+                className="px-6 py-3 bg-gradient-to-r from-pink-500 via-purple-500 to-pink-500 rounded-xl text-white text-sm font-bold hover:shadow-2xl hover:shadow-pink-500/50 transition-all duration-300 transform hover:scale-105 hover:-translate-y-1 bg-size-200 bg-pos-0 hover:bg-pos-100 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {isSubmitting ? '⏳ JOINING...' : '🚀 JOIN THE BLINK FAMILY!'}
               </button>
-            </div>
+              {message && (
+                <p className={`text-sm font-semibold ${message.includes('❌') ? 'text-red-400' : 'text-green-400'}`}>
+                  {message}
+                </p>
+              )}
+            </form>
           </div>
         </div>
 
