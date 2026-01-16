@@ -4,10 +4,17 @@ const fs = require('fs').promises;
 const path = require('path');
 
 const app = express();
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: [
+    'https://blinkhourcity.vercel.app',
+    'http://localhost:5173',
+    'http://localhost:3000'
+  ],
+  credentials: true
+}));
 app.use(express.json());
 
 // Data file path
@@ -76,25 +83,20 @@ function censorEmail(email) {
   return `${censored}@${domain}`;
 }
 
+// In-memory storage for Vercel (serverless)
+let signupsMemory = { signups: [] };
+
 async function initDataFile() {
-  try {
-    await fs.access(DATA_FILE);
-  } catch {
-    await fs.writeFile(DATA_FILE, JSON.stringify({ signups: [] }, null, 2));
-  }
+  // No file needed - using memory
+  console.log('Using in-memory storage');
 }
 
 async function getSignups() {
-  try {
-    const data = await fs.readFile(DATA_FILE, 'utf8');
-    return JSON.parse(data);
-  } catch (error) {
-    return { signups: [] };
-  }
+  return signupsMemory;
 }
 
 async function saveSignups(data) {
-  await fs.writeFile(DATA_FILE, JSON.stringify(data, null, 2));
+  signupsMemory = data;
 }
 
 // Check if daily limit reached
@@ -484,4 +486,10 @@ async function startServer() {
   });
 }
 
-startServer().catch(console.error);
+// Export for Vercel serverless
+module.exports = app;
+
+// For local development only
+if (!process.env.VERCEL) {
+  startServer().catch(console.error);
+}

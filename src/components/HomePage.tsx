@@ -361,7 +361,7 @@ export function HomePage({ onNavigate, bgImage }: HomePageProps) {
                 ) : (
                   [
                     { value: stats.streams, label: 'Streams Today', icon: Music, color: 'from-pink-500 to-rose-500' },
-                    { value: stats.blinks, label: 'Newsletter Signups', icon: Heart, color: 'from-pink-500 to-purple-500' },
+                    { value: stats.blinks, label: 'Active BLINKS', icon: Heart, color: 'from-pink-500 to-purple-500' },
                     { value: stats.views, label: 'Total Views', icon: Youtube, color: 'from-red-500 to-pink-500' },
                   ].map((stat, i) => (
                     <div
