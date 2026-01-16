@@ -1,6 +1,6 @@
 require('dotenv').config();
 const nodemailer = require('nodemailer');
-const { kv } = require('@vercel/kv');
+const { createClient } = require('redis');
 
 // Email configuration
 const EMAIL_USER = process.env.EMAIL_USER;
@@ -9,9 +9,35 @@ const EMAIL_PASS = process.env.EMAIL_PASS;
 let transporter = null;
 let emailEnabled = false;
 
-// KV storage keys
+// Redis client
+let redisClient = null;
+
+// KV storage keys (now Redis keys)
 const SIGNUPS_KEY = 'blinkhourcity:signups';
 const STATS_KEY = 'blinkhourcity:stats';
+
+// Initialize Redis connection
+async function initRedis() {
+  if (redisClient) return; // already connected
+
+  if (!process.env.REDIS_URL) {
+    console.error('❌ REDIS_URL is missing in environment variables');
+    return;
+  }
+
+  try {
+    redisClient = createClient({
+      url: process.env.REDIS_URL,
+    });
+
+    redisClient.on('error', (err) => console.error('Redis Client Error:', err));
+
+    await redisClient.connect();
+    console.log('✅ Redis connected successfully via REDIS_URL');
+  } catch (error) {
+    console.error('❌ Failed to connect to Redis:', error.message);
+  }
+}
 
 // Initialize email transporter
 async function initEmail() {
@@ -39,25 +65,25 @@ async function initEmail() {
   }
 }
 
-// Load signups from KV
+// Load signups from Redis
 async function loadSignups() {
   try {
-    const signups = await kv.get(SIGNUPS_KEY);
-    return signups || [];
+    const data = await redisClient.get(SIGNUPS_KEY);
+    return data ? JSON.parse(data) : [];
   } catch (error) {
-    console.error('❌ KV load error:', error.message);
+    console.error('❌ Redis load error:', error.message);
     return [];
   }
 }
 
-// Save signups to KV
+// Save signups to Redis
 async function saveSignups(signups) {
   try {
-    await kv.set(SIGNUPS_KEY, signups);
-    console.log(`💾 Saved ${signups.length} signups to KV storage`);
+    await redisClient.set(SIGNUPS_KEY, JSON.stringify(signups));
+    console.log(`💾 Saved ${signups.length} signups to Redis storage`);
     return true;
   } catch (error) {
-    console.error('❌ KV save error:', error.message);
+    console.error('❌ Redis save error:', error.message);
     return false;
   }
 }
@@ -237,11 +263,13 @@ module.exports = async (req, res) => {
     return res.status(200).end();
   }
 
-  // Initialize email on first request
+  // Initialize email and Redis on first request
   if (!transporter) {
     console.log('🔧 Initializing email...');
     await initEmail();
   }
+
+  await initRedis(); // Connect to Redis (safe to call multiple times)
 
   const { pathname } = new URL(req.url, `http://${req.headers.host}`);
 
@@ -306,7 +334,7 @@ module.exports = async (req, res) => {
 
       signups.push(newSignup);
 
-      // Save to KV storage
+      // Save to Redis
       await saveSignups(signups);
 
       // Send welcome email
