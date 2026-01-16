@@ -16,7 +16,7 @@ let redisClient = null;
 const SIGNUPS_KEY = 'blinkhourcity:signups';
 const DAILY_KEY_PREFIX = 'blinkhourcity:daily:';
 
-// Initialize Redis
+// Initialize Redis connection
 async function initRedis() {
   if (redisClient) return;
 
@@ -252,7 +252,7 @@ async function sendWelcomeEmail(email, username, socialPlatform) {
   }
 }
 
-// Vercel serverless handler
+// Main Vercel serverless handler
 module.exports = async (req, res) => {
   // Enable CORS
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -263,7 +263,7 @@ module.exports = async (req, res) => {
     return res.status(200).end();
   }
 
-  // Initialize on first request
+  // Initialize services on first request
   if (!transporter) {
     console.log('🔧 Initializing email...');
     await initEmail();
@@ -273,7 +273,7 @@ module.exports = async (req, res) => {
 
   const { pathname } = new URL(req.url, `http://${req.headers.host}`);
 
-  // GET /api/stats - used by homepage
+  // GET /api/stats ── used by homepage for Active BLINKS count
   if (pathname === '/api/stats' && req.method === 'GET') {
     try {
       const signups = await loadSignups();
@@ -295,7 +295,7 @@ module.exports = async (req, res) => {
     }
   }
 
-  // POST /api/signup
+  // POST /api/signup ── signup endpoint with daily limit
   if (pathname === '/api/signup' && req.method === 'POST') {
     try {
       const { email, username, socialPlatform } = req.body || {};
@@ -326,7 +326,7 @@ module.exports = async (req, res) => {
       // Load existing signups
       const signups = await loadSignups();
 
-      // Check duplicate
+      // Check if email already exists
       const emailExists = signups.some(
         signup => signup.email.toLowerCase() === email.toLowerCase()
       );
@@ -346,18 +346,18 @@ module.exports = async (req, res) => {
 
       signups.push(newSignup);
 
-      // Save
+      // Save to Redis
       await saveSignups(signups);
 
       // Increment daily counter
       await redisClient.incr(dailyKey);
-      await redisClient.expire(dailyKey, 86400); // expires in 24h
+      await redisClient.expire(dailyKey, 86400); // expire after 24h
 
-      // Send email (non-blocking)
+      // Send welcome email (non-blocking)
       console.log(`🎉 New signup #${signups.length}: ${censorEmail(email)} (@${username} on ${socialPlatform})`);
       sendWelcomeEmail(email, username, socialPlatform)
         .then(sent => {
-          if (sent) console.log(`✅ Email sent to ${censorEmail(email)}`);
+          if (sent) console.log(`✅ Email successfully sent to ${censorEmail(email)}`);
         })
         .catch(err => console.error('❌ Email error:', err));
 
@@ -371,7 +371,7 @@ module.exports = async (req, res) => {
     }
   }
 
-  // GET /api/signups - returns censored list (for your future styled page)
+  // GET /api/signups ── returns list with censored emails (for your styled page)
   if (pathname === '/api/signups' && req.method === 'GET') {
     try {
       const signups = await loadSignups();
@@ -393,11 +393,10 @@ module.exports = async (req, res) => {
     }
   }
 
-  // POST /api/clear-signups - reset everything (for testing)
+  // POST /api/clear-signups ── reset all signups (for testing)
   if (pathname === '/api/clear-signups' && req.method === 'POST') {
     try {
       await redisClient.del(SIGNUPS_KEY);
-      // Optional: clear all daily counters (or leave them - they expire anyway)
       console.log('🧹 All signups cleared from Redis');
       return res.status(200).json({ message: 'Signups cleared successfully' });
     } catch (error) {
@@ -409,7 +408,7 @@ module.exports = async (req, res) => {
   return res.status(404).json({ error: 'Not found' });
 };
 
-// Local development server (shows port message)
+// Local development server (shows listening message)
 if (require.main === module) {
   const http = require('http');
   const PORT = process.env.PORT || 3000;
