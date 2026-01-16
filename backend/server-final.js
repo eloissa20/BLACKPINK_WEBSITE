@@ -1,3 +1,11 @@
+require('dotenv').config();
+
+// TEST - Debugging env variables
+console.log('🔍 Checking environment variables...');
+console.log('EMAIL_USER:', process.env.EMAIL_USER);
+console.log('EMAIL_PASS:', process.env.EMAIL_PASS ? '***SET***' : 'NOT SET');
+// END TEST
+
 const express = require('express');
 const cors = require('cors');
 const fs = require('fs').promises;
@@ -37,11 +45,24 @@ async function setupEmail() {
       return;
     }
 
+    // Get email credentials from environment variables
+    const EMAIL_USER = process.env.EMAIL_USER || 'blinkhourcity@gmail.com';
+    const EMAIL_PASS = process.env.EMAIL_PASS || 'qdyvlwwryilfpoyh';
+
+    console.log('📧 Email config - USER:', EMAIL_USER);
+    console.log('📧 Email config - PASS:', EMAIL_PASS ? '***SET***' : 'NOT SET');
+
+    if (!EMAIL_USER || !EMAIL_PASS) {
+      console.log('⚠️ Email credentials not configured (EMAIL_USER or EMAIL_PASS missing)');
+      emailEnabled = false;
+      return;
+    }
+
     const EMAIL_CONFIG = {
       service: 'gmail',
       auth: {
-        user: 'blinkhourcity@gmail.com',
-        pass: 'qdyvlwwryilfpoyh'
+        user: EMAIL_USER,
+        pass: EMAIL_PASS
       }
     };
 
@@ -118,8 +139,10 @@ async function sendWelcomeEmail(email, username, socialPlatform) {
   }
 
   try {
+    const EMAIL_USER = process.env.EMAIL_USER || 'blinkhourcity@gmail.com';
+    
     const mailOptions = {
-      from: '"BLINKHOURCITY 💖" <blinkhourcity@gmail.com>',
+      from: '"BLINKHOURCITY 💖" <' + EMAIL_USER + '>',
       to: email,
       subject: '💖 Welcome to BLINKHOURCITY, ' + username + '! ✨',
       html: `
