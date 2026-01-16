@@ -1,5 +1,7 @@
 require('dotenv').config();
 const nodemailer = require('nodemailer');
+const fs = require('fs').promises;
+const path = require('path');
 
 // Email configuration
 const EMAIL_USER = process.env.EMAIL_USER;
@@ -7,6 +9,9 @@ const EMAIL_PASS = process.env.EMAIL_PASS;
 
 let transporter = null;
 let emailEnabled = false;
+
+// File path for persistent storage
+const SIGNUPS_FILE = path.join('/tmp', 'signups.json');
 
 // Initialize email transporter
 async function initEmail() {
@@ -34,6 +39,29 @@ async function initEmail() {
   } catch (error) {
     console.error('❌ Email configuration failed:', error.message);
     emailEnabled = false;
+  }
+}
+
+// Load signups from file
+async function loadSignups() {
+  try {
+    const data = await fs.readFile(SIGNUPS_FILE, 'utf8');
+    return JSON.parse(data);
+  } catch (error) {
+    // File doesn't exist or is corrupted, return empty array
+    return { signups: [] };
+  }
+}
+
+// Save signups to file
+async function saveSignups(signupsData) {
+  try {
+    await fs.writeFile(SIGNUPS_FILE, JSON.stringify(signupsData, null, 2));
+    console.log(`💾 Saved ${signupsData.signups.length} signups to storage`);
+    return true;
+  } catch (error) {
+    console.error('❌ Failed to save signups:', error.message);
+    return false;
   }
 }
 
@@ -201,9 +229,6 @@ async function sendWelcomeEmail(email, username, socialPlatform) {
   }
 }
 
-// In-memory storage for signups (Vercel serverless)
-let signupsMemory = { signups: [] };
-
 // Vercel serverless handler
 module.exports = async (req, res) => {
   // Enable CORS
@@ -225,9 +250,12 @@ module.exports = async (req, res) => {
 
   // GET /api/stats
   if (pathname === '/api/stats' && req.method === 'GET') {
+    const signupsData = await loadSignups();
+    console.log(`📊 Stats request - Total BLINKs: ${signupsData.signups.length}`);
+    
     return res.status(200).json({
       streams: 5300000,
-      blinks: signupsMemory.signups.length,
+      blinks: signupsData.signups.length,
       views: 40900000000,
     });
   }
@@ -248,8 +276,11 @@ module.exports = async (req, res) => {
         return res.status(400).json({ message: 'Please select a social platform' });
       }
 
+      // Load existing signups
+      const signupsData = await loadSignups();
+
       // Check if email already exists
-      const emailExists = signupsMemory.signups.some(
+      const emailExists = signupsData.signups.some(
         signup => signup.email.toLowerCase() === email.toLowerCase()
       );
       if (emailExists) {
@@ -266,7 +297,10 @@ module.exports = async (req, res) => {
         timestamp: new Date().toISOString(),
       };
 
-      signupsMemory.signups.push(newSignup);
+      signupsData.signups.push(newSignup);
+
+      // Save to persistent storage
+      await saveSignups(signupsData);
 
       // Send welcome email
       console.log(`🎉 New signup: ${censorEmail(email)} (@${username} on ${socialPlatform})`);
@@ -285,7 +319,7 @@ module.exports = async (req, res) => {
 
       return res.status(200).json({ 
         message: 'Welcome to BLINKHOURCITY! Check your email for exclusive content! 💖',
-        count: signupsMemory.signups.length,
+        count: signupsData.signups.length,
       });
     } catch (error) {
       console.error('Signup error:', error);
@@ -295,13 +329,14 @@ module.exports = async (req, res) => {
 
   // GET /api/signups
   if (pathname === '/api/signups' && req.method === 'GET') {
-    const censoredSignups = signupsMemory.signups.map(signup => ({
+    const signupsData = await loadSignups();
+    const censoredSignups = signupsData.signups.map(signup => ({
       ...signup,
       email: censorEmail(signup.email)
     }));
     
     return res.status(200).json({
-      total: signupsMemory.signups.length,
+      total: signupsData.signups.length,
       signups: censoredSignups
     });
   }
