@@ -30,6 +30,7 @@
     }
     .gradient-text {
       background: linear-gradient(90deg, #ec4899, #a855f7, #ec4899);
+      background-clip: text;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-size: 200% 100%;
@@ -65,10 +66,10 @@
 
     <!-- Signups Grid -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="signups-list">
-      <!-- JS will fill this -->
+      <!-- Cards will be inserted here -->
     </div>
 
-    <!-- States -->
+    <!-- Loading / Empty states -->
     <div id="loading" class="text-center py-20 text-pink-400 text-2xl animate-pulse">
       Loading BLINK family members...
     </div>
@@ -80,7 +81,7 @@
   <script>
     async function loadSignups() {
       try {
-        const res = await fetch('/api/signups-json'); // we'll add this route next
+        const res = await fetch('/api/signups-json');
         const data = await res.json();
 
         document.getElementById('total-count').textContent = data.total.toLocaleString();
@@ -126,6 +127,7 @@
       }
     }
 
+    // Load immediately and refresh every 10 seconds
     loadSignups();
     setInterval(loadSignups, 10000);
   </script>
