@@ -408,6 +408,45 @@ module.exports = async (req, res) => {
   return res.status(404).json({ error: 'Not found' });
 };
 
+
+// GET /api/signups → serve the styled HTML page
+if (pathname === '/api/signups' && req.method === 'GET') {
+  const fs = require('fs');
+  const path = require('path');
+  const htmlPath = path.join(__dirname, 'signups.html');
+
+  try {
+    const html = fs.readFileSync(htmlPath, 'utf8');
+    res.setHeader('Content-Type', 'text/html');
+    return res.end(html);
+  } catch (err) {
+    console.error('Failed to read signups.html:', err);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+}
+
+// GET /api/signups-json → returns raw JSON for the HTML page to fetch
+if (pathname === '/api/signups-json' && req.method === 'GET') {
+  try {
+    const signups = await loadSignups();
+    const censoredSignups = signups.map(signup => ({
+      ...signup,
+      email: censorEmail(signup.email)
+    }));
+    
+    return res.status(200).json({
+      total: signups.length,
+      signups: censoredSignups
+    });
+  } catch (error) {
+    console.error('Signups JSON error:', error);
+    return res.status(200).json({
+      total: 0,
+      signups: []
+    });
+  }
+}
+
 // Local development server (shows listening message)
 if (require.main === module) {
   const http = require('http');
