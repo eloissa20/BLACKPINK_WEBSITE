@@ -4,7 +4,7 @@
   "description": "Backend server for BLACKPINK website with newsletter signup tracking and email notifications",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
+    "start": "node server-final.js",
     "dev": "nodemon server.js"
   },
   "keywords": [

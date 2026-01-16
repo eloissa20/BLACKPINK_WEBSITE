@@ -9,22 +9,26 @@ export default function Footer() {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [message, setMessage] = useState('');
+  const [messageType, setMessageType] = useState<'success' | 'error' | 'limit'>('success');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!formData.email || !formData.email.includes('@')) {
       setMessage('❌ Please enter a valid email!');
+      setMessageType('error');
       return;
     }
 
     if (!formData.username.trim()) {
       setMessage('❌ Please enter your username!');
+      setMessageType('error');
       return;
     }
 
     if (!formData.socialPlatform) {
       setMessage('❌ Please select a social platform!');
+      setMessageType('error');
       return;
     }
 
@@ -43,17 +47,24 @@ export default function Footer() {
       const data = await response.json();
 
       if (response.ok) {
-        setMessage('✨ Welcome to the BLINK family! Check your email!');
+        setMessage('✨ Welcome to BLINKHOURCITY! Check your email! 💖');
+        setMessageType('success');
         setFormData({ email: '', username: '', socialPlatform: '' });
+      } else if (response.status === 429 && data.limitReached) {
+        // Daily limit reached
+        setMessage('💖 Daily limit reached! We can only welcome 500 new BLINKs per day. Please come back tomorrow to join our family! See you soon! 🌸✨');
+        setMessageType('limit');
       } else {
         setMessage(data.message || '❌ Something went wrong!');
+        setMessageType('error');
       }
     } catch (error) {
       console.error('Signup error:', error);
       setMessage('❌ Unable to connect. Please try again!');
+      setMessageType('error');
     } finally {
       setIsSubmitting(false);
-      setTimeout(() => setMessage(''), 5000);
+      setTimeout(() => setMessage(''), 10000); // Show for 10 seconds
     }
   };
 
@@ -187,7 +198,7 @@ export default function Footer() {
           <div className="text-center md:text-right">
             <h3 className="text-2xl font-bold text-pink-400 mb-6 flex items-center justify-center md:justify-end gap-2">
               <Sparkles className="w-6 h-6 text-purple-400 animate-spin-slow" />
-              STAY CONNECTED
+              JOIN BLINKHOURCITY
               <Heart className="w-6 h-6 text-pink-400 animate-pulse" />
             </h3>
             <p className="text-gray-300 text-sm mb-6 leading-relaxed">
@@ -237,10 +248,17 @@ export default function Footer() {
               >
                 {isSubmitting ? '⏳ JOINING...' : '🚀 JOIN THE BLINK FAMILY!'}
               </button>
+              
               {message && (
-                <p className={`text-sm font-semibold ${message.includes('❌') ? 'text-red-400' : 'text-green-400'}`}>
+                <div className={`text-sm font-semibold p-3 rounded-lg ${
+                  messageType === 'success' 
+                    ? 'bg-green-900/30 text-green-400 border border-green-500/30' 
+                    : messageType === 'limit'
+                    ? 'bg-purple-900/30 text-purple-300 border border-purple-500/30'
+                    : 'bg-red-900/30 text-red-400 border border-red-500/30'
+                }`}>
                   {message}
-                </p>
+                </div>
               )}
             </form>
           </div>
@@ -274,7 +292,7 @@ export default function Footer() {
         <div className="border-t-2 border-pink-500/30 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-gray-400 text-sm font-medium">
-              © 2026 BLACKPINK • sunnysunlisa • All rights reserved
+              © 2026 BLINKHOURCITY • All rights reserved
             </p>
             <div className="flex items-center gap-2 text-sm">
               <span className="text-gray-400">Made with</span>

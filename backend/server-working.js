@@ -217,12 +217,12 @@ async function sendWelcomeEmail(email, username, socialPlatform) {
         <body>
           <div class="container">
             <div class="header">
-              <h1>💖 WELCOME TO THE BLINK FAMILY! 💖</h1>
+              <h1>WELCOME TO THE BLINKHOURCITY!</h1>
             </div>
             <div class="content">
               <h2>Hey ${username}! 👋</h2>
               <p>
-                We're so excited to have you join the <span class="highlight">BLACKPINK</span> community! 
+                We're so excited to have you join the <span class="highlight">BLACKPINK</span> 'BLINKHOURCITY'fan community! 
                 You're now part of millions of BLINKs worldwide who share the love for JISOO, JENNIE, ROSÉ, and LISA!
               </p>
               <p>
@@ -238,6 +238,9 @@ async function sendWelcomeEmail(email, username, socialPlatform) {
               <center>
                 <a href="https://www.youtube.com/c/BLACKPINKOFFICIAL" class="button">
                   🎬 VISIT BLACKPINK'S YOUTUBE
+                </a>
+                <a href="https://forms.sonymusicfans.com/campaign/blackpink-deadline/" class="button">
+                  📦 PRE-ORDER BLACKPINK's 3RD MINI ALBUM [DEADLINE]
                 </a>
               </center>
               <p style="margin-top: 30px;">
