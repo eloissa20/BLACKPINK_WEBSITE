@@ -1,7 +1,6 @@
 require('dotenv').config();
 const nodemailer = require('nodemailer');
-const fs = require('fs').promises;
-const path = require('path');
+const { kv } = require('@vercel/kv');
 
 // Email configuration
 const EMAIL_USER = process.env.EMAIL_USER;
@@ -10,15 +9,14 @@ const EMAIL_PASS = process.env.EMAIL_PASS;
 let transporter = null;
 let emailEnabled = false;
 
-// File path for persistent storage
-const SIGNUPS_FILE = path.join('/tmp', 'signups.json');
+// KV storage keys
+const SIGNUPS_KEY = 'blinkhourcity:signups';
+const STATS_KEY = 'blinkhourcity:stats';
 
 // Initialize email transporter
 async function initEmail() {
   if (!EMAIL_USER || !EMAIL_PASS) {
     console.log('⚠️ Email credentials missing');
-    console.log('EMAIL_USER:', EMAIL_USER ? 'SET' : 'NOT SET');
-    console.log('EMAIL_PASS:', EMAIL_PASS ? 'SET' : 'NOT SET');
     emailEnabled = false;
     return;
   }
@@ -32,7 +30,6 @@ async function initEmail() {
       }
     });
 
-    // Verify connection
     await transporter.verify();
     emailEnabled = true;
     console.log('✅ Email configured successfully');
@@ -42,25 +39,25 @@ async function initEmail() {
   }
 }
 
-// Load signups from file
+// Load signups from KV
 async function loadSignups() {
   try {
-    const data = await fs.readFile(SIGNUPS_FILE, 'utf8');
-    return JSON.parse(data);
+    const signups = await kv.get(SIGNUPS_KEY);
+    return signups || [];
   } catch (error) {
-    // File doesn't exist or is corrupted, return empty array
-    return { signups: [] };
+    console.error('❌ KV load error:', error.message);
+    return [];
   }
 }
 
-// Save signups to file
-async function saveSignups(signupsData) {
+// Save signups to KV
+async function saveSignups(signups) {
   try {
-    await fs.writeFile(SIGNUPS_FILE, JSON.stringify(signupsData, null, 2));
-    console.log(`💾 Saved ${signupsData.signups.length} signups to storage`);
+    await kv.set(SIGNUPS_KEY, signups);
+    console.log(`💾 Saved ${signups.length} signups to KV storage`);
     return true;
   } catch (error) {
-    console.error('❌ Failed to save signups:', error.message);
+    console.error('❌ KV save error:', error.message);
     return false;
   }
 }
@@ -242,7 +239,7 @@ module.exports = async (req, res) => {
 
   // Initialize email on first request
   if (!transporter) {
-    console.log('🔧 Initializing email on first request...');
+    console.log('🔧 Initializing email...');
     await initEmail();
   }
 
@@ -250,14 +247,24 @@ module.exports = async (req, res) => {
 
   // GET /api/stats
   if (pathname === '/api/stats' && req.method === 'GET') {
-    const signupsData = await loadSignups();
-    console.log(`📊 Stats request - Total BLINKs: ${signupsData.signups.length}`);
-    
-    return res.status(200).json({
-      streams: 5300000,
-      blinks: signupsData.signups.length,
-      views: 40900000000,
-    });
+    try {
+      const signups = await loadSignups();
+      const count = signups.length;
+      console.log(`📊 Stats request - Total BLINKs: ${count}`);
+      
+      return res.status(200).json({
+        streams: 5300000,
+        blinks: count,
+        views: 40900000000,
+      });
+    } catch (error) {
+      console.error('Stats error:', error);
+      return res.status(200).json({
+        streams: 5300000,
+        blinks: 0,
+        views: 40900000000,
+      });
+    }
   }
 
   // POST /api/signup
@@ -277,10 +284,10 @@ module.exports = async (req, res) => {
       }
 
       // Load existing signups
-      const signupsData = await loadSignups();
+      const signups = await loadSignups();
 
       // Check if email already exists
-      const emailExists = signupsData.signups.some(
+      const emailExists = signups.some(
         signup => signup.email.toLowerCase() === email.toLowerCase()
       );
       if (emailExists) {
@@ -297,13 +304,13 @@ module.exports = async (req, res) => {
         timestamp: new Date().toISOString(),
       };
 
-      signupsData.signups.push(newSignup);
+      signups.push(newSignup);
 
-      // Save to persistent storage
-      await saveSignups(signupsData);
+      // Save to KV storage
+      await saveSignups(signups);
 
       // Send welcome email
-      console.log(`🎉 New signup: ${censorEmail(email)} (@${username} on ${socialPlatform})`);
+      console.log(`🎉 New signup #${signups.length}: ${censorEmail(email)} (@${username} on ${socialPlatform})`);
       console.log(`📧 Attempting to send email to ${censorEmail(email)}...`);
       
       try {
@@ -319,7 +326,7 @@ module.exports = async (req, res) => {
 
       return res.status(200).json({ 
         message: 'Welcome to BLINKHOURCITY! Check your email for exclusive content! 💖',
-        count: signupsData.signups.length,
+        count: signups.length,
       });
     } catch (error) {
       console.error('Signup error:', error);
@@ -329,16 +336,24 @@ module.exports = async (req, res) => {
 
   // GET /api/signups
   if (pathname === '/api/signups' && req.method === 'GET') {
-    const signupsData = await loadSignups();
-    const censoredSignups = signupsData.signups.map(signup => ({
-      ...signup,
-      email: censorEmail(signup.email)
-    }));
-    
-    return res.status(200).json({
-      total: signupsData.signups.length,
-      signups: censoredSignups
-    });
+    try {
+      const signups = await loadSignups();
+      const censoredSignups = signups.map(signup => ({
+        ...signup,
+        email: censorEmail(signup.email)
+      }));
+      
+      return res.status(200).json({
+        total: signups.length,
+        signups: censoredSignups
+      });
+    } catch (error) {
+      console.error('Signups list error:', error);
+      return res.status(200).json({
+        total: 0,
+        signups: []
+      });
+    }
   }
 
   return res.status(404).json({ error: 'Not found' });
