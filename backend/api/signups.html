@@ -17,17 +17,6 @@
     .glow-pink {
       box-shadow: 0 0 25px rgba(236, 72, 153, 0.6);
     }
-    .card {
-      background: rgba(30, 30, 50, 0.7);
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(236, 72, 153, 0.3);
-      transition: all 0.3s ease;
-    }
-    .card:hover {
-      transform: translateY(-5px);
-      border-color: #ec4899;
-      box-shadow: 0 15px 30px rgba(236, 72, 153, 0.25);
-    }
     .gradient-text {
       background: linear-gradient(90deg, #ec4899, #a855f7, #ec4899);
       background-clip: text;
@@ -48,6 +37,36 @@
       0%, 100% { opacity: 1; }
       50% { opacity: 0.6; }
     }
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0 0.75rem;
+    }
+    th, td {
+      padding: 1rem 1.25rem;
+      text-align: left;
+    }
+    th {
+      background: rgba(236, 72, 153, 0.15);
+      color: #ec4899;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    tr {
+      background: rgba(30, 30, 50, 0.7);
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+    }
+    tr:hover {
+      transform: translateY(-3px);
+      background: rgba(50, 30, 70, 0.8);
+      box-shadow: 0 10px 20px rgba(236, 72, 153, 0.2);
+    }
+    td:nth-child(1) { font-weight: bold; color: #ec4899; }
+    td:nth-child(2) { color: #d946ef; }
+    td:nth-child(3) { color: #a855f7; }
+    td:nth-child(4) { color: #9ca3af; font-style: italic; }
   </style>
 </head>
 <body class="bg-black text-white">
@@ -64,18 +83,25 @@
       <p class="text-sm text-gray-400 mt-4 animate-pulse">Live • Auto-refreshes every 10 seconds</p>
     </header>
 
-    <!-- Signups Grid -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="signups-list">
-      <!-- Cards will be inserted here -->
-    </div>
-
-    <!-- Loading / Empty states -->
+    <!-- Table -->
     <div id="loading" class="text-center py-20 text-pink-400 text-2xl animate-pulse">
       Loading BLINK family members...
     </div>
     <div id="empty" class="hidden text-center py-20 text-gray-400 text-xl">
       No BLINKs have joined yet. Be the first! 💖
     </div>
+
+    <table id="signups-table" class="hidden w-full">
+      <thead>
+        <tr>
+          <th>Username</th>
+          <th>Platform</th>
+          <th>Joined At</th>
+          <th>Email (censored)</th>
+        </tr>
+      </thead>
+      <tbody id="signups-body"></tbody>
+    </table>
   </div>
 
   <script>
@@ -86,40 +112,29 @@
 
         document.getElementById('total-count').textContent = data.total.toLocaleString();
 
-        const list = document.getElementById('signups-list');
-        list.innerHTML = '';
+        const body = document.getElementById('signups-body');
+        body.innerHTML = '';
 
         if (data.total === 0) {
           document.getElementById('empty').classList.remove('hidden');
           document.getElementById('loading').classList.add('hidden');
+          document.getElementById('signups-table').classList.add('hidden');
           return;
         }
 
         document.getElementById('empty').classList.add('hidden');
         document.getElementById('loading').classList.add('hidden');
+        document.getElementById('signups-table').classList.remove('hidden');
 
         data.signups.forEach(s => {
-          const card = document.createElement('div');
-          card.className = 'card rounded-2xl p-6';
-          card.innerHTML = `
-            <div class="flex items-center gap-4 mb-4">
-              <div class="w-14 h-14 rounded-full bg-gradient-to-br from-pink-600 to-purple-600 flex items-center justify-center text-white text-2xl font-bold">
-                ${s.username[0].toUpperCase()}
-              </div>
-              <div>
-                <h3 class="text-xl font-bold text-pink-300">${s.username}</h3>
-                <p class="text-sm text-gray-400">via ${s.socialPlatform}</p>
-              </div>
-            </div>
-            <p class="text-sm text-gray-300 mb-2">
-              <i class="fas fa-clock mr-2 text-purple-400"></i>
-              ${s.timestamp}
-            </p>
-            <p class="text-sm text-gray-500 italic">
-              ${s.email}
-            </p>
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${s.username}</td>
+            <td>${s.socialPlatform}</td>
+            <td>${s.timestamp}</td>
+            <td>${s.email}</td>
           `;
-          list.appendChild(card);
+          body.appendChild(row);
         });
       } catch (err) {
         console.error(err);
@@ -127,7 +142,6 @@
       }
     }
 
-    // Load immediately and refresh every 10 seconds
     loadSignups();
     setInterval(loadSignups, 10000);
   </script>
