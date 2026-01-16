@@ -12,34 +12,29 @@ let emailEnabled = false;
 // Redis client
 let redisClient = null;
 
-// KV storage keys (now Redis keys)
+// Redis key
 const SIGNUPS_KEY = 'blinkhourcity:signups';
-const STATS_KEY = 'blinkhourcity:stats';
 
-// Initialize Redis connection
+// Initialize Redis
 async function initRedis() {
-  if (redisClient) return; // already connected
+  if (redisClient) return;
 
   if (!process.env.REDIS_URL) {
-    console.error('❌ REDIS_URL is missing in environment variables');
+    console.error('❌ REDIS_URL missing');
     return;
   }
 
   try {
-    redisClient = createClient({
-      url: process.env.REDIS_URL,
-    });
-
-    redisClient.on('error', (err) => console.error('Redis Client Error:', err));
-
+    redisClient = createClient({ url: process.env.REDIS_URL });
+    redisClient.on('error', err => console.error('Redis Error:', err));
     await redisClient.connect();
-    console.log('✅ Redis connected successfully via REDIS_URL');
-  } catch (error) {
-    console.error('❌ Failed to connect to Redis:', error.message);
+    console.log('✅ Redis connected');
+  } catch (err) {
+    console.error('❌ Redis connection failed:', err.message);
   }
 }
 
-// Initialize email transporter
+// Initialize email
 async function initEmail() {
   if (!EMAIL_USER || !EMAIL_PASS) {
     console.log('⚠️ Email credentials missing');
@@ -50,339 +45,169 @@ async function initEmail() {
   try {
     transporter = nodemailer.createTransport({
       service: 'gmail',
-      auth: {
-        user: EMAIL_USER,
-        pass: EMAIL_PASS
-      }
+      auth: { user: EMAIL_USER, pass: EMAIL_PASS }
     });
-
     await transporter.verify();
     emailEnabled = true;
-    console.log('✅ Email configured successfully');
-  } catch (error) {
-    console.error('❌ Email configuration failed:', error.message);
+    console.log('✅ Email ready');
+  } catch (err) {
+    console.error('❌ Email setup failed:', err.message);
     emailEnabled = false;
   }
 }
 
-// Load signups from Redis
+// Load signups
 async function loadSignups() {
   try {
     const data = await redisClient.get(SIGNUPS_KEY);
     return data ? JSON.parse(data) : [];
-  } catch (error) {
-    console.error('❌ Redis load error:', error.message);
+  } catch (err) {
+    console.error('❌ loadSignups error:', err.message);
     return [];
   }
 }
 
-// Save signups to Redis
+// Save signups
 async function saveSignups(signups) {
   try {
     await redisClient.set(SIGNUPS_KEY, JSON.stringify(signups));
-    console.log(`💾 Saved ${signups.length} signups to Redis storage`);
+    console.log(`💾 Saved ${signups.length} signups`);
     return true;
-  } catch (error) {
-    console.error('❌ Redis save error:', error.message);
+  } catch (err) {
+    console.error('❌ saveSignups error:', err.message);
     return false;
   }
 }
 
 function censorEmail(email) {
-  const [localPart, domain] = email.split('@');
-  if (localPart.length <= 2) {
-    return `${localPart[0]}***@${domain}`;
-  }
-  const visibleChars = Math.min(2, localPart.length - 1);
-  const censored = localPart.substring(0, visibleChars) + '***';
-  return `${censored}@${domain}`;
+  const [local, domain] = email.split('@');
+  if (local.length <= 2) return `${local[0]}***@${domain}`;
+  return `${local.slice(0, 2)}***@${domain}`;
 }
 
 async function sendWelcomeEmail(email, username, socialPlatform) {
-  if (!emailEnabled || !transporter) {
-    console.log('⚠️ Email not configured, skipping send');
-    return false;
-  }
+  if (!emailEnabled || !transporter) return false;
 
   try {
     const mailOptions = {
       from: `"BLINKHOURCITY 💖" <${EMAIL_USER}>`,
       to: email,
-      subject: '💖 Welcome to BLINKHOURCITY - You\'re In The Area! ✨',
+      subject: '💖 Welcome to BLINKHOURCITY!',
       html: `
-        <!DOCTYPE html>
-        <html>
-        <head>
-          <meta charset="UTF-8">
-          <meta name="viewport" content="width=device-width, initial-scale=1.0">
-          <style>
-            * { margin: 0; padding: 0; box-sizing: border-box; }
-            body {
-              font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
-              background: #000; margin: 0; padding: 0; line-height: 1.6;
-            }
-            .email-wrapper { background: #000; padding: 20px 10px; }
-            .container {
-              max-width: 600px; margin: 0 auto; background: #000;
-              border-radius: 24px; overflow: hidden;
-              box-shadow: 0 30px 80px rgba(236, 72, 153, 0.6);
-            }
-            .header {
-              background: linear-gradient(135deg, #ec4899 0%, #c026d3 50%, #a855f7 100%);
-              padding: 50px 30px; text-align: center; border-radius: 24px 24px 0 0;
-            }
-            .header h1 {
-              color: #fff; font-size: 32px; font-weight: 900;
-              letter-spacing: 2px; line-height: 1.3; margin: 0;
-              text-transform: uppercase;
-              text-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-            }
-            .emoji-large { font-size: 36px; display: inline-block; }
-            .content { padding: 50px 35px; background: #000; }
-            .greeting { font-size: 28px; font-weight: 800; color: #fff; margin-bottom: 25px; }
-            .intro-text { font-size: 16px; color: #e5e5e5; line-height: 1.7; margin-bottom: 30px; }
-            .highlight { color: #ec4899; font-weight: 700; }
-            .perks-section { background: transparent; border: none; padding: 0; margin: 35px 0; }
-            .perks-title { font-size: 18px; font-weight: 800; color: #fff; margin-bottom: 20px; }
-            .perk-item {
-              display: flex; align-items: center; margin-bottom: 12px;
-              color: #e5e5e5; font-size: 15px;
-            }
-            .perk-item:last-child { margin-bottom: 0; }
-            .perk-icon { margin-right: 10px; font-size: 18px; }
-            .button-container { text-align: center; margin: 45px 0; }
-            .button {
-              display: inline-block;
-              background: linear-gradient(135deg, #ec4899 0%, #a855f7 100%);
-              color: #fff !important; text-decoration: none;
-              padding: 16px 28px; border-radius: 50px;
-              font-weight: 800; font-size: 14px;
-              letter-spacing: 0.5px; margin: 8px 6px;
-              box-shadow: 0 8px 25px rgba(236, 72, 153, 0.4);
-              text-transform: uppercase;
-            }
-            .divider {
-              height: 1px;
-              background: linear-gradient(90deg, transparent 0%, rgba(236, 72, 153, 0.4) 50%, transparent 100%);
-              margin: 40px 0;
-            }
-            .closing-text {
-              text-align: left; font-size: 16px; color: #e5e5e5;
-              font-weight: 400; margin: 35px 0 20px; line-height: 1.7;
-            }
-            .social-links {
-              text-align: left; padding: 0; background: transparent;
-              border-radius: 0; margin-top: 25px;
-            }
-            .social-links a {
-              color: #ec4899; text-decoration: none; font-weight: 600;
-              font-size: 14px; margin-right: 8px;
-            }
-            .footer {
-              background: #000; padding: 30px; text-align: center;
-              border-top: none;
-            }
-            .footer-text { color: #666; font-size: 13px; line-height: 1.8; margin: 8px 0; }
-          </style>
-        </head>
-        <body>
-          <div class="email-wrapper">
-            <div class="container">
-              <div class="header">
-                <h1><span class="emoji-large">💖</span> WELCOME TO THE BLINK FAMILY! <span class="emoji-large">💖</span></h1>
-              </div>
-              
-              <div class="content">
-                <div class="greeting">Hey ${username}! 👋</div>
-                
-                <div class="intro-text">
-                  We're so excited to have you join the <span class="highlight">BLACKPINK</span> 
-                  <span class="highlight">'BLINKHOURCITY'</span> fan community! 
-                  You're now part of millions of BLINKs worldwide who share the love for JISOO, JENNIE, ROSÉ, and LISA!
-                </div>
-                
-                <div class="perks-section">
-                  <div class="perks-title">Here's what you'll get:</div>
-                  <div class="perk-item"><span class="perk-icon">✨</span><div>Exclusive updates and announcements</div></div>
-                  <div class="perk-item"><span class="perk-icon">🎵</span><div>Behind-the-scenes content</div></div>
-                  <div class="perk-item"><span class="perk-icon">🎤</span><div>Early access to comeback news</div></div>
-                  <div class="perk-item"><span class="perk-icon">💌</span><div>Special fan events and giveaways</div></div>
-                  <div class="perk-item"><span class="perk-icon">🌟</span><div>Connect with fellow BLINKs on <strong>${socialPlatform}</strong></div></div>
-                </div>
-                
-                <div class="button-container">
-                  <a href="https://www.youtube.com/c/BLACKPINKOFFICIAL" class="button">
-                    🎬 VISIT BLACKPINK'S YOUTUBE
-                  </a>
-                  <a href="https://forms.sonymusicfans.com/campaign/blackpink-deadline/" class="button">
-                    📦 PRE-ORDER BLACKPINK's 3RD MINI ALBUM [DEADLINE]
-                  </a>
-                </div>
-                
-                <div class="divider"></div>
-                
-                <div class="closing-text">
-                  Thank you for being part of our journey! Let's continue to support BLACKPINK together! 💪💖
-                </div>
-                
-                <div class="social-links">
-                  <a href="https://www.instagram.com/blackpinkofficial/">Instagram</a> |
-                  <a href="https://x.com/BLACKPINK">Twitter</a> |
-                  <a href="https://www.tiktok.com/@bp_tiktok">TikTok</a> |
-                  <a href="https://www.youtube.com/c/BLACKPINKOFFICIAL">YouTube</a>
-                </div>
-              </div>
-              
-              <div class="footer">
-                <div class="footer-text">Made with 💖 for BLINKs worldwide 🌎</div>
-              </div>
-            </div>
-          </div>
-        </body>
-        </html>
+        <h1>Hey ${username}!</h1>
+        <p>Welcome to the BLINK family! 💖</p>
+        <p>You joined via <strong>${socialPlatform}</strong></p>
+        <p>Thank you for being part of BLINKHOURCITY!</p>
       `
     };
 
     await transporter.sendMail(mailOptions);
-    console.log(`✅ Welcome email sent to ${censorEmail(email)}`);
+    console.log(`✅ Email sent to ${censorEmail(email)}`);
     return true;
-  } catch (error) {
-    console.error('❌ Email send failed:', error.message);
+  } catch (err) {
+    console.error('❌ Email failed:', err.message);
     return false;
   }
 }
 
-// Vercel serverless handler
+// Main handler
 module.exports = async (req, res) => {
-  // Enable CORS
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
-  if (req.method === 'OPTIONS') {
-    return res.status(200).end();
-  }
+  if (req.method === 'OPTIONS') return res.status(200).end();
 
-  // Initialize email and Redis on first request
-  if (!transporter) {
-    console.log('🔧 Initializing email...');
-    await initEmail();
-  }
+  await initEmail();
+  await initRedis();
 
-  await initRedis(); // Connect to Redis (safe to call multiple times)
+  const url = new URL(req.url, `http://${req.headers.host}`);
+  const pathname = url.pathname;
 
-  const { pathname } = new URL(req.url, `http://${req.headers.host}`);
-
-  // GET /api/stats
+  // GET /api/stats ── used by homepage
   if (pathname === '/api/stats' && req.method === 'GET') {
-    try {
-      const signups = await loadSignups();
-      const count = signups.length;
-      console.log(`📊 Stats request - Total BLINKs: ${count}`);
-      
-      return res.status(200).json({
-        streams: 5300000,
-        blinks: count,
-        views: 40900000000,
-      });
-    } catch (error) {
-      console.error('Stats error:', error);
-      return res.status(200).json({
-        streams: 5300000,
-        blinks: 0,
-        views: 40900000000,
-      });
-    }
+    const signups = await loadSignups();
+    return res.status(200).json({
+      streams: 5300000,
+      blinks: signups.length,
+      views: 40900000000
+    });
   }
 
-  // POST /api/signup
+  // POST /api/signup ── called from footer form
   if (pathname === '/api/signup' && req.method === 'POST') {
     try {
-      const { email, username, socialPlatform } = req.body;
+      const body = req.body || {};
+      const { email, username, socialPlatform } = body;
 
-      // Validation
       if (!email || !email.includes('@')) {
-        return res.status(400).json({ message: 'Invalid email address' });
+        return res.status(400).json({ message: 'Invalid email' });
       }
-      if (!username || !username.trim()) {
-        return res.status(400).json({ message: 'Username is required' });
+      if (!username?.trim()) {
+        return res.status(400).json({ message: 'Username required' });
       }
       if (!socialPlatform) {
-        return res.status(400).json({ message: 'Please select a social platform' });
+        return res.status(400).json({ message: 'Select a platform' });
       }
 
-      // Load existing signups
       const signups = await loadSignups();
 
-      // Check if email already exists
-      const emailExists = signups.some(
-        signup => signup.email.toLowerCase() === email.toLowerCase()
-      );
-      if (emailExists) {
-        return res.status(400).json({ 
-          message: 'This email is already part of the BLINK family! 💖' 
-        });
+      if (signups.some(s => s.email.toLowerCase() === email.toLowerCase())) {
+        return res.status(400).json({ message: 'Email already registered 💖' });
       }
 
-      // Add new signup
       const newSignup = {
         email,
         username: username.trim(),
         socialPlatform,
-        timestamp: new Date().toISOString(),
+        timestamp: new Date().toISOString()
       };
 
       signups.push(newSignup);
-
-      // Save to Redis
       await saveSignups(signups);
 
-      // Send welcome email
-      console.log(`🎉 New signup #${signups.length}: ${censorEmail(email)} (@${username} on ${socialPlatform})`);
-      console.log(`📧 Attempting to send email to ${censorEmail(email)}...`);
-      
-      try {
-        const emailSent = await sendWelcomeEmail(email, username, socialPlatform);
-        if (emailSent) {
-          console.log(`✅ Email successfully sent to ${censorEmail(email)}`);
-        } else {
-          console.log(`⚠️ Email failed to send to ${censorEmail(email)}`);
-        }
-      } catch (emailError) {
-        console.error('❌ Email error:', emailError);
-      }
+      sendWelcomeEmail(email, username, socialPlatform).catch(console.error);
 
-      return res.status(200).json({ 
-        message: 'Welcome to BLINKHOURCITY! Check your email for exclusive content! 💖',
-        count: signups.length,
+      return res.status(200).json({
+        message: 'Welcome! Check your email 💖',
+        count: signups.length
       });
-    } catch (error) {
-      console.error('Signup error:', error);
-      return res.status(500).json({ message: 'Server error. Please try again.' });
+    } catch (err) {
+      console.error('Signup error:', err);
+      return res.status(500).json({ message: 'Server error' });
     }
   }
 
-  // GET /api/signups
+  // GET /api/signups ── show all signups (censored emails)
   if (pathname === '/api/signups' && req.method === 'GET') {
-    try {
-      const signups = await loadSignups();
-      const censoredSignups = signups.map(signup => ({
-        ...signup,
-        email: censorEmail(signup.email)
-      }));
-      
-      return res.status(200).json({
-        total: signups.length,
-        signups: censoredSignups
-      });
-    } catch (error) {
-      console.error('Signups list error:', error);
-      return res.status(200).json({
-        total: 0,
-        signups: []
-      });
-    }
+    const signups = await loadSignups();
+    const censored = signups.map(s => ({
+      ...s,
+      email: censorEmail(s.email)
+    }));
+    return res.status(200).json({
+      total: signups.length,
+      signups: censored
+    });
+  }
+
+  // Optional: clear everything (POST /api/clear-signups)
+  if (pathname === '/api/clear-signups' && req.method === 'POST') {
+    await redisClient.del(SIGNUPS_KEY);
+    console.log('🧹 Signups cleared');
+    return res.status(200).json({ message: 'Signups cleared' });
   }
 
   return res.status(404).json({ error: 'Not found' });
 };
+
+// Local development server
+if (require.main === module) {
+  const http = require('http');
+  const PORT = process.env.PORT || 3000;
+  http.createServer((req, res) => module.exports(req, res))
+    .listen(PORT, () => {
+      console.log(`🚀 Server running at http://localhost:${PORT}`);
+      console.log('Test: http://localhost:3000/api/stats');
+    });
+}
