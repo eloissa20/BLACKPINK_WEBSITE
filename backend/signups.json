@@ -1,0 +1,26 @@
+{
+  "signups": [
+    {
+      "email": "sunnysunlisa0327@gmail.com",
+      "timestamp": "2026-01-16T02:09:16.421Z"
+    },
+    {
+      "email": "dlwdz2003@gmail.com",
+      "username": "sunny",
+      "socialPlatform": "Twitter",
+      "timestamp": "2026-01-16T05:27:54.849Z"
+    },
+    {
+      "email": "blinksph08@gmail.com",
+      "username": "sunny",
+      "socialPlatform": "Twitter",
+      "timestamp": "2026-01-16T05:31:03.574Z"
+    },
+    {
+      "email": "dilawcarts@gmail.com",
+      "username": "yellow",
+      "socialPlatform": "Twitter",
+      "timestamp": "2026-01-16T05:46:55.087Z"
+    }
+  ]
+}

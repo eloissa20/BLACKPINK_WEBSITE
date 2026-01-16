@@ -2,15 +2,29 @@ import { Instagram, Youtube, Music, Twitter, Sparkles, Heart } from 'lucide-reac
 import { useState } from 'react';
 
 export default function Footer() {
-  const [email, setEmail] = useState('');
+  const [formData, setFormData] = useState({
+    email: '',
+    username: '',
+    socialPlatform: ''
+  });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [message, setMessage] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!email || !email.includes('@')) {
+    if (!formData.email || !formData.email.includes('@')) {
       setMessage('❌ Please enter a valid email!');
+      return;
+    }
+
+    if (!formData.username.trim()) {
+      setMessage('❌ Please enter your username!');
+      return;
+    }
+
+    if (!formData.socialPlatform) {
+      setMessage('❌ Please select a social platform!');
       return;
     }
 
@@ -23,14 +37,14 @@ export default function Footer() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify(formData),
       });
 
       const data = await response.json();
 
       if (response.ok) {
         setMessage('✨ Welcome to the BLINK family! Check your email!');
-        setEmail('');
+        setFormData({ email: '', username: '', socialPlatform: '' });
       } else {
         setMessage(data.message || '❌ Something went wrong!');
       }
@@ -183,11 +197,39 @@ export default function Footer() {
               <input
                 type="email"
                 placeholder="✉️ Your email address"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                value={formData.email}
+                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                 disabled={isSubmitting}
                 className="px-5 py-3 bg-gray-800/80 backdrop-blur-sm border-2 border-gray-700 rounded-xl text-white text-sm placeholder-gray-400 focus:outline-none focus:border-pink-500 focus:ring-2 focus:ring-pink-500/50 transition-all duration-300 disabled:opacity-50"
               />
+              
+              {/* Username and Social Platform in one row */}
+              <div className="grid grid-cols-2 gap-3">
+                <input
+                  type="text"
+                  placeholder="👤 Username"
+                  value={formData.username}
+                  onChange={(e) => setFormData({ ...formData, username: e.target.value })}
+                  disabled={isSubmitting}
+                  className="px-4 py-3 bg-gray-800/80 backdrop-blur-sm border-2 border-gray-700 rounded-xl text-white text-sm placeholder-gray-400 focus:outline-none focus:border-pink-500 focus:ring-2 focus:ring-pink-500/50 transition-all duration-300 disabled:opacity-50"
+                />
+                
+                <select
+                  value={formData.socialPlatform}
+                  onChange={(e) => setFormData({ ...formData, socialPlatform: e.target.value })}
+                  disabled={isSubmitting}
+                  className="px-4 py-3 bg-gray-800/80 backdrop-blur-sm border-2 border-gray-700 rounded-xl text-white text-sm focus:outline-none focus:border-pink-500 focus:ring-2 focus:ring-pink-500/50 transition-all duration-300 disabled:opacity-50"
+                >
+                  <option value="">📱 Platform</option>
+                  <option value="Instagram">Instagram</option>
+                  <option value="Twitter">Twitter</option>
+                  <option value="TikTok">TikTok</option>
+                  <option value="YouTube">YouTube</option>
+                  <option value="Facebook">Facebook</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+
               <button 
                 type="submit"
                 disabled={isSubmitting}
