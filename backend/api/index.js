@@ -16,7 +16,7 @@ let redisClient = null;
 const SIGNUPS_KEY = 'blinkhourcity:signups';
 const DAILY_KEY_PREFIX = 'blinkhourcity:daily:';
 
-// Initialize Redis connection
+// Initialize Redis
 async function initRedis() {
   if (redisClient) return;
 
@@ -252,9 +252,8 @@ async function sendWelcomeEmail(email, username, socialPlatform) {
   }
 }
 
-// Main Vercel serverless handler
+// Main handler
 module.exports = async (req, res) => {
-  // Enable CORS
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -263,7 +262,6 @@ module.exports = async (req, res) => {
     return res.status(200).end();
   }
 
-  // Initialize services on first request
   if (!transporter) {
     console.log('🔧 Initializing email...');
     await initEmail();
@@ -273,20 +271,17 @@ module.exports = async (req, res) => {
 
   const { pathname } = new URL(req.url, `http://${req.headers.host}`);
 
-  // GET /api/stats ── used by homepage for Active BLINKS count
+  // GET /api/stats
   if (pathname === '/api/stats' && req.method === 'GET') {
     try {
       const signups = await loadSignups();
       const count = signups.length;
-      console.log(`📊 Stats request - Total BLINKs: ${count}`);
-      
       return res.status(200).json({
         streams: 5300000,
         blinks: count,
         views: 40900000000,
       });
     } catch (error) {
-      console.error('Stats error:', error);
       return res.status(200).json({
         streams: 5300000,
         blinks: 0,
@@ -295,12 +290,11 @@ module.exports = async (req, res) => {
     }
   }
 
-  // POST /api/signup ── signup endpoint with daily limit
+  // POST /api/signup with daily limit
   if (pathname === '/api/signup' && req.method === 'POST') {
     try {
       const { email, username, socialPlatform } = req.body || {};
 
-      // Validation
       if (!email || !email.includes('@')) {
         return res.status(400).json({ message: 'Invalid email address' });
       }
@@ -311,7 +305,6 @@ module.exports = async (req, res) => {
         return res.status(400).json({ message: 'Please select a social platform' });
       }
 
-      // Daily limit check (500 per day)
       const today = new Date().toISOString().split('T')[0];
       const dailyKey = `${DAILY_KEY_PREFIX}${today}`;
       let dailyCount = parseInt(await redisClient.get(dailyKey) || '0', 10);
@@ -323,20 +316,12 @@ module.exports = async (req, res) => {
         });
       }
 
-      // Load existing signups
       const signups = await loadSignups();
 
-      // Check if email already exists
-      const emailExists = signups.some(
-        signup => signup.email.toLowerCase() === email.toLowerCase()
-      );
-      if (emailExists) {
-        return res.status(400).json({ 
-          message: 'This email is already part of the BLINK family! 💖' 
-        });
+      if (signups.some(s => s.email.toLowerCase() === email.toLowerCase())) {
+        return res.status(400).json({ message: 'Email already registered 💖' });
       }
 
-      // Add new signup
       const newSignup = {
         email,
         username: username.trim(),
@@ -345,120 +330,192 @@ module.exports = async (req, res) => {
       };
 
       signups.push(newSignup);
-
-      // Save to Redis
       await saveSignups(signups);
 
-      // Increment daily counter
       await redisClient.incr(dailyKey);
-      await redisClient.expire(dailyKey, 86400); // expire after 24h
+      await redisClient.expire(dailyKey, 86400);
 
-      // Send welcome email (non-blocking)
-      console.log(`🎉 New signup #${signups.length}: ${censorEmail(email)} (@${username} on ${socialPlatform})`);
-      sendWelcomeEmail(email, username, socialPlatform)
-        .then(sent => {
-          if (sent) console.log(`✅ Email successfully sent to ${censorEmail(email)}`);
-        })
-        .catch(err => console.error('❌ Email error:', err));
+      sendWelcomeEmail(email, username, socialPlatform).catch(console.error);
 
       return res.status(200).json({ 
-        message: 'Welcome to BLINKHOURCITY! Check your email for exclusive content! 💖',
+        message: 'Welcome to BLINKHOURCITY! Check your email! 💖',
         count: signups.length,
       });
     } catch (error) {
       console.error('Signup error:', error);
-      return res.status(500).json({ message: 'Server error. Please try again.' });
+      return res.status(500).json({ message: 'Server error' });
     }
   }
 
-  // GET /api/signups ── returns list with censored emails (for your styled page)
+  // GET /api/signups → serves the styled HTML page
   if (pathname === '/api/signups' && req.method === 'GET') {
-    try {
-      const signups = await loadSignups();
-      const censoredSignups = signups.map(signup => ({
-        ...signup,
-        email: censorEmail(signup.email)
-      }));
-      
-      return res.status(200).json({
-        total: signups.length,
-        signups: censoredSignups
-      });
-    } catch (error) {
-      console.error('Signups list error:', error);
-      return res.status(200).json({
-        total: 0,
-        signups: []
-      });
+    const html = `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>BLINKHOURCITY - All BLINKs Joined 💖</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <style>
+    body {
+      background: linear-gradient(to bottom, #000, #1a0033);
+      color: white;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      min-height: 100vh;
+      margin: 0;
     }
-  }
-
-  // POST /api/clear-signups ── reset all signups (for testing)
-  if (pathname === '/api/clear-signups' && req.method === 'POST') {
-    try {
-      await redisClient.del(SIGNUPS_KEY);
-      console.log('🧹 All signups cleared from Redis');
-      return res.status(200).json({ message: 'Signups cleared successfully' });
-    } catch (error) {
-      console.error('Clear error:', error);
-      return res.status(500).json({ message: 'Error clearing signups' });
+    .glow-pink { box-shadow: 0 0 25px rgba(236, 72, 153, 0.6); }
+    .card {
+      background: rgba(30, 30, 50, 0.7);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(236, 72, 153, 0.3);
+      transition: all 0.3s ease;
     }
-  }
+    .card:hover {
+      transform: translateY(-5px);
+      border-color: #ec4899;
+      box-shadow: 0 15px 30px rgba(236, 72, 153, 0.25);
+    }
+    .gradient-text {
+      background: linear-gradient(90deg, #ec4899, #a855f7, #ec4899);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-size: 200% 100%;
+      animation: gradientFlow 6s linear infinite;
+    }
+    @keyframes gradientFlow {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    .blink { animation: blink 1.5s infinite; }
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.6; }
+    }
+  </style>
+</head>
+<body class="bg-black text-white">
+  <div class="container mx-auto px-4 py-12 max-w-6xl">
+    <header class="text-center mb-12">
+      <h1 class="text-5xl md:text-6xl font-extrabold gradient-text mb-4 blink">
+        BLINKHOURCITY FAMILY 💖
+      </h1>
+      <p class="text-xl text-pink-300 mb-2">Total BLINKs Joined:</p>
+      <div id="total-count" class="text-6xl md:text-8xl font-black text-pink-500 glow-pink inline-block px-10 py-6 rounded-3xl bg-black/50">
+        0
+      </div>
+      <p class="text-sm text-gray-400 mt-4 animate-pulse">Live • Auto-refreshes every 10 seconds</p>
+    </header>
 
-  return res.status(404).json({ error: 'Not found' });
-};
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="signups-list"></div>
 
+    <div id="loading" class="text-center py-20 text-pink-400 text-2xl animate-pulse">
+      Loading BLINK family members...
+    </div>
+    <div id="empty" class="hidden text-center py-20 text-gray-400 text-xl">
+      No BLINKs have joined yet. Be the first! 💖
+    </div>
+  </div>
 
-// GET /api/signups → serve the styled HTML page
-if (pathname === '/api/signups' && req.method === 'GET') {
-  const fs = require('fs');
-  const path = require('path');
-  const htmlPath = path.join(__dirname, 'signups.html');
+  <script>
+    async function loadSignups() {
+      try {
+        const res = await fetch('/api/signups-json');
+        const data = await res.json();
 
-  try {
-    const html = fs.readFileSync(htmlPath, 'utf8');
-    res.setHeader('Content-Type', 'text/html');
-    return res.end(html);
-  } catch (err) {
-    console.error('Failed to read signups.html:', err);
-    return res.status(500).json({ error: 'Internal server error' });
-  }
+        document.getElementById('total-count').textContent = data.total.toLocaleString();
+
+        const list = document.getElementById('signups-list');
+        list.innerHTML = '';
+
+        if (data.total === 0) {
+          document.getElementById('empty').classList.remove('hidden');
+          document.getElementById('loading').classList.add('hidden');
+          return;
+        }
+
+        document.getElementById('empty').classList.add('hidden');
+        document.getElementById('loading').classList.add('hidden');
+
+        data.signups.forEach(s => {
+          const card = document.createElement('div');
+          card.className = 'card rounded-2xl p-6';
+          card.innerHTML = \`
+            <div class="flex items-center gap-4 mb-4">
+              <div class="w-14 h-14 rounded-full bg-gradient-to-br from-pink-600 to-purple-600 flex items-center justify-center text-white text-2xl font-bold">
+                \${s.username[0].toUpperCase()}
+              </div>
+              <div>
+                <h3 class="text-xl font-bold text-pink-300">\${s.username}</h3>
+                <p class="text-sm text-gray-400">via \${s.socialPlatform}</p>
+              </div>
+            </div>
+            <p class="text-sm text-gray-300 mb-2">
+              <i class="fas fa-clock mr-2 text-purple-400"></i> \${s.timestamp}
+            </p>
+            <p class="text-sm text-gray-500 italic">\${s.email}</p>
+          \`;
+          list.appendChild(card);
+        });
+      } catch (err) {
+        console.error(err);
+        document.getElementById('loading').textContent = 'Error loading BLINKs...';
+      }
+    }
+
+    loadSignups();
+    setInterval(loadSignups, 10000);
+  </script>
+</body>
+</html>
+    `;
+
+  res.setHeader('Content-Type', 'text/html');
+  return res.end(html);
 }
 
-// GET /api/signups-json → returns raw JSON for the HTML page to fetch
+// GET /api/signups-json → JSON data for the page
 if (pathname === '/api/signups-json' && req.method === 'GET') {
   try {
     const signups = await loadSignups();
-    const censoredSignups = signups.map(signup => ({
-      ...signup,
-      email: censorEmail(signup.email)
+    const censoredSignups = signups.map(s => ({
+      ...s,
+      email: censorEmail(s.email)
     }));
-    
     return res.status(200).json({
       total: signups.length,
       signups: censoredSignups
     });
   } catch (error) {
-    console.error('Signups JSON error:', error);
-    return res.status(200).json({
-      total: 0,
-      signups: []
-    });
+    return res.status(200).json({ total: 0, signups: [] });
   }
 }
 
-// Local development server (shows listening message)
+// POST /api/clear-signups
+if (pathname === '/api/clear-signups' && req.method === 'POST') {
+  try {
+    await redisClient.del(SIGNUPS_KEY);
+    console.log('🧹 Signups cleared');
+    return res.status(200).json({ message: 'Signups cleared' });
+  } catch (error) {
+    console.error('Clear error:', error);
+    return res.status(500).json({ message: 'Error clearing' });
+  }
+}
+
+return res.status(404).json({ error: 'Not found' });
+};
+
+// Local dev server
 if (require.main === module) {
   const http = require('http');
   const PORT = process.env.PORT || 3000;
-
-  http.createServer((req, res) => {
-    module.exports(req, res);
-  }).listen(PORT, () => {
-    console.log(`🚀 API server running locally at http://localhost:${PORT}`);
-    console.log('Test endpoints:');
-    console.log(`  - Stats: http://localhost:${PORT}/api/stats`);
-    console.log(`  - Signups list: http://localhost:${PORT}/api/signups`);
-    console.log(`  - Clear signups: POST http://localhost:${PORT}/api/clear-signups`);
-  });
+  http.createServer((req, res) => module.exports(req, res))
+    .listen(PORT, () => {
+      console.log(`Server running on http://localhost:${PORT}`);
+    });
 }
