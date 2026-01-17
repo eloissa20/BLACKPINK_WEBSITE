@@ -33,14 +33,14 @@ export function HomePage({ onNavigate, bgImage }: HomePageProps) {
         const data = await response.json();
         setStats({
           streams: data.streams || 5300000,
-          blinks: data.blinks || 0, // Changed to 0 - will show signup count
+          blinks: data.blinks || 0,
           views: data.views || 40900000000,
         });
       } catch (error) {
         console.error('Error fetching stats:', error);
         setStats({
           streams: 5300000,
-          blinks: 0, // Changed to 0
+          blinks: 0,
           views: 40900000000,
         });
       } finally {
@@ -49,7 +49,7 @@ export function HomePage({ onNavigate, bgImage }: HomePageProps) {
     };
 
     fetchStats();
-    const interval = setInterval(fetchStats, 10000); // Check every 10 seconds for real-time updates
+    const interval = setInterval(fetchStats, 10000);
     return () => clearInterval(interval);
   }, []);
 
@@ -166,20 +166,20 @@ export function HomePage({ onNavigate, bgImage }: HomePageProps) {
       }}
     >
       <div className="absolute inset-0 bg-gradient-to-br from-black/80 via-black/70 to-pink-900/40" />
-      <div className="relative z-10 h-full overflow-y-auto p-8 scrollbar-thin scrollbar-thumb-pink-500 scrollbar-track-transparent">
-        <header className="sticky top-0 bg-gradient-to-r from-black/90 to-pink-900/50 backdrop-blur-xl mb-8 border-b-2 border-pink-500/50 pb-6 rounded-2xl p-6 shadow-2xl">
+      <div className="relative z-10 h-full overflow-y-auto p-4 sm:p-6 md:p-8 scrollbar-thin scrollbar-thumb-pink-500 scrollbar-track-transparent">
+        <header className="sticky top-0 bg-gradient-to-r from-black/90 to-pink-900/50 backdrop-blur-xl mb-6 border-b-2 border-pink-500/50 pb-4 rounded-xl p-4 shadow-2xl z-20">
           <div className="flex items-center justify-between">
-            <h2 className="text-4xl font-extrabold bg-gradient-to-r from-pink-400 via-pink-300 to-purple-400 bg-clip-text text-transparent flex items-center gap-3">
-              <TrendingUp className="w-8 h-8 text-pink-400 animate-bounce" />
+            <h2 className="text-3xl sm:text-4xl font-extrabold bg-gradient-to-r from-pink-400 via-pink-300 to-purple-400 bg-clip-text text-transparent flex items-center gap-3">
+              <TrendingUp className="w-7 h-7 sm:w-8 sm:h-8 animate-bounce" />
               Latest News
             </h2>
-            <div className="text-pink-300 text-sm font-semibold bg-pink-900/30 px-4 py-2 rounded-full border border-pink-500/30">
-              Updated: Jan 15, 2026
+            <div className="text-pink-300 text-sm font-semibold bg-pink-900/30 px-3 py-2 rounded-full border border-pink-500/30">
+              Updated: Jan 17, 2026
             </div>
           </div>
         </header>
 
-        <div className="space-y-6">
+        <div className="space-y-6 pb-8">
           {newsPosts.map((post, index) => (
             <div
               key={index}
@@ -195,7 +195,7 @@ export function HomePage({ onNavigate, bgImage }: HomePageProps) {
                 <img
                   src={post.image}
                   alt={post.title}
-                  className="w-full h-56 object-cover transition-transform duration-700 group-hover:scale-110"
+                  className="w-full h-48 sm:h-56 object-cover transition-transform duration-700 group-hover:scale-110"
                   onError={(e) => {
                     e.currentTarget.src =
                       bgImage ||
@@ -204,19 +204,19 @@ export function HomePage({ onNavigate, bgImage }: HomePageProps) {
                 />
                 <Star className="absolute top-4 right-4 w-6 h-6 text-pink-400 opacity-0 group-hover:opacity-100 animate-spin transition-opacity duration-300 z-20" />
               </a>
-              <div className="p-6">
+              <div className="p-5 sm:p-6">
                 <a
                   href={post.link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-pink-400 group-hover:text-pink-300 transition-colors duration-300 text-xl font-bold block mb-3"
+                  className="text-pink-400 group-hover:text-pink-300 transition-colors duration-300 text-lg sm:text-xl font-bold block mb-3"
                 >
                   {post.title}
                 </a>
-                <p className="text-gray-300 text-sm leading-relaxed mb-4">
+                <p className="text-gray-300 text-sm sm:text-base leading-relaxed mb-4">
                   {post.content}
                 </p>
-                <div className="flex justify-between items-center text-xs text-gray-400 border-t border-pink-500/20 pt-4">
+                <div className="flex justify-between items-center text-sm text-gray-400 border-t border-pink-500/20 pt-4">
                   <span className="font-semibold">{post.author}</span>
                   <span>{post.timestamp}</span>
                 </div>
@@ -272,12 +272,18 @@ export function HomePage({ onNavigate, bgImage }: HomePageProps) {
             .scrollbar-thin::-webkit-scrollbar-thumb:hover {
               background: linear-gradient(to bottom, rgb(236, 72, 153), rgb(168, 85, 247));
             }
+            
+            @supports (-webkit-touch-callout: none) {
+              .mobile-vh {
+                height: -webkit-fill-available;
+              }
+            }
           `,
         }}
       />
 
-      <div className="flex flex-col h-screen bg-black text-white overflow-hidden">
-        <div className="fixed inset-0 pointer-events-none z-40">
+      <div className="flex flex-col h-screen mobile-vh bg-black text-white overflow-hidden">
+        <div className="fixed inset-0 pointer-events-none z-40 hidden sm:block">
           <div className="absolute inset-0 bg-gradient-to-t from-pink-900/30 via-transparent to-purple-900/30" />
           <Sparkles className="absolute top-20 left-10 w-8 h-8 text-pink-400 animate-pulse animate-float" />
           <Sparkles className="absolute bottom-32 right-20 w-12 h-12 text-pink-300 animate-ping" />
@@ -286,106 +292,175 @@ export function HomePage({ onNavigate, bgImage }: HomePageProps) {
           <Star className="absolute bottom-40 left-1/4 w-8 h-8 text-purple-500 animate-pulse" style={{ animationDelay: '1s' }} />
         </div>
 
-        <div className="flex flex-1 flex-col lg:flex-row overflow-hidden">
+        <div className="flex flex-1 flex-col lg:flex-row overflow-hidden h-full">
           <div className="hidden lg:block lg:w-80 xl:w-96 h-full overflow-hidden border-r-4 border-pink-500/30 shadow-2xl shadow-pink-500/20">
             <NewsFeed />
           </div>
 
-          <div className="relative flex-1 flex flex-col justify-center items-center overflow-hidden">
-            <video
-              ref={videoRef}
-              className="absolute inset-0 w-full h-full object-cover"
-              src="/src/assets/bg-home-bp.mp4"
-              loop
-              muted
-              playsInline
-              autoPlay
-              preload="auto"
-            />
+          <div className="relative flex-1 flex flex-col overflow-y-auto overflow-x-hidden">
+            {/* Video Background Section */}
+            <div className="relative min-h-screen lg:min-h-0 lg:h-auto flex flex-col justify-center items-center">
+              <video
+                ref={videoRef}
+                className="absolute inset-0 w-full h-full object-cover"
+                src="/src/assets/bg-home-bp.mp4"
+                loop
+                muted
+                playsInline
+                autoPlay
+                preload="auto"
+              />
 
-            <div className="absolute inset-0 bg-gradient-to-br from-black/70 via-pink-900/30 to-purple-900/40 z-10" />
-            <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/60 z-10" />
+              <div className="absolute inset-0 bg-gradient-to-br from-black/70 via-pink-900/30 to-purple-900/40 z-10" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/60 z-10" />
 
-            <div className="absolute top-6 left-6 z-30 flex gap-4">
-              <button
-                onClick={toggleMute}
-                className="bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-500 hover:to-purple-500 backdrop-blur-xl p-4 rounded-2xl shadow-2xl transition-all duration-300 transform hover:scale-110 border border-pink-400/50 animate-glow"
-              >
-                {isMuted ? <VolumeX className="w-6 h-6" /> : <Volume2 className="w-6 h-6" />}
-              </button>
+              <div className="absolute top-4 left-4 sm:top-6 sm:left-6 z-30 flex gap-2 sm:gap-4">
+                <button
+                  onClick={toggleMute}
+                  className="bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-500 hover:to-purple-500 backdrop-blur-xl p-2 sm:p-3 md:p-4 rounded-xl sm:rounded-2xl shadow-2xl transition-all duration-300 transform hover:scale-110 border border-pink-400/50 animate-glow"
+                >
+                  {isMuted ? <VolumeX className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" /> : <Volume2 className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" />}
+                </button>
+              </div>
+
+              <div className="relative z-20 text-center px-4 sm:px-6 py-6 sm:py-12 md:py-16 max-w-6xl mx-auto w-full flex flex-col justify-center min-h-screen">
+                <div className="space-y-4 sm:space-y-6 md:space-y-8">
+                  {/* Title Section */}
+                  <div className="space-y-3 sm:space-y-4">
+                    <div className="flex items-center justify-center gap-2 sm:gap-4 md:gap-6 mb-2 sm:mb-4">
+                      <Zap className="w-6 h-6 sm:w-10 sm:h-10 md:w-14 md:h-14 text-pink-400 animate-pulse animate-float flex-shrink-0" />
+                      <h1 className="text-3xl sm:text-5xl md:text-7xl lg:text-8xl font-extrabold tracking-wider sm:tracking-widest bg-gradient-to-r from-pink-400 via-pink-300 to-purple-400 bg-clip-text text-transparent animate-gradient drop-shadow-2xl leading-tight">
+                        WELCOME BLINKS
+                      </h1>
+                      <Zap className="w-6 h-6 sm:w-10 sm:h-10 md:w-14 md:h-14 text-pink-400 animate-pulse animate-float flex-shrink-0" style={{ animationDelay: '0.5s' }} />
+                    </div>
+                    <p className="text-sm sm:text-lg md:text-xl lg:text-2xl text-gray-200 font-light tracking-wide drop-shadow-lg px-2 sm:px-4">
+                      🩷 The BLINKHOURCITY for BLACKPINK fans worldwide 🩷
+                    </p>
+                  </div>
+
+                  {/* Buttons Section */}
+                  <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 md:gap-6 justify-center items-stretch sm:items-center px-4 sm:px-6 max-w-3xl mx-auto w-full">
+                    <button
+                      onClick={() => onNavigate('guidelines')}
+                      className="group relative overflow-hidden bg-gradient-to-r from-pink-600 via-pink-500 to-purple-700 hover:from-pink-500 hover:via-pink-400 hover:to-purple-600 px-6 sm:px-8 md:px-10 lg:px-12 py-4 sm:py-5 md:py-6 rounded-2xl sm:rounded-3xl text-base sm:text-lg md:text-xl lg:text-2xl font-bold shadow-2xl transform hover:scale-105 sm:hover:scale-110 transition-all duration-500 border-2 border-pink-400/50 animate-glow w-full sm:w-auto"
+                    >
+                      <span className="relative z-10 flex items-center justify-center gap-2 sm:gap-3 md:gap-4">
+                        <Music className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 lg:w-8 lg:h-8 animate-bounce flex-shrink-0" />
+                        <span className="whitespace-nowrap">LET'S STREAM</span>
+                        <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 animate-spin flex-shrink-0" />
+                      </span>
+                      <div className="absolute inset-0 bg-gradient-to-r from-white/30 to-transparent translate-x-full group-hover:translate-x-0 transition-transform duration-700" />
+                    </button>
+
+                    <button
+                      onClick={() => onNavigate('album')}
+                      className="group relative overflow-hidden bg-black/80 hover:bg-black/60 border-2 sm:border-3 md:border-4 border-pink-500 hover:border-purple-500 px-6 sm:px-8 md:px-10 lg:px-12 py-4 sm:py-5 md:py-6 rounded-2xl sm:rounded-3xl text-base sm:text-lg md:text-xl lg:text-2xl font-bold shadow-2xl transform hover:scale-105 sm:hover:scale-110 transition-all duration-500 backdrop-blur-xl w-full sm:w-auto"
+                    >
+                      <span className="relative z-10 flex items-center justify-center gap-2 sm:gap-3 md:gap-4">
+                        <ShoppingBag className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 lg:w-8 lg:h-8 group-hover:animate-bounce flex-shrink-0" />
+                        <span className="whitespace-nowrap">LET'S BUY</span>
+                        <Heart className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 group-hover:animate-pulse flex-shrink-0" />
+                      </span>
+                      <div className="absolute inset-0 bg-gradient-to-r from-pink-500/20 to-purple-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                    </button>
+                  </div>
+
+                  {/* Stats Section */}
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 md:gap-6 mt-6 sm:mt-8 md:mt-10 max-w-5xl mx-auto px-4 sm:px-6 w-full">
+                    {loading ? (
+                      <p className="col-span-3 text-pink-400 text-base sm:text-lg md:text-2xl animate-pulse">⏳ Loading live stats...</p>
+                    ) : (
+                      [
+                        { value: stats.streams, label: 'Streams Today', icon: Music, color: 'from-pink-500 to-rose-500' },
+                        { value: stats.blinks, label: 'Active BLINKS', icon: Heart, color: 'from-pink-500 to-purple-500' },
+                        { value: stats.views, label: 'Total Views', icon: Youtube, color: 'from-red-500 to-pink-500' },
+                      ].map((stat, i) => (
+                        <div
+                          key={i}
+                          className="group relative bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl border-2 border-pink-500/30 rounded-2xl sm:rounded-3xl p-4 sm:p-5 md:p-6 hover:border-pink-400 transition-all duration-500 transform hover:scale-105 hover:-translate-y-1 sm:hover:-translate-y-2 shadow-2xl hover:shadow-pink-500/40"
+                        >
+                          <div className={`absolute inset-0 bg-gradient-to-br ${stat.color} opacity-0 group-hover:opacity-20 rounded-2xl sm:rounded-3xl transition-opacity duration-500`} />
+                          <stat.icon className="w-7 h-7 sm:w-8 sm:h-8 md:w-10 md:h-10 text-pink-400 mx-auto mb-2 sm:mb-3 group-hover:scale-125 transition-transform duration-300" />
+                          <p className="text-xl sm:text-2xl md:text-3xl font-extrabold bg-gradient-to-r from-pink-300 to-purple-300 bg-clip-text text-transparent">
+                            {stat.value.toLocaleString()}
+                          </p>
+                          <p className="text-gray-300 mt-1 sm:mt-2 font-semibold text-xs sm:text-sm">{stat.label}</p>
+                        </div>
+                      ))
+                    )}
+                  </div>
+                </div>
+              </div>
             </div>
 
-            <div className="relative z-20 text-center px-6 py-8 max-w-6xl mx-auto space-y-12">
-              <div className="space-y-4">
-                <div className="flex items-center justify-center gap-6 mb-6 flex-wrap">
-                  <Zap className="w-12 h-12 md:w-14 md:h-14 text-pink-400 animate-pulse animate-float" />
-                  <h1 className="text-5xl md:text-7xl lg:text-8xl font-extrabold tracking-widest bg-gradient-to-r from-pink-400 via-pink-300 to-purple-400 bg-clip-text text-transparent animate-gradient drop-shadow-2xl">
-                    WELCOME BLINKS
-                  </h1>
-                  <Zap className="w-12 h-12 md:w-14 md:h-14 text-pink-400 animate-pulse animate-float" style={{ animationDelay: '0.5s' }} />
-                </div>
-                <p className="text-xl md:text-2xl text-gray-200 font-light tracking-wide drop-shadow-lg">
-                  💖 The ultimate hub for BLACKPINK fans worldwide ✨
-                </p>
-              </div>
-
-              <div className="flex flex-col sm:flex-row gap-6 justify-center">
-                <button
-                  onClick={() => onNavigate('guidelines')}
-                  className="group relative overflow-hidden bg-gradient-to-r from-pink-600 via-pink-500 to-purple-700 hover:from-pink-500 hover:via-pink-400 hover:to-purple-600 px-12 py-6 rounded-3xl text-2xl font-bold shadow-2xl transform hover:scale-110 transition-all duration-500 border-2 border-pink-400/50 animate-glow"
-                >
-                  <span className="relative z-10 flex items-center gap-4">
-                    <Music className="w-8 h-8 animate-bounce" />
-                    LET'S STREAM
-                    <Sparkles className="w-6 h-6 animate-spin" />
-                  </span>
-                  <div className="absolute inset-0 bg-gradient-to-r from-white/30 to-transparent translate-x-full group-hover:translate-x-0 transition-transform duration-700" />
-                </button>
-
-                <button
-                  onClick={() => onNavigate('album')}
-                  className="group relative overflow-hidden bg-black/80 hover:bg-black/60 border-4 border-pink-500 hover:border-purple-500 px-12 py-6 rounded-3xl text-2xl font-bold shadow-2xl transform hover:scale-110 transition-all duration-500 backdrop-blur-xl"
-                >
-                  <span className="relative z-10 flex items-center gap-4">
-                    <ShoppingBag className="w-8 h-8 group-hover:animate-bounce" />
-                    LET'S BUY
-                    <Heart className="w-6 h-6 group-hover:animate-pulse" />
-                  </span>
-                  <div className="absolute inset-0 bg-gradient-to-r from-pink-500/20 to-purple-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                </button>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12 max-w-5xl mx-auto">
-                {loading ? (
-                  <p className="col-span-3 text-pink-400 text-2xl animate-pulse">⏳ Loading live stats...</p>
-                ) : (
-                  [
-                    { value: stats.streams, label: 'Streams Today', icon: Music, color: 'from-pink-500 to-rose-500' },
-                    { value: stats.blinks, label: 'Active BLINKS', icon: Heart, color: 'from-pink-500 to-purple-500' },
-                    { value: stats.views, label: 'Total Views', icon: Youtube, color: 'from-red-500 to-pink-500' },
-                  ].map((stat, i) => (
-                    <div
-                      key={i}
-                      className="group relative bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl border-2 border-pink-500/30 rounded-3xl p-6 hover:border-pink-400 transition-all duration-500 transform hover:scale-105 hover:-translate-y-2 shadow-2xl hover:shadow-pink-500/40"
-                    >
-                      <div className={`absolute inset-0 bg-gradient-to-br ${stat.color} opacity-0 group-hover:opacity-20 rounded-3xl transition-opacity duration-500`} />
-                      <stat.icon className="w-10 h-10 text-pink-400 mx-auto mb-3 group-hover:scale-125 transition-transform duration-300" />
-                      <p className="text-3xl font-extrabold bg-gradient-to-r from-pink-300 to-purple-300 bg-clip-text text-transparent">
-                        {stat.value.toLocaleString()}
-                      </p>
-                      <p className="text-gray-300 mt-2 font-semibold text-sm">{stat.label}</p>
+            {/* Mobile News Feed - only latest news layout with header + date badge */}
+            <div className="lg:hidden relative min-h-[80vh] bg-cover bg-no-repeat bg-center"
+              style={{
+                backgroundImage: `url(${
+                  bgImage ||
+                  'https://4kwallpapers.com/images/wallpapers/blackpink-3840x2160-19348.jpg'
+                })`,
+              }}
+            >
+              <div className="absolute inset-0 bg-gradient-to-br from-black/80 via-black/70 to-pink-900/40" />
+              <div className="relative z-10 h-full overflow-y-auto p-4 sm:p-6 scrollbar-thin scrollbar-thumb-pink-500 scrollbar-track-transparent">
+                <header className="sticky top-0 bg-gradient-to-r from-black/90 to-pink-900/50 backdrop-blur-xl mb-6 border-b-2 border-pink-500/50 pb-4 rounded-xl p-4 shadow-2xl z-20">
+                  <div className="flex items-center justify-between">
+                    <h2 className="text-3xl font-extrabold bg-gradient-to-r from-pink-400 via-pink-300 to-purple-400 bg-clip-text text-transparent flex items-center gap-3">
+                      <TrendingUp className="w-7 h-7 animate-bounce" />
+                      Latest News
+                    </h2>
+                    <div className="text-pink-300 text-sm font-semibold bg-pink-900/30 px-3 py-2 rounded-full border border-pink-500/30">
+                      Updated: Jan 17, 2026
                     </div>
-                  ))
-                )}
-              </div>
+                  </div>
+                </header>
 
-              <div className="mt-20 lg:hidden">
-                <h3 className="text-3xl font-bold text-pink-400 mb-8 flex items-center justify-center gap-3">
-                  <TrendingUp className="w-8 h-8 animate-bounce" />
-                  Latest News
-                </h3>
-                <div className="bg-black/70 backdrop-blur-2xl rounded-3xl border-4 border-pink-500/50 max-h-[600px] overflow-hidden shadow-2xl shadow-pink-500/30">
-                  <NewsFeed />
+                <div className="space-y-6 pb-12">
+                  {newsPosts.map((post, index) => (
+                    <div
+                      key={index}
+                      className="group bg-gradient-to-br from-gray-900/80 to-black/80 backdrop-blur-xl rounded-2xl overflow-hidden shadow-2xl border-2 border-pink-500/20 transition-all duration-500 hover:border-pink-500/60 hover:shadow-pink-500/30 hover:-translate-y-2"
+                    >
+                      <a
+                        href={post.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="block relative overflow-hidden"
+                      >
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                        <img
+                          src={post.image}
+                          alt={post.title}
+                          className="w-full h-48 object-cover transition-transform duration-700 group-hover:scale-110"
+                          onError={(e) => {
+                            e.currentTarget.src =
+                              bgImage ||
+                              'https://4kwallpapers.com/images/wallpapers/blackpink-3840x2160-19348.jpg';
+                          }}
+                        />
+                        <Star className="absolute top-4 right-4 w-6 h-6 text-pink-400 opacity-0 group-hover:opacity-100 animate-spin transition-opacity duration-300 z-20" />
+                      </a>
+                      <div className="p-5">
+                        <a
+                          href={post.link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-pink-400 group-hover:text-pink-300 transition-colors duration-300 text-lg font-bold block mb-3"
+                        >
+                          {post.title}
+                        </a>
+                        <p className="text-gray-300 text-sm leading-relaxed mb-4">
+                          {post.content}
+                        </p>
+                        <div className="flex justify-between items-center text-sm text-gray-400 border-t border-pink-500/20 pt-4">
+                          <span className="font-semibold">{post.author}</span>
+                          <span>{post.timestamp}</span>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>

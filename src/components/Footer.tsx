@@ -103,11 +103,11 @@ export default function Footer() {
   ];
 
   const streamingPlatforms = [
-    { name: 'Spotify', url: 'https://open.spotify.com/artist/41MozSoPIsD1dJM0CLPjZF' },
-    { name: 'Apple Music', url: 'https://music.apple.com/us/artist/blackpink/1252555207' },
+    { name: 'Spotify', url: 'https://open.spotify.com/artist/41MozSoPIsD1dJM0CLPjZF?si=x8nNMGVnQcuxdpsmDNcWhg' },
+    { name: 'Apple Music', url: 'https://music.apple.com/ph/artist/blackpink/1141774019' },
     { name: 'YouTube Music', url: 'https://music.youtube.com/channel/UCOmHUn--16B90oW2L6FRR3A' },
     { name: 'Amazon Music', url: 'https://music.amazon.com/artists/B01LWZY8S7/blackpink' },
-    { name: 'Deezer', url: 'https://www.deezer.com/en/artist/9635624' },
+    { name: 'Deezer', url: 'https://link.deezer.com/s/32bn3haOpUMxMju9W9cAQ' },
     { name: 'Tidal', url: 'https://tidal.com/browse/artist/8348745' },
   ];
 
@@ -127,15 +127,15 @@ export default function Footer() {
           {/* Brand Section */}
           <div className="text-center md:text-left">
             <div className="flex items-center justify-center md:justify-start gap-3 mb-6">
-              <Heart className="w-8 h-8 text-pink-400 animate-bounce" />
+              <Heart className="w-7 h-7 text-pink-400 animate-bounce" />
               <h2 className="text-4xl font-black bg-gradient-to-r from-pink-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
                 BLACKPINK
               </h2>
-              <Heart className="w-8 h-8 text-pink-400 animate-bounce" style={{ animationDelay: '0.2s' }} />
+              <Heart className="w-7 h-7 text-pink-400 animate-bounce" style={{ animationDelay: '0.2s' }} />
             </div>
             
             <p className="text-gray-300 text-sm mb-8 leading-relaxed max-w-xs mx-auto md:mx-0">
-              💖 The revolutionary K-pop girl group taking the world by storm! Join BLINKs worldwide! 🌍✨
+              The record breaking, chart topping, cultural phenomenon, fashion icons, the one and only biggest girl group in the planet, BLACKPINK!
             </p>
             
             {/* Social Links with Fun Effects */}
@@ -237,7 +237,6 @@ export default function Footer() {
                   <option value="TikTok">TikTok</option>
                   <option value="YouTube">YouTube</option>
                   <option value="Facebook">Facebook</option>
-                  <option value="Other">Other</option>
                 </select>
               </div>
 
@@ -246,7 +245,7 @@ export default function Footer() {
                 disabled={isSubmitting}
                 className="px-6 py-3 bg-gradient-to-r from-pink-500 via-purple-500 to-pink-500 rounded-xl text-white text-sm font-bold hover:shadow-2xl hover:shadow-pink-500/50 transition-all duration-300 transform hover:scale-105 hover:-translate-y-1 bg-size-200 bg-pos-0 hover:bg-pos-100 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {isSubmitting ? '⏳ JOINING...' : '🚀 JOIN THE BLINK FAMILY!'}
+                {isSubmitting ? '⏳ JOINING...' : '🚀 JOIN THE BLINKHOURCITY!'}
               </button>
               
               {message && (
