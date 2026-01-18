@@ -161,7 +161,7 @@ export function AlbumDetailsPage({ continent, onBack }: AlbumDetailsPageProps) {
             name: 'Dear My Muse', 
             url: 'https://dearmymuse.com/article/notice/1/77799/', 
             description: 'Official retailer - Circle certified', 
-            icon: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQvPVp4ZF2H7ZEQDwpP2AzC_j52ksguEHLGQQ&s' 
+            icon: 'https://dearmymuse.kr/_dj/img/logo.png' 
           },
           { 
             name: 'WithMuu', 
@@ -171,16 +171,14 @@ export function AlbumDetailsPage({ continent, onBack }: AlbumDetailsPageProps) {
           },
         ],
         chartInfo: {
-          primary: 'Circle Chart',
-          period: 'Realtime & Weekly',
+          primary: 'Hanteo Chart',
+          period: 'Circle Chart',
           certification: 'Circle Certified',
         },
         buyingTips: {
-          title: 'Circle Chart Tips',
           tips: [
             'Purchase only from Hanteo/Gaon/Circle counted stores',
             'Different versions help increase album sales rank',
-            'Look for photocard events & group orders',
             'Pre-order early for strong first-week numbers',
             'Multiple purchases per person usually allowed',
           ],
@@ -513,12 +511,12 @@ export function AlbumDetailsPage({ continent, onBack }: AlbumDetailsPageProps) {
                   <div className="bg-black/50 rounded-2xl p-8 text-center border border-[#E83C91]/30 transform hover:scale-105 transition-all duration-300">
                     <TrendingUp className="w-12 h-12 text-[#E83C91] mx-auto mb-4" />
                     <div className="text-2xl font-bold text-[#ff4d6d] mb-2">{storeData.chartInfo.primary}</div>
-                    <p className="text-gray-300 font-medium">Primary Chart System</p>
+                    <p className="text-gray-300 font-medium">Tracks actual album purchases by fans in Real-Time</p>
                   </div>
                   <div className="bg-black/50 rounded-2xl p-8 text-center border border-[#EE6983]/30 transform hover:scale-105 transition-all duration-300">
                     <Zap className="w-12 h-12 text-[#EE6983] mx-auto mb-4" />
                     <div className="text-2xl font-bold text-[#FF0066] mb-2">{storeData.chartInfo.period}</div>
-                    <p className="text-gray-300 font-medium">Critical Tracking Period</p>
+                    <p className="text-gray-300 font-medium">Based on distributor shipments to retailers/stores, updated Weekly.</p>
                   </div>
                   <div className="bg-black/50 rounded-2xl p-8 text-center border border-[#FF0066]/30 transform hover:scale-105 transition-all duration-300">
                     <Award className="w-12 h-12 text-[#FF0066] mx-auto mb-4" />
