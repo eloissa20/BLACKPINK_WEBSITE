@@ -1,4 +1,22 @@
-import { ArrowLeft, ExternalLink, CreditCard, Package, Sparkles, Star, Award, TrendingUp, ShoppingCart, Zap, AlertCircle, DollarSign } from 'lucide-react';
+import {
+  ArrowLeft,
+  ExternalLink,
+  Sparkles,
+  Star,
+  Award,
+  TrendingUp,
+  ShoppingCart,
+  Zap,
+  AlertCircle,
+} from 'lucide-react';
+import React from 'react';
+
+// Local logo imports – assuming AlbumDetailsPage.tsx is in src/components/
+// If the file is in a deeper folder, change ../ to ../../ or more
+import ItunesLogo from '../assets/logos/itunes.png';
+import AmazonMusicLogo from '../assets/logos/amazon-music.png';
+import QobuzLogo from '../assets/logos/qobuz.png';
+import SevenDigitalLogo from '../assets/logos/7digital.png';
 
 type ContinentType = 'global' | 'korea' | 'usa' | 'uk';
 
@@ -10,18 +28,87 @@ interface Store {
   highlight?: boolean;
 }
 
+interface BuyingTipSection {
+  title?: string;
+  subtitle?: React.ReactNode;
+  icon?: React.ReactNode;
+  tips: string[];
+}
+
+interface ChartInfo {
+  primary: string;
+  period: string;
+  certification: string;
+}
+
+interface RegionData {
+  title: string;
+  gradient: string;
+  digital: Store[];
+  physical: Store[];
+  chartInfo: ChartInfo;
+  buyingTips: BuyingTipSection;
+}
+
 interface AlbumDetailsPageProps {
   continent: ContinentType;
   onBack: () => void;
 }
 
+// Flag Components
+const FlagGlobal = () => (
+  <img
+    src="https://png.pngtree.com/png-vector/20230905/ourmid/pngtree-metallic-globe-3d-planet-png-image_9942792.png"
+    alt="3D Globe Icon with Stand"
+    className="w-full h-full object-contain"
+  />
+);
+
+const FlagKR = () => (
+  <img
+    src="https://static.vecteezy.com/system/resources/previews/015/309/515/non_2x/south-korea-waving-flag-realistic-transparent-background-free-png.png"
+    alt="South Korea Waving Flag"
+    className="w-full h-full object-contain"
+  />
+);
+
+const FlagUS = () => (
+  <img
+    src="https://static.vecteezy.com/system/resources/previews/015/309/669/non_2x/united-states-waving-flag-realistic-transparent-background-free-png.png"
+    alt="USA Waving Flag"
+    className="w-full h-full object-contain"
+  />
+);
+
+const FlagUK = () => (
+  <img
+    src="https://static.vecteezy.com/system/resources/previews/015/309/522/non_2x/united-kingdom-waving-flag-realistic-transparent-background-free-png.png"
+    alt="UK Waving Flag"
+    className="w-full h-full object-contain"
+  />
+);
+
 export function AlbumDetailsPage({ continent, onBack }: AlbumDetailsPageProps) {
-  const getStoresByContinent = (continent: ContinentType) => {
-    const stores = {
+  const [scrollY, setScrollY] = React.useState(0);
+
+  React.useEffect(() => {
+    const handleScroll = () => setScrollY(window.scrollY);
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const flagMap: Record<ContinentType, React.ReactNode> = {
+    global: <FlagGlobal />,
+    korea: <FlagKR />,
+    usa: <FlagUS />,
+    uk: <FlagUK />,
+  };
+
+  const getStoresByContinent = (continent: ContinentType): RegionData => {
+    const stores: Record<ContinentType, RegionData> = {
       global: {
         title: 'GLOBAL',
-        flag: '🌐',
-        gradient: 'from-blue-500 via-purple-500 to-pink-600',
+        gradient: 'from-[#E83C91] via-[#EE6983] to-[#FF0066]',
         digital: [
           { name: 'Apple Music', url: 'https://music.apple.com/us/artist/blackpink/1141774019', description: 'Global streaming - High quality audio', icon: '🎧' },
           { name: 'Spotify', url: 'https://open.spotify.com/artist/41MozSoPIsD1dJM0CLPjZF', description: 'Worldwide streaming - Playlists & discovery', icon: '🎵' },
@@ -30,351 +117,429 @@ export function AlbumDetailsPage({ continent, onBack }: AlbumDetailsPageProps) {
           { name: 'Deezer', url: 'https://www.deezer.com/en/artist/9635624', description: 'HiFi streaming - Available globally', icon: '🎶' },
         ],
         physical: [
-          { name: 'BLACKPINK Official Shop', url: 'https://shop.blackpinkmusic.com/', description: 'Exclusive merch & limited editions', icon: '🖤' } as Store,
-          { name: 'Weverse Shop Global', url: 'https://weverse.io/blackpink/feed', description: 'Global fan platform - Special albums & merch', icon: '🌐' } as Store,
-          { name: 'YG Select Global', url: 'https://en.ygselect.com/', description: 'Official YG store - Worldwide shipping', icon: '🏪' } as Store,
-          { name: 'Amazon International', url: 'https://www.amazon.com/s?k=blackpink+album', description: 'Fast global shipping options', icon: '📦' } as Store,
-          { name: 'Ktown4u', url: 'https://www.ktown4u.com/artist_store?artist_name=BLACKPINK', description: 'K-pop specialist - International delivery', icon: '✈️' } as Store,
+          { name: 'BLACKPINK Official Shop', url: 'https://shop.blackpinkmusic.com/', description: 'Exclusive merch & limited editions', icon: '🖤' },
+          { name: 'Weverse Shop Global', url: 'https://weverse.io/blackpink/feed', description: 'Global fan platform - Special albums & merch', icon: '🌐' },
+          { name: 'YG Select Global', url: 'https://en.ygselect.com/', description: 'Official YG store - Worldwide shipping', icon: '🏪' },
+          { name: 'Amazon International', url: 'https://www.amazon.com/s?k=blackpink+album', description: 'Fast global shipping options', icon: '📦' },
+          { name: 'Ktown4u', url: 'https://www.ktown4u.com/artist_store?artist_name=BLACKPINK', description: 'K-pop specialist - International delivery', icon: '✈️' },
         ],
-        chartInfo: { primary: 'Global Charts', period: 'Ongoing Streams', certification: 'IFPI / RIAA Eligible' }
+        chartInfo: {
+          primary: 'Global Charts',
+          period: 'Ongoing Streams',
+          certification: 'IFPI / RIAA Eligible',
+        },
+        buyingTips: {
+          title: 'Global Support Tips',
+          tips: [
+            'Stream daily on multiple platforms',
+            'Add songs to high-engagement playlists',
+            'Purchase digital albums where possible',
+            'Share official content widely',
+            'All global streams and sales help rankings',
+          ],
+        },
       },
+
       korea: {
         title: 'KOREA',
-        flag: '🇰🇷',
-        gradient: 'from-red-500 via-pink-500 to-rose-600',
-        digital: [
-          { name: 'Melon', url: 'https://www.melon.com/artist/timeline.htm?artistId=261143', description: 'Leading Korean platform - Major chart impact', icon: '🍈' },
-          { name: 'Genie Music', url: 'https://www.genie.co.kr/detail/artistInfo?xxnm=80216', description: 'Realtime charts - High influence', icon: '🧞' },
-          { name: 'Bugs', url: 'https://music.bugs.co.kr/artist/80038', description: 'Popular digital service - Chart eligible', icon: '🐛' },
-          { name: 'Flo', url: 'https://www.music-flo.com/detail/artist/arzayaer/albumtrack', description: '24-bit HiFi streaming', icon: '🎼' },
-          { name: 'Vibe', url: 'https://vibe.naver.com/artist/15169', description: 'Naver platform - Strong domestic reach', icon: '💫' },
-        ],
+        gradient: 'from-[#E83C91] via-[#EE6983] to-[#FF0066]',
+        digital: [],
         physical: [
-          { name: 'Weverse Shop KR', url: 'https://weverse.io/blackpink/feed', description: 'Official albums - Counts for Circle Chart', icon: '🌐' } as Store,
-          { name: 'YG Select', url: 'https://en.ygselect.com/', description: 'Official YG albums & merch', icon: '🏪' } as Store,
-          { name: 'Synnara', url: 'https://www.synnara.co.kr/', description: 'Major retailer - Circle certified', icon: '🏬' } as Store,
-          { name: 'Yes24', url: 'http://www.yes24.com/searchcorner/Search?keywordAd=&keyword=&domain=ALL&qdomain=%EC%A0%84%EC%B2%B4&Wcode=001_005&query=BLACKPINK', description: 'Large selection - Chart counting', icon: '✅' } as Store,
-          { name: 'Aladin', url: 'https://www.aladin.co.kr/search/wsearchresult.aspx?SearchTarget=All&SearchWord=BLACKPINK', description: 'Popular store - Fast shipping', icon: '📚' } as Store,
+          { 
+            name: 'Ktown4u', 
+            url: 'https://kr.ktown4u.com/eventinfo?eve_no=43973847&biz_no=967', 
+            description: 'K-pop specialist - Circle Chart counting', 
+            icon: 'https://kr.ktown4u.com/icons/ktown4u-logo.png' 
+          },
+          { 
+            name: 'YG Select', 
+            url: 'https://ygselect.com/product/list.html?cate_no=43', 
+            description: 'Official YG store - Chart eligible', 
+            icon: 'https://ygselect.com/web/logo/YG%20SELECT_Signature_black.png' 
+          },
+          { 
+            name: 'Dear My Muse', 
+            url: 'https://dearmymuse.com/article/notice/1/77799/', 
+            description: 'Official retailer - Circle certified', 
+            icon: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQvPVp4ZF2H7ZEQDwpP2AzC_j52ksguEHLGQQ&s' 
+          },
+          { 
+            name: 'WithMuu', 
+            url: 'https://www.withmuu.com/goods/goods_list.php?brandCd=009', 
+            description: 'Trusted K-pop store - Fast delivery', 
+            icon: 'https://www.withmuu.com/data/skin/front/moment/images/common/symbol.svg' 
+          },
         ],
-        chartInfo: { primary: 'Circle Chart', period: 'Realtime & Weekly', certification: 'Circle Certified' }
+        chartInfo: {
+          primary: 'Circle Chart',
+          period: 'Realtime & Weekly',
+          certification: 'Circle Certified',
+        },
+        buyingTips: {
+          title: 'Circle Chart Tips',
+          tips: [
+            'Purchase only from Hanteo/Gaon/Circle counted stores',
+            'Different versions help increase album sales rank',
+            'Look for photocard events & group orders',
+            'Pre-order early for strong first-week numbers',
+            'Multiple purchases per person usually allowed',
+          ],
+        },
       },
+
       usa: {
         title: 'USA',
-        flag: '🇺🇸',
-        gradient: 'from-pink-600 via-rose-500 to-pink-600',
+        gradient: 'from-[#E83C91] via-[#EE6983] to-[#FF0066]',
         digital: [
-          { name: 'Apple Music / iTunes', url: 'https://music.apple.com/us/artist/blackpink/1141774019', description: 'Counts toward Billboard Hot 100 & 200', icon: '🍎' },
-          { name: 'Spotify', url: 'https://open.spotify.com/artist/41MozSoPIsD1dJM0CLPjZF', description: 'US streaming - Major chart weight', icon: '🎵' },
-          { name: 'Amazon Music', url: 'https://music.amazon.com/artists/B01LWZY8S7/blackpink', description: 'Digital sales & streams - Billboard eligible', icon: '🛒' },
-          { name: 'YouTube Music', url: 'https://music.youtube.com/channel/UCOmHUn--16B90oW2L6FRR3A', description: 'Premium streaming counts', icon: '▶️' },
+          { 
+            name: 'iTunes', 
+            url: 'https://music.apple.com/us/artist/blackpink/1141774019', 
+            description: 'Digital track & album sales count toward Billboard Hot 100 & 200', 
+            icon: ItunesLogo,
+          },
+          { 
+            name: 'Amazon Music', 
+            url: 'https://music.amazon.com/artists/B01LWZY8S7/blackpink', 
+            description: 'Digital album purchases & eligible streams - Billboard counted', 
+            icon: AmazonMusicLogo,
+          },
+          { 
+            name: 'Qobuz', 
+            url: 'https://www.qobuz.com/us-en/search?q=blackpink', 
+            description: 'High-resolution downloads & streams contribute to Billboard', 
+            icon: QobuzLogo,
+          },
+          { 
+            name: '7digital', 
+            url: 'https://us.7digital.com/artist/blackpink', 
+            description: 'Digital sales platform - contributes to Hot 100 & Billboard 200', 
+            icon: SevenDigitalLogo,
+          },
         ],
         physical: [
-          { name: 'BLACKPINK US Shop', url: 'https://forms.sonymusicfans.com/campaign/blackpink-deadline/', description: 'Official store - Billboard counting', icon: '🖤', highlight: true } as Store,
-          { name: 'Target (Black Ver.)', url: 'https://www.target.com/p/-/A-95174953', description: 'Exclusive Black Version - Major retailer', icon: '🎯' } as Store,
-          { name: 'Target (Pink Ver.)', url: 'https://www.target.com/p/-/A-95175206', description: 'Exclusive Pink Version - Major retailer', icon: '💖' } as Store,
-          { name: 'Amazon US', url: 'https://www.amazon.com/dp/B0GGDNRNBQ', description: 'Fast shipping - Chart eligible', icon: '📦' } as Store,
+          { name: 'BLACKPINK US Shop', url: 'https://forms.sonymusicfans.com/campaign/blackpink-deadline/', description: 'Official store - Billboard counting', icon: '🖤', highlight: true },
+          { name: 'Target (Black Ver.)', url: 'https://www.target.com/p/-/A-95174953', description: 'Exclusive Black Version - Major retailer', icon: '🎯' },
+          { name: 'Target (Pink Ver.)', url: 'https://www.target.com/p/-/A-95175206', description: 'Exclusive Pink Version - Major retailer', icon: '💖' },
+          { name: 'Amazon US', url: 'https://www.amazon.com/dp/B0GGDNRNBQ', description: 'Fast shipping - Chart eligible', icon: '📦' },
         ],
-        chartInfo: { primary: 'Billboard 200', period: 'Tracking Week', certification: 'RIAA Certified' }
+        chartInfo: {
+          primary: 'Billboard 200',
+          period: 'Tracking Week (Fri–Thu)',
+          certification: 'RIAA Certified',
+        },
+        buyingTips: {
+          icon: <AlertCircle className="w-10 h-10 text-[#FF0066] flex-shrink-0 animate-pulse" />,
+          title: 'Billboard Rules Reminder',
+          subtitle: (
+            <span className="whitespace-nowrap overflow-hidden block">
+              Note: When purchasing from the US Amazon Store, please do NOT buy from Amazon resellers.
+            </span>
+          ),
+          tips: [
+            'PRIORITIZE purchasing from USA Retail stores',
+            'You may purchase from WEVERSE USA, US Amazon Store, & Artist Store',
+            'Do NOT buy physical albums from WEVERSE GLOBAL or KTOWN4U (they will not count towards USA Billboard Charts)',
+            'Do NOT purchase more than 4 physical albums PER card',
+            'ONLY shipped physical albums are counted as sales',
+            'First-week sales matter most',
+          ],
+        },
       },
+
       uk: {
         title: 'UK',
-        flag: '🇬🇧',
-        gradient: 'from-indigo-600 via-purple-500 to-pink-600',
+        gradient: 'from-[#E83C91] via-[#EE6983] to-[#FF0066]',
         digital: [
           { name: 'Apple Music / iTunes UK', url: 'https://music.apple.com/gb/artist/blackpink/1141774019', description: 'Official Charts counting', icon: '🍎' },
           { name: 'Spotify UK', url: 'https://open.spotify.com/artist/41MozSoPIsD1dJM0CLPjZF', description: 'Streaming impact on OCC', icon: '🎵' },
           { name: 'Amazon Music UK', url: 'https://music.amazon.co.uk/artists/B01LWZY8S7/blackpink', description: 'Digital sales eligible', icon: '🛒' },
         ],
         physical: [
-          { name: 'HMV', url: 'https://store.hmv.com/search?searchtext=blackpink', description: 'Iconic UK retailer - Chart counting', icon: '💿' } as Store,
-          { name: 'Amazon UK', url: 'https://www.amazon.co.uk/s?k=blackpink+album', description: 'Fast delivery - OCC eligible', icon: '📦' } as Store,
-          { name: 'Zavvi', url: 'https://www.zavvi.com/search/blackpink.list', description: 'Exclusive editions available', icon: '🎬' } as Store,
-          { name: 'Rough Trade', url: 'https://www.roughtrade.com/search?q=blackpink', description: 'Indie specialist - Vinyl focus', icon: '🎶' } as Store,
+          { name: 'HMV', url: 'https://store.hmv.com/search?searchtext=blackpink', description: 'Iconic UK retailer - Chart counting', icon: '💿' },
+          { name: 'Amazon UK', url: 'https://www.amazon.co.uk/s?k=blackpink+album', description: 'Fast delivery - OCC eligible', icon: '📦' },
+          { name: 'Zavvi', url: 'https://www.zavvi.com/search/blackpink.list', description: 'Exclusive editions available', icon: '🎬' },
+          { name: 'Rough Trade', url: 'https://www.roughtrade.com/search?q=blackpink', description: 'Indie specialist - Vinyl focus', icon: '🎶' },
         ],
-        chartInfo: { primary: 'Official Charts', period: 'Friday-Thursday', certification: 'BPI Certified' }
+        chartInfo: {
+          primary: 'Official Charts Company (OCC)',
+          period: 'Friday–Thursday',
+          certification: 'BPI Certified',
+        },
+        buyingTips: {
+          title: 'UK Chart Tips',
+          tips: [
+            'Buy from UK-based or OCC-reporting retailers',
+            'Vinyl and CD purchases carry strong weight',
+            'No strict per-customer purchase limits like Billboard',
+            'Pre-orders help secure better first-week position',
+            'Streaming also contributes significantly to charts',
+          ],
+        },
       },
     };
     return stores[continent];
   };
 
   const storeData = getStoresByContinent(continent);
-  const isUSA = continent === 'usa';
 
   return (
     <>
-      <style dangerouslySetInnerHTML={{
-        __html: `
-          @keyframes gradient { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
-          @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-15px); } }
-          @keyframes glow { 0%, 100% { box-shadow: 0 0 20px rgba(236, 72, 153, 0.5); } 50% { box-shadow: 0 0 40px rgba(236, 72, 153, 0.8); } }
-          @keyframes pulse-glow { 0%, 100% { box-shadow: 0 0 30px rgba(236, 72, 153, 0.6), 0 0 60px rgba(236, 72, 153, 0.3); } 50% { box-shadow: 0 0 50px rgba(236, 72, 153, 0.9), 0 0 100px rgba(236, 72, 153, 0.5); } }
-          @keyframes shimmer { 0% { background-position: -200% center; } 100% { background-position: 200% center; } }
-          .animate-gradient { background-size: 200% 200%; animation: gradient 8s ease infinite; }
-          .animate-float { animation: float 3s ease-in-out infinite; }
-          .animate-glow { animation: glow 2s ease-in-out infinite; }
-          .animate-pulse-glow { animation: pulse-glow 3s ease-in-out infinite; }
-          .animate-shimmer { background-size: 200% 100%; animation: shimmer 3s linear infinite; }
-        `
-      }} />
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
+            @keyframes gradient { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+            @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-12px); } }
+            @keyframes glow { 0%, 100% { box-shadow: 0 0 25px rgba(232,60,145,0.5); } 50% { box-shadow: 0 0 45px rgba(255,0,102,0.75); } }
+            .animate-gradient { background-size: 200% 200%; animation: gradient 14s ease infinite; }
+            .animate-float { animation: float 5.5s ease-in-out infinite; }
+            .animate-glow { animation: glow 5s ease-in-out infinite; }
+            .scrollbar-hide::-webkit-scrollbar { display: none; }
+            .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+          `,
+        }}
+      />
 
-      <div className="relative min-h-screen bg-black text-white overflow-hidden">
-        <div className="fixed inset-0 bg-gradient-to-br from-black via-purple-900/20 to-pink-900/30" />
-        <div className="fixed inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-pink-900/20 via-black to-black" />
-        
+      <div className="relative min-h-screen bg-black text-white overflow-hidden pb-20">
+        <div className="fixed inset-0 bg-gradient-to-br from-black via-rose-950/20 to-pink-950/30 pointer-events-none" />
+        <div className="fixed inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(232,60,145,0.07),transparent_70%)] pointer-events-none" />
+
         <div className="fixed inset-0 pointer-events-none z-10">
-          <Sparkles className="absolute top-20 left-10 w-8 h-8 text-pink-400 animate-pulse animate-float" />
-          <Sparkles className="absolute bottom-32 right-20 w-12 h-12 text-pink-300 animate-ping" />
-          <Star className="absolute top-40 right-1/3 w-10 h-10 text-pink-500 animate-pulse" />
+          <Sparkles className="absolute top-24 left-20 w-14 h-14 text-[#E83C91] opacity-70 animate-float" />
+          <Sparkles className="absolute bottom-40 right-24 w-12 h-12 text-[#FF0066] opacity-60 animate-pulse" />
         </div>
 
-        <div className="relative z-20 p-8 overflow-y-auto">
+        <div className="relative z-20 p-6 md:p-10 lg:p-12">
           <div className="max-w-7xl mx-auto">
+
+            {/* Back Button */}
             <button
               onClick={onBack}
-              className="group flex items-center gap-3 text-pink-400 hover:text-pink-300 transition-all duration-300 mb-8 bg-pink-900/20 hover:bg-pink-900/40 px-6 py-3 rounded-2xl border-2 border-pink-500/30 hover:border-pink-400 backdrop-blur-xl transform hover:scale-105"
+              className="group flex items-center gap-4 text-[#E83C91] hover:text-[#FF0066] transition-all duration-300 mb-8 bg-black/60 px-8 py-5 rounded-2xl border border-[#E83C91]/40 hover:border-[#FF0066]/70 backdrop-blur-xl transform hover:scale-105 shadow-xl"
             >
-              <ArrowLeft className="w-5 h-5 group-hover:animate-bounce" />
-              <span className="font-bold text-lg">Back to Regions</span>
+              <ArrowLeft className="w-7 h-7 group-hover:-translate-x-1.5 transition-transform" />
+              <span className="font-bold text-2xl">Back to Regions</span>
             </button>
 
-            <div className="text-center mb-16 space-y-6">
-              <div className="inline-block mb-4">
-                <div 
-                  className="animate-float drop-shadow-[0_8px_16px_rgba(0,0,0,0.6)]" 
-                  style={{ filter: 'drop-shadow(0 4px 12px rgba(255,255,255,0.4))' }}
-                >
-                  <span className={continent === 'global' ? 'text-[10rem] md:text-[12rem]' : 'text-9xl'}>
-                    {storeData.flag}
-                  </span>
-                </div>
+            {/* Header */}
+            <div className="text-center mb-12" style={{ transform: `translateY(${scrollY * -0.15}px)` }}>
+              <div className="inline-block mb-3 w-36 h-36 sm:w-44 sm:h-44 md:w-48 md:h-48 mx-auto">
+                <div className="animate-float">{flagMap[continent]}</div>
               </div>
-              <h1 className={`text-5xl md:text-7xl font-extrabold tracking-widest bg-gradient-to-r ${storeData.gradient} bg-clip-text text-transparent animate-gradient drop-shadow-2xl`}>
+
+              <h1
+                className={`text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black tracking-tight bg-gradient-to-r ${storeData.gradient} bg-clip-text text-transparent animate-gradient drop-shadow-lg mb-2 leading-tight`}
+              >
                 {storeData.title}
               </h1>
-              <p className="text-xl md:text-2xl text-gray-200 font-light tracking-wide drop-shadow-lg">
-                💖 Official stores & platforms to support BLACKPINK ✨
+
+              <p className="text-base sm:text-lg md:text-xl text-white/90 tracking-wide font-medium">
+                Support BLACKPINK • Official Stores & Platforms
               </p>
             </div>
 
-            {/* Digital & Physical Stores */}
-            <div className="grid lg:grid-cols-2 gap-8 mb-12">
-              {/* Digital */}
-              <div className="group relative bg-gradient-to-br from-pink-900/40 to-purple-900/40 backdrop-blur-xl border-2 border-pink-500/40 rounded-3xl p-8 hover:border-pink-400 transition-all duration-500 shadow-2xl hover:shadow-pink-500/40">
-                <div className="absolute inset-0 bg-gradient-to-br from-pink-500/20 to-transparent opacity-0 group-hover:opacity-100 rounded-3xl transition-opacity duration-500" />
-                <div className="relative z-10">
-                  <div className="flex items-center gap-4 mb-8">
-                    <div className="bg-gradient-to-br from-pink-500 to-rose-500 p-4 rounded-2xl shadow-lg animate-glow">
-                      <CreditCard className="w-8 h-8 text-white" />
-                    </div>
-                    <h2 className="text-3xl font-bold bg-gradient-to-r from-pink-300 to-purple-300 bg-clip-text text-transparent">
-                      Digital Stores
-                    </h2>
-                  </div>
-                  <div className="space-y-4">
-                    {storeData.digital.map((store, i) => (
-                      <a key={i} href={store.url} target="_blank" rel="noopener noreferrer"
-                        className="block bg-black/40 hover:bg-black/60 rounded-2xl p-6 transition-all duration-300 group/item border border-pink-500/20 hover:border-pink-400/60 transform hover:-translate-y-1">
-                        <div className="flex items-start justify-between gap-4">
-                          <div className="flex-1">
-                            <div className="flex items-center gap-3 mb-2">
-                              <span className="text-2xl">{store.icon}</span>
-                              <h3 className="text-xl font-bold text-white group-hover/item:text-pink-300 transition-colors">{store.name}</h3>
-                            </div>
-                            <p className="text-gray-300 text-sm leading-relaxed">{store.description}</p>
-                          </div>
-                          <ExternalLink className="w-5 h-5 text-gray-400 group-hover/item:text-pink-400 transition-all duration-300 flex-shrink-0 group-hover/item:scale-125" />
-                        </div>
-                      </a>
-                    ))}
-                  </div>
-                  <div className="mt-8 p-6 bg-gradient-to-br from-pink-900/40 to-purple-900/40 rounded-2xl border border-pink-500/30">
-                    <div className="flex items-center gap-3 mb-4">
-                      <Zap className="w-6 h-6 text-pink-400" />
-                      <h3 className="text-lg font-bold text-pink-300">Digital Buying Tips</h3>
-                    </div>
-                    <ul className="space-y-3 text-gray-300 text-sm">
-                      {['Buy/stream from official platforms for chart impact', 'Multiple purchases allowed', 'Digital counts instantly', 'High-quality & lossless options available', 'Helps global & regional performance'].map((tip, i) => (
-                        <li key={i} className="flex items-start gap-3">
-                          <Star className="w-4 h-4 text-pink-400 flex-shrink-0 mt-0.5" />
-                          <span>{tip}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
+            {/* Digital Platforms */}
+            {storeData.digital.length > 0 && (
+              <section className="mb-28">
+                <div className="flex items-center gap-6 mb-10">
+                  <div className="h-1 flex-1 bg-gradient-to-r from-transparent via-[#EE6983]/50 to-transparent" />
+                  <h2 className="text-3xl md:text-4xl font-extrabold bg-gradient-to-r from-[#E83C91] via-[#EE6983] to-[#FF0066] bg-clip-text text-transparent px-8 pb-4">
+                    Digital Platforms
+                  </h2>
+                  <div className="h-1 flex-1 bg-gradient-to-r from-transparent via-[#EE6983]/50 to-transparent" />
                 </div>
-              </div>
 
-              {/* Physical */}
-              <div className={`group relative backdrop-blur-xl border-2 rounded-3xl p-8 transition-all duration-500 shadow-2xl ${
-                isUSA 
-                  ? 'bg-gradient-to-br from-pink-900/50 to-rose-900/50 border-pink-400/60 hover:border-pink-300 shadow-pink-500/50 hover:shadow-pink-400/60' 
-                  : 'bg-gradient-to-br from-purple-900/40 to-blue-900/40 border-purple-500/40 hover:border-purple-400 hover:shadow-purple-500/40'
-              }`}>
-                <div className={`absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 ${
-                  isUSA 
-                    ? 'bg-gradient-to-br from-pink-500/30 to-rose-500/20' 
-                    : 'bg-gradient-to-br from-purple-500/20 to-transparent'
-                }`} />
-                
-                {isUSA && (
-                  <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-transparent via-pink-400/20 to-transparent animate-shimmer" />
-                )}
-                
-                <div className="relative z-10">
-                  <div className="flex items-center gap-4 mb-8">
-                    <div className={`p-4 rounded-2xl shadow-lg ${
-                      isUSA 
-                        ? 'bg-gradient-to-br from-pink-500 to-rose-500 animate-pulse-glow' 
-                        : 'bg-gradient-to-br from-purple-500 to-blue-500 animate-glow'
-                    }`}>
-                      <Package className="w-8 h-8 text-white" />
-                    </div>
-                    <h2 className={`text-3xl font-bold bg-gradient-to-r bg-clip-text text-transparent ${
-                      isUSA 
-                        ? 'from-pink-200 via-rose-200 to-pink-300' 
-                        : 'from-purple-300 to-blue-300'
-                    }`}>
-                      Physical Stores
-                    </h2>
-                  </div>
-                  
-                  <div className="space-y-4">
-                    {storeData.physical.map((store, i) => (
-                      <a key={i} href={store.url} target="_blank" rel="noopener noreferrer"
-                        className={`block bg-black/40 hover:bg-black/60 rounded-2xl p-6 transition-all duration-300 group/item border transform hover:-translate-y-1 hover:scale-[1.02] ${
-                          isUSA 
-                            ? 'border-pink-500/30 hover:border-pink-300/80 hover:shadow-lg hover:shadow-pink-500/30' 
-                            : 'border-purple-500/20 hover:border-purple-400/60'
-                        } ${store.highlight && isUSA ? 'ring-2 ring-pink-400/50 bg-pink-950/30' : ''}`}>
-                        <div className="flex items-start justify-between gap-4">
-                          <div className="flex-1">
-                            <div className="flex items-center gap-3 mb-2">
-                              <span className="text-2xl">{store.icon}</span>
-                              <h3 className={`text-xl font-bold text-white transition-colors ${
-                                isUSA 
-                                  ? 'group-hover/item:text-pink-200' 
-                                  : 'group-hover/item:text-purple-300'
-                              }`}>{store.name}</h3>
-                              {store.highlight && isUSA && (
-                                <span className="ml-2 px-3 py-1 text-xs font-bold bg-gradient-to-r from-pink-500 to-rose-500 rounded-full text-white animate-pulse">
-                                  OFFICIAL
-                                </span>
-                              )}
-                            </div>
-                            <p className="text-gray-300 text-sm leading-relaxed">{store.description}</p>
-                          </div>
-                          <ExternalLink className={`w-5 h-5 text-gray-400 transition-all duration-300 flex-shrink-0 group-hover/item:scale-125 ${
-                            isUSA 
-                              ? 'group-hover/item:text-pink-300' 
-                              : 'group-hover/item:text-purple-400'
-                          }`} />
-                        </div>
-                      </a>
-                    ))}
-                  </div>
-                  
-                  <div className={`mt-8 p-8 rounded-2xl border-2 ${
-                    isUSA 
-                      ? 'bg-gradient-to-br from-pink-950/60 to-rose-950/60 border-pink-400/50 shadow-xl shadow-pink-500/20' 
-                      : 'bg-gradient-to-br from-purple-900/40 to-blue-900/40 border-purple-500/30'
-                  }`}>
-                    <div className="flex items-center gap-3 mb-6">
-                      <div className={`p-2 rounded-xl ${
-                        isUSA 
-                          ? 'bg-gradient-to-br from-pink-500 to-rose-500' 
-                          : 'bg-purple-600'
-                      }`}>
-                        <ShoppingCart className={`${isUSA ? 'w-7 h-7' : 'w-6 h-6'} text-white`} />
-                      </div>
-                      <h3 className={`${isUSA ? 'text-2xl' : 'text-lg'} font-bold ${
-                        isUSA 
-                          ? 'text-pink-200' 
-                          : 'text-purple-300'
-                      }`}>Physical Buying Tips</h3>
-                    </div>
-                    
-                    {isUSA && (
-                      <div className="mb-6 p-4 bg-pink-900/40 border-2 border-pink-400/60 rounded-xl">
-                        <div className="flex items-start gap-3">
-                          <AlertCircle className="w-6 h-6 text-pink-300 flex-shrink-0 mt-0.5 animate-pulse" />
-                          <div>
-                            <p className="text-pink-200 font-bold text-lg mb-1">🚨 Important Billboard Rules 🚨</p>
-                            <p className="text-gray-200 text-base">Follow these rules carefully for your purchases to count toward Billboard charts!</p>
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                    
-                    <ul className={`space-y-4 text-gray-300 ${isUSA ? 'text-base' : 'text-sm'}`}>
-                      {(isUSA 
-                        ? ['Buy from certified retailers for chart counting', 'Max 4 copies regardless of versions per store', 'First-week sales are crucial', 'Max copies per transaction can use cash', 'Boosts physical chart positions']
-                        : ['Buy from certified retailers for chart counting', 'Look for exclusive variants & inclusions', 'First-week sales are crucial', 'Includes photocards & collectibles', 'Boosts physical chart positions']
-                      ).map((tip, i) => (
-                        <li key={i} className={`flex items-start gap-4 p-3 rounded-lg transition-all duration-300 ${
-                          isUSA 
-                            ? 'hover:bg-pink-900/30 border border-transparent hover:border-pink-500/30' 
-                            : ''
-                        }`}>
-                          <div className={`p-1.5 rounded-lg flex-shrink-0 ${
-                            isUSA 
-                              ? 'bg-gradient-to-br from-pink-500 to-rose-500' 
-                              : 'bg-purple-600/50'
-                          }`}>
-                            {isUSA && i === 1 ? (
-                              <DollarSign className="w-5 h-5 text-white" />
+                <div className="grid md:grid-cols-2 gap-7">
+                  {storeData.digital.map((store, i) => (
+                    <a
+                      key={i}
+                      href={store.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="group relative block rounded-3xl p-[3px] bg-gradient-to-br from-[#E83C91] via-[#EE6983] to-[#FF0066] hover:from-[#FF0066] hover:via-[#EE6983] hover:to-[#E83C91] transition-all duration-500 hover:scale-[1.03] hover:shadow-2xl hover:shadow-[#FF0066]/40"
+                    >
+                      <div className="bg-black/85 backdrop-blur-xl rounded-[calc(1.5rem-3px)] p-8 h-full flex flex-col">
+                        <div className="flex items-start gap-5 mb-5">
+                          <div
+                            className="p-5 rounded-2xl bg-[#ffccd5]/90 backdrop-blur-sm shadow-[#FF0066]/40 transform group-hover:rotate-6 transition-transform"
+                          >
+                            {store.icon.includes('.png') || store.icon.includes('.jpg') || store.icon.includes('.svg') ? (
+                              <img
+                                src={store.icon}
+                                alt={`${store.name} logo`}
+                                className="w-14 h-14 object-contain"
+                              />
                             ) : (
-                              <Star className={`${isUSA ? 'w-5 h-5' : 'w-4 h-4'} text-white`} />
+                              <span className="text-5xl">{store.icon}</span>
                             )}
                           </div>
-                          <span className={isUSA ? 'font-medium leading-relaxed' : ''}>{tip}</span>
-                        </li>
-                      ))}
-                    </ul>
+
+                          <div className="flex-1">
+                            <h3 className="text-xl md:text-2xl font-bold mb-2 group-hover:text-[#FF0066] transition-colors">
+                              {store.name}
+                            </h3>
+                            <p className="text-gray-100 text-base sm:text-lg md:text-xl leading-relaxed font-medium tracking-wide">
+                              {store.description}
+                            </p>
+                          </div>
+
+                          <ExternalLink className="w-6 h-6 text-gray-400 group-hover:text-[#FF0066] transition-colors flex-shrink-0 mt-1" />
+                        </div>
+                      </div>
+                    </a>
+                  ))}
+                </div>
+              </section>
+            )}
+
+            {/* Physical Stores */}
+            <section className="mb-32">
+              <div className="flex items-center gap-6 mb-10">
+                <div className="h-1 flex-1 bg-gradient-to-r from-transparent via-[#EE6983]/50 to-transparent" />
+                <h2 className="text-3xl md:text-4xl font-extrabold bg-gradient-to-r from-[#E83C91] via-[#EE6983] to-[#FF0066] bg-clip-text text-transparent px-8 pb-4">
+                  Physical Stores
+                </h2>
+                <div className="h-1 flex-1 bg-gradient-to-r from-transparent via-[#EE6983]/50 to-transparent" />
+              </div>
+
+              {storeData.buyingTips.icon || storeData.buyingTips.title ? (
+                <div className="mb-10 p-6 bg-black/70 border border-[#E83C91]/40 rounded-2xl backdrop-blur-xl">
+                  <div className="flex items-start gap-5">
+                    {storeData.buyingTips.icon}
+                    <div>
+                      {storeData.buyingTips.title && (
+                        <p className="text-[#E83C91] font-bold text-xl mb-3">{storeData.buyingTips.title}</p>
+                      )}
+                      {storeData.buyingTips.subtitle && (
+                        <p className="text-gray-200 text-base leading-relaxed">{storeData.buyingTips.subtitle}</p>
+                      )}
+                    </div>
                   </div>
+                </div>
+              ) : null}
+
+              <div className="grid md:grid-cols-2 gap-7">
+                {storeData.physical.map((store, i) => (
+                  <a
+                    key={i}
+                    href={store.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={`group relative block rounded-3xl p-[4px] bg-gradient-to-br from-[#E83C91] via-[#EE6983] to-[#FF0066] hover:from-[#FF0066] hover:via-[#EE6983] hover:to-[#E83C91] transition-all duration-500 hover:scale-[1.03] hover:shadow-2xl hover:shadow-[#FF0066]/40 ${store.highlight ? 'scale-[1.02] hover:scale-[1.05]' : ''}`}
+                  >
+                    <div className="bg-black/85 backdrop-blur-xl rounded-[calc(1.5rem-4px)] p-8 h-full flex flex-col relative">
+                      {store.highlight && (
+                        <div className="absolute -top-4 -right-5 z-20">
+                          <div className="bg-gradient-to-r from-[#E83C91] to-[#FF0066] text-white px-5 py-2 rounded-full font-bold text-sm shadow-xl animate-pulse">
+                            OFFICIAL
+                          </div>
+                        </div>
+                      )}
+
+                      <div className="flex items-start gap-5 mb-5">
+                        <div
+                          className="p-5 rounded-2xl bg-[#ffccd5]/90 backdrop-blur-sm shadow-[#FF0066]/40 transform group-hover:rotate-6 transition-transform"
+                        >
+                          {store.icon.includes('.png') || store.icon.includes('.jpg') || store.icon.includes('.svg') ? (
+                            <img
+                              src={store.icon}
+                              alt={`${store.name} logo`}
+                              className="w-14 h-14 object-contain"
+                            />
+                          ) : (
+                            <span className="text-5xl">{store.icon}</span>
+                          )}
+                        </div>
+
+                        <div className="flex-1">
+                          <h3 className="text-xl md:text-2xl font-bold mb-2 group-hover:text-[#FF0066] transition-colors">
+                            {store.name}
+                          </h3>
+                          <p className="text-gray-100 text-base sm:text-lg md:text-xl leading-relaxed font-medium tracking-wide">
+                            {store.description}
+                          </p>
+                        </div>
+
+                        <ExternalLink className="w-6 h-6 text-gray-400 group-hover:text-[#FF0066] transition-colors flex-shrink-0 mt-1" />
+                      </div>
+                    </div>
+                  </a>
+                ))}
+              </div>
+
+              {/* Buying Tips Section */}
+              <div className="mt-12 p-10 bg-black/70 backdrop-blur-xl border border-[#E83C91]/40 rounded-3xl relative">
+                <div className="absolute -top-6 left-1/2 -translate-x-1/2 bg-gradient-to-r from-[#E83C91] to-[#FF0066] p-5 rounded-full shadow-2xl">
+                  <ShoppingCart className="w-10 h-10 text-white" />
+                </div>
+
+                <h3 className="text-2xl md:text-3xl font-bold text-center bg-gradient-to-r from-[#ff9ec1] via-[#EE6983] to-[#FF0066] bg-clip-text text-transparent mt-4 mb-6 py-3">
+                  <span className="text-white">💡</span> Buying Tips <span className="text-white">💡</span>
+                </h3>
+
+                {storeData.buyingTips.subtitle && (
+                  <p className="text-center text-base md:text-lg text-white/90 font-medium mb-8 max-w-3xl mx-auto">
+                    {storeData.buyingTips.subtitle}
+                  </p>
+                )}
+
+                <div className="grid md:grid-cols-2 gap-5">
+                  {storeData.buyingTips.tips.map((tip, i) => (
+                    <div
+                      key={i}
+                      className="flex items-center gap-4 p-5 bg-black/50 rounded-2xl border border-[#E83C91]/30 hover:border-[#FF0066]/70 transition-colors"
+                    >
+                      <Star className="w-6 h-6 text-[#FF0066] flex-shrink-0" />
+                      <span className="text-gray-100 text-lg md:text-xl font-medium leading-relaxed">
+                        {tip}
+                      </span>
+                    </div>
+                  ))}
                 </div>
               </div>
-            </div>
+            </section>
 
-            {/* Chart Info */}
-            <div className="relative bg-gradient-to-r from-pink-900/40 via-purple-900/40 to-pink-900/40 backdrop-blur-xl rounded-3xl p-10 border-2 border-pink-500/40 shadow-2xl animate-glow">
-              <div className="absolute inset-0 bg-gradient-to-r from-pink-500/10 to-purple-500/10 rounded-3xl" />
+            {/* Chart Counting Information */}
+            <div className="relative bg-black/60 backdrop-blur-xl rounded-3xl p-10 border-2 border-[#E83C91]/30 shadow-2xl animate-glow mb-16">
+              <div className="absolute inset-0 bg-gradient-to-r from-[#E83C91]/5 via-[#EE6983]/5 to-[#FF0066]/5 rounded-3xl pointer-events-none" />
               <div className="relative z-10">
                 <div className="flex items-center justify-center gap-4 mb-10">
-                  <Award className="w-10 h-10 text-pink-400 animate-bounce" />
-                  <h2 className="text-4xl font-bold bg-gradient-to-r from-pink-300 to-purple-300 bg-clip-text text-transparent text-center">
+                  <Award className="w-10 h-10 text-[#FF0066] animate-bounce" />
+                  <h2 className="text-4xl font-bold bg-gradient-to-r from-[#E83C91] via-[#EE6983] to-[#FF0066] bg-clip-text text-transparent text-center pb-4">
                     Chart Counting Information
                   </h2>
-                  <Award className="w-10 h-10 text-pink-400 animate-bounce" style={{ animationDelay: '0.5s' }} />
+                  <Award className="w-10 h-10 text-[#FF0066] animate-bounce" style={{ animationDelay: '0.5s' }} />
                 </div>
                 <div className="grid md:grid-cols-3 gap-6">
-                  <div className="bg-black/40 backdrop-blur-sm rounded-2xl p-8 text-center border border-pink-500/30 transform hover:scale-105 transition-all duration-300">
-                    <TrendingUp className="w-12 h-12 text-pink-400 mx-auto mb-4" />
-                    <div className="text-3xl font-bold text-pink-300 mb-2">{storeData.chartInfo.primary}</div>
+                  <div className="bg-black/50 rounded-2xl p-8 text-center border border-[#E83C91]/30 transform hover:scale-105 transition-all duration-300">
+                    <TrendingUp className="w-12 h-12 text-[#E83C91] mx-auto mb-4" />
+                    <div className="text-2xl font-bold text-[#ff4d6d] mb-2">{storeData.chartInfo.primary}</div>
                     <p className="text-gray-300 font-medium">Primary Chart System</p>
                   </div>
-                  <div className="bg-black/40 backdrop-blur-sm rounded-2xl p-8 text-center border border-purple-500/30 transform hover:scale-105 transition-all duration-300">
-                    <Zap className="w-12 h-12 text-purple-400 mx-auto mb-4" />
-                    <div className="text-3xl font-bold text-purple-300 mb-2">{storeData.chartInfo.period}</div>
+                  <div className="bg-black/50 rounded-2xl p-8 text-center border border-[#EE6983]/30 transform hover:scale-105 transition-all duration-300">
+                    <Zap className="w-12 h-12 text-[#EE6983] mx-auto mb-4" />
+                    <div className="text-2xl font-bold text-[#FF0066] mb-2">{storeData.chartInfo.period}</div>
                     <p className="text-gray-300 font-medium">Critical Tracking Period</p>
                   </div>
-                  <div className="bg-black/40 backdrop-blur-sm rounded-2xl p-8 text-center border border-blue-500/30 transform hover:scale-105 transition-all duration-300">
-                    <Award className="w-12 h-12 text-blue-400 mx-auto mb-4" />
-                    <div className="text-3xl font-bold text-blue-300 mb-2">{storeData.chartInfo.certification}</div>
+                  <div className="bg-black/50 rounded-2xl p-8 text-center border border-[#FF0066]/30 transform hover:scale-105 transition-all duration-300">
+                    <Award className="w-12 h-12 text-[#FF0066] mx-auto mb-4" />
+                    <div className="text-2xl font-bold text-[#E83C91] mb-2">{storeData.chartInfo.certification}</div>
                     <p className="text-gray-300 font-medium">Official Certification</p>
                   </div>
                 </div>
               </div>
             </div>
 
-            <div className="mt-12 text-center bg-gradient-to-br from-pink-900/30 to-purple-900/30 backdrop-blur-xl border-2 border-pink-500/30 rounded-3xl p-10">
-              <Sparkles className="w-16 h-16 text-pink-400 mx-auto mb-6 animate-spin" style={{ animationDuration: '4s' }} />
-              <h3 className="text-3xl font-bold bg-gradient-to-r from-pink-300 to-purple-300 bg-clip-text text-transparent mb-4">
-                Every Purchase Supports BLACKPINK! 💖
+            {/* Every Purchase Supports BLACKPINK */}
+            <div className="text-center bg-black/60 backdrop-blur-xl border-2 border-[#E83C91]/30 rounded-3xl p-10 mb-20">
+              <Sparkles className="w-16 h-16 text-[#FF0066] mx-auto mb-6 animate-spin" style={{ animationDuration: '4s' }} />
+              <h3 className="text-3xl font-bold bg-gradient-to-r from-[#E83C91] via-[#EE6983] to-[#FF0066] bg-clip-text text-transparent mb-4">
+                EVERY PURCHASE SUPPORTS BLACKPINK!
               </h3>
               <p className="text-xl text-gray-200 max-w-2xl mx-auto leading-relaxed">
-                Choose your favorite store above and help BLACKPINK dominate the charts worldwide! ✨
+                Choose your favorite store above and help BLACKPINK charts worldwide
               </p>
             </div>
+
           </div>
         </div>
       </div>
