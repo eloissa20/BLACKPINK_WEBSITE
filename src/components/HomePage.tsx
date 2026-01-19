@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 
 import { TabType } from '../types';
+import bgVideo from '../assets/bg-home-bp.mp4';
 
 type HomePageProps = {
   onNavigate: (tab: TabType) => void;
@@ -303,14 +304,13 @@ export function HomePage({ onNavigate, bgImage }: HomePageProps) {
               <video
                 ref={videoRef}
                 className="absolute inset-0 w-full h-full object-cover"
-                src="/src/assets/bg-home-bp.mp4"
+                src={bgVideo}           // ← use the imported variable
                 loop
                 muted
                 playsInline
                 autoPlay
                 preload="auto"
               />
-
               <div className="absolute inset-0 bg-gradient-to-br from-black/70 via-pink-900/30 to-purple-900/40 z-10" />
               <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/60 z-10" />
 
