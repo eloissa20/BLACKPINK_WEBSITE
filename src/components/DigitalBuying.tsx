@@ -12,7 +12,7 @@ interface DigitalStore {
   url: string;
   region: string;
   logo?: string;
-  description?: string;
+  description?: string | string[];
   contributes?: string;
   note?: string;
   guide?: {
@@ -184,19 +184,20 @@ const data: Record<Tab, DigitalStore[]> = {
       url: 'https://music.apple.com/us/artist/blackpink/1141774019',
       region: 'USA',
       logo: 'https://logos-world.net/wp-content/uploads/2020/11/Apple-Music-Logo-2015-present.png',
-      contributes: 'Billboard Hot 100 / 200 (digital sales)',
-      description: 'Digital track/album purchases count directly toward Billboard charts.',
+      contributes: 'Billboard Hot 100, Billboard 200 & Global 200 (digital sales)',
+      description: [ 'Minimum of 10 iTunes accounts required.', 'Digital track and album purchases count directly toward Billboard charts.', ],
       guide: {
         steps: [
           'Go to iTunes or Apple Music US store',
-          'Search for BLACKPINK song/album',
-          'Buy individual tracks (NOT "Complete Album")',
-          'Download purchases after buying',
+          'Search for BLACKPINK DEADLINE',
+          'Buy TITLE TRACK first and buy other tracks individually (NOT "Complete Album")',
+          'After buying, go to LIBRARY ⇢ DELETE the downloaded tracks so the purchase counts toward Billboard',
+          'Maximum of 4 itunes purchase per payment method',
         ],
         benefits: [
           'Each track purchase = 1 sale toward Digital Song Sales',
           '10 track sales = 1 album unit (TEA)',
-          'Helps both Hot 100 & Billboard 200',
+          'Helps both Hot 100, Global 200 & Billboard 200 ,',
         ],
       },
     },
@@ -205,18 +206,24 @@ const data: Record<Tab, DigitalStore[]> = {
       url: 'https://music.amazon.com/artists/B01LWZY8S7/blackpink',
       region: 'USA',
       logo: 'https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg',
-      contributes: 'Billboard (streams + digital sales)',
-      description: 'HD/Ultra HD streams + digital purchases eligible.',
+      contributes: 'Billboard Hot 100, Billboard 200 & Global 200 (streams + digital sales)',
+      description: '1 Amazon account PER card',
       guide: {
         steps: [
-          'Sign in to Amazon Music US',
-          'Search BLACKPINK',
-          'Purchase track/album digitally',
-          'Download purchases',
+          'Sign in or Create Account on Amazon Music Website/App',
+          'Use the search bar to find BLACKPINK – DEADLINE, ensuring it includes all tracks, with priority on the title track',
+          'Select the purchase option and choose MP3 Album or Pre-Order MP3 Album',
+          'Do NOT CLICK Pre-Order MP3 Album Pay now',
+          'Buy each track individually',
+          'Click "BUY MP3 SONG" button',
+          'Purchased made will be available on your AMAZON MUSIC LIBRARY',
+          'In LIBRARY ⇢ "PURCHASED" to DOWNLOAD the song by clicking the THREE-DOT icon',
         ],
         benefits: [
           'Direct sales count for Billboard',
-          'Streams from Unlimited also contribute',
+          'Push for Amazon Best seller',
+          '1 purchase = 1 full Billboard unit',
+          'Streaming needs 1,250–3,750 streams for the same result',
         ],
       },
     },
@@ -224,14 +231,16 @@ const data: Record<Tab, DigitalStore[]> = {
       name: 'Qobuz (US)',
       url: 'https://www.qobuz.com/us-en/search?q=blackpink',
       region: 'USA',
-      logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Qobuz_logo.svg/1200px-Qobuz_logo.svg.png',
+      logo: 'https://upload.wikimedia.org/wikipedia/commons/1/16/Qobuz_-_logo_%28France%2C_2007%29.svg',
       contributes: 'Billboard (high-res downloads)',
-      description: 'High-resolution audio downloads count toward charts.',
+      description: ['1 Qobuz account PER card.', 'High-resolution audio downloads count toward charts.',],
       guide: {
         steps: [
-          'Create Qobuz account',
-          'Search & buy high-res tracks/album',
-          'Download files',
+          'Sign in or Create an Account on the QOBUZ Website/App',
+          'Search for BLACKPINK DEADLINE / [Title Track]',
+          'Click the ALBUM or SINGLE containing the song',
+          'Click the CART ICON next to the song you want to purchase',
+          'Select any available format offered by QOBUZ',
         ],
         benefits: [
           'Downloads count as sales',
@@ -243,22 +252,22 @@ const data: Record<Tab, DigitalStore[]> = {
       name: '7digital (US)',
       url: 'https://us.7digital.com/artist/blackpink',
       region: 'USA',
-      logo: 'https://upload.wikimedia.org/wikipedia/en/thumb/5/5d/7digital_logo.svg/1200px-7digital_logo.svg.png',
+      logo: 'https://images.ctfassets.net/6pk8mg3yh2ee/4SyoUHdVJK4SaK8S0UIqq8/12b7e69967f6222d5a8c523aade98283/7digitallogo.png',
       contributes: 'Billboard (digital sales)',
-      description: 'Digital music store — sales contribute to US charts.',
+      description: ['1 7Digital account PER card.', 'Digital music store — sales contribute to US charts.',],
       guide: {
         steps: [
-          'GO TO 7DIGITAL WEBSITE. SIGN IN TO YOUR DIGITAL ACCOUNT OR CREATE NEW',
-          "SEARCH FOR THE SONG OR ALBUM EX. 'BLACKPINK JUMP'",
-          'SELECT THE TRACK EX. JUMP 16 BIT FLAC',
-          "CHOOSE AUDIO QUALITY OR FORMAT, THEN CLICK ON 'BUY'",
-          'CLICK ON CHECKOUT, CHOOSE YOUR PAYMENT METHOD',
-          'DOWNLOAD YOUR PURCHASED TRACK. GO TO> "MY MUSIC" OR "MY DOWNLOADS."> CLICK DOWNLOAD.',
+          'Go to 7DIGITAL WEBSITE. Sign in or Create Account',
+          "Search for the song or album, e.g., 'BLACKPINK JUMP'.",
+          'Select the TRACK e.g., "JUMP 16 BIT FLAC"',
+          "Choose audio quality or format, then click on 'BUY'",
+          'Click on "CHECKOUT", choose your payment method',
+          'Download your purchased track. Go to "MY MUSIC" or "MY DOWNLOADS", then click "DOWNLOAD"',
         ],
         benefits: [
-          'EVERY PAID DOWNLOAD FROM DIGITAL COUNTS AS ONE SALE TOWARD THE BILLBOARD DIGITAL SONG SALES CHART.',
-          'THIS IS THE SAME AS BUYING FROM ITUNES OR AMAZON MUSIC—EACH PURCHASE DIRECTLY HELPS THE SONG RANK HIGHER.',
-          'SINCE DIGITAL SALES HAVE MORE WEIGHT THAN STREAMING, A HIGH NUMBER OF 7DIGITAL PURCHASES CAN PUSH A SONG HIGHER ON THE HOT 100',
+          'Every paid download from DIGITAL counts as one sale toward the BILLBOARD DIGITAL SONG SALES CHART',
+          'Every paid download from DIGITAL counts as one sale toward the BILLBOARD DIGITAL SONG SALES CHART',
+          'Since digital sales have more weight than streaming, a high number of 7DIGITAL PURCHASES can push a song higher on the HOT 100',
         ],
       },
     },
@@ -324,22 +333,13 @@ export function DigitalBuying({ onBack, playSound }: Props) {
 
   return (
     <>
-      {/* Embedded CSS for flip cards and 3D effects */}
       <style
         dangerouslySetInnerHTML={{
           __html: `
-            .perspective-1000 {
-              perspective: 1000px;
-            }
-            .transform-style-preserve-3d {
-              transform-style: preserve-3d;
-            }
-            .backface-hidden {
-              backface-visibility: hidden;
-            }
-            .rotate-y-180 {
-              transform: rotateY(180deg);
-            }
+            .perspective-1000 { perspective: 1000px; }
+            .transform-style-preserve-3d { transform-style: preserve-3d; }
+            .backface-hidden { backface-visibility: hidden; }
+            .rotate-y-180 { transform: rotateY(180deg); }
           `,
         }}
       />
@@ -351,46 +351,46 @@ export function DigitalBuying({ onBack, playSound }: Props) {
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(236,72,153,0.15),transparent_70%)] animate-pulse" />
         </div>
 
-        <div className="max-w-7xl mx-auto px-6 py-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
           {/* Back Button */}
           <button
             onClick={onBack}
             onMouseEnter={playSound}
-            className="flex items-center gap-3 text-pink-400 hover:text-pink-300 mb-12 font-bold text-xl transition-all duration-500 hover:-translate-x-2 group"
+            className="flex items-center gap-2 sm:gap-3 text-pink-400 hover:text-pink-300 mb-8 sm:mb-12 font-bold text-lg sm:text-xl transition-all duration-500 hover:-translate-x-2 group"
           >
-            <ArrowLeft className="w-8 h-8 transition-transform group-hover:-translate-x-1" />
+            <ArrowLeft className="w-6 sm:w-8 transition-transform group-hover:-translate-x-1" />
             Back to Buying Methods
           </button>
 
           {/* Hero Section */}
-          <div className="relative text-center mb-20">
-            <div className="relative overflow-hidden rounded-3xl shadow-2xl">
+          <div className="relative text-center mb-12 sm:mb-20">
+            <div className="relative overflow-hidden rounded-2xl sm:rounded-3xl shadow-2xl">
               <img
-                src="https://images.unsplash.com/photo-1611339555312-e607c8352fd7?ixlib=rb-4.0.3&auto=format&fit=crop&w=2340&q=80"
+                src="https://6.soompi.io/wp-content/uploads/image/20260114150718_BLACKPINK.jpg?s=900x600&e=t"
                 alt="Digital Music"
-                className="w-full h-96 md:h-[40rem] object-cover brightness-75"
+                className="w-full h-64 sm:h-80 lg:h-[40rem] object-cover brightness-75 object-top"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
             </div>
 
-            <div className="absolute inset-x-0 bottom-0 pb-12 px-8 flex flex-col items-center pointer-events-none">
-              <h1 className="text-6xl md:text-8xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-purple-400 to-pink-500 bg-[length:200%_200%] animate-[gradient_8s_ease_infinite]">
-                DIGITAL STREAMING & PURCHASES
+            <div className="absolute inset-x-0 bottom-4 sm:bottom-12 px-4 sm:px-8 flex flex-col items-center pointer-events-none">
+              <h1 className="text-4xl sm:text-6xl lg:text-8xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-purple-400 to-pink-500 bg-[length:200%_200%] animate-[gradient_8s_ease_infinite]">
+                DIGITAL PURCHASES
               </h1>
-              <p className="text-xl md:text-2xl text-gray-300 mt-6 font-medium">
+              <p className="text-lg sm:text-xl lg:text-2xl text-gray-300 mt-4 sm:mt-6 font-medium">
                 Support BLACKPINK through streams and digital buys
               </p>
             </div>
           </div>
 
           {/* Tabs */}
-          <div className="flex justify-center gap-6 mb-24 flex-wrap">
+          <div className="flex justify-center gap-4 sm:gap-6 mb-12 sm:mb-24 flex-wrap">
             {tabs.map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
                 onMouseEnter={playSound}
-                className={`relative px-8 py-4 rounded-full font-bold text-xl tracking-wide transition-all duration-500 overflow-hidden
+                className={`relative px-6 sm:px-8 py-3 sm:py-4 rounded-full font-bold text-base sm:text-xl tracking-wide transition-all duration-500 overflow-hidden
                   ${activeTab === tab ? 'text-white shadow-2xl shadow-pink-600/50' : 'text-gray-500 hover:text-gray-200'}`}
               >
                 <span className="relative z-10">{tab}</span>
@@ -404,10 +404,9 @@ export function DigitalBuying({ onBack, playSound }: Props) {
             ))}
           </div>
 
-          {/* Billboard Guide Tab */}
           {activeTab === 'Billboard 2026 Guide' ? (
-            <div className="bg-black/60 backdrop-blur-xl rounded-3xl p-10 border border-pink-500/30 text-gray-200 leading-relaxed max-w-4xl mx-auto">
-              <h2 className="text-4xl font-black text-center bg-gradient-to-r from-pink-500 to-purple-500 bg-clip-text text-transparent mb-10">
+            <div className="bg-black/60 backdrop-blur-xl rounded-3xl p-6 sm:p-10 border border-pink-500/30 text-gray-200 leading-relaxed max-w-4xl mx-auto">
+              <h2 className="text-3xl sm:text-4xl font-black text-center bg-gradient-to-r from-pink-500 to-purple-500 bg-clip-text text-transparent mb-8 sm:mb-10">
                 BILLBOARD 2026 GUIDE
               </h2>
 
@@ -464,81 +463,83 @@ export function DigitalBuying({ onBack, playSound }: Props) {
             <>
               {/* USA Reminder Block */}
               {isUSA && (
-                <div className="bg-gradient-to-br from-red-900/40 via-pink-900/30 to-purple-900/20 backdrop-blur-xl rounded-3xl p-8 mb-12 border border-pink-500/40 text-gray-200">
-                  <h3 className="text-3xl font-black text-center bg-gradient-to-r from-pink-400 to-purple-400 bg-clip-text text-transparent mb-6">
-                    🇺🇸 USA DIGITAL BUYING 📲💻
+                <div className="bg-gradient-to-br from-red-900/40 via-pink-900/30 to-purple-900/20 backdrop-blur-xl rounded-3xl p-6 sm:p-8 mb-8 sm:mb-12 border border-pink-500/40 text-gray-200">
+                  <h3 className="text-2xl sm:text-3xl font-black text-center bg-gradient-to-r from-[#E37383] to-[#F33A6A] bg-clip-text text-transparent mb-6">
+                    USA DIGITAL BUYING
                   </h3>
-                  <p className="text-lg mb-6 text-center font-medium">
+                  <p className="text-base sm:text-lg mb-6 text-center font-medium">
                     Create accounts for EACH of the USA Billboard Buying Platforms for the preparation of Digital Buying upon release.
                   </p>
-                  <p className="text-center font-bold text-yellow-300 mb-6 text-lg">
-                    ⇢ This is incredibly important for the success on US Billboard Hot 100 (Singles Chart), US Billboard 200 (Album Chart), & Digital Song Sales Chart.
+                  <p className="text-center font-bold text-yellow-300 mb-6 text-base sm:text-lg">
+                    ⇢ This is very important for the success of BLACKPINK&apos;s <span className="italic">DEADLINE</span> mini-album and its TITLE TRACK on the
+                    <br className="hidden sm:block" />
+                    US Billboard Hot 100 (Singles Chart), US Global 200 (Most Popular Song), US Billboard 200 (Album Chart), and the Digital Song Sales Chart.
                   </p>
 
                   <div className="space-y-4">
-                    <p className="font-semibold text-lg">𝗜𝗺𝗽𝗼𝗿𝘁𝗮𝗻𝘁 𝗥𝗲𝗺𝗶𝗻𝗱𝗲𝗿𝘀: 🚨</p>
-                    <ol className="list-decimal pl-6 space-y-3 text-base">
-                      <li>Purchase ALL tracks separately & NOT as an album (Do NOT click on “Complete Album”) so we can accomplish our goals for both BBH100 & BB200. Once all tracks have been purchased, it’ll automatically count as 1 Album Sale.</li>
-                      <li>DOWNLOAD your digital purchases so it counts towards Billboard.</li>
+                    <p className="font-semibold text-base sm:text-lg">𝗜𝗺𝗽𝗼𝗿𝘁𝗮𝗻𝘁 𝗥𝗲𝗺𝗶𝗻𝗱𝗲𝗿𝘀: 🚨</p>
+                    <ol className="list-decimal pl-5 sm:pl-6 space-y-3 text-sm sm:text-base">
+                      <li>Purchase ALL tracks individually & NOT as an album (Do NOT click on “Complete Album”) so we can accomplish our goals for both BBH100 & BB200.</li>
+                      <li>After purchasing, DOWNLOAD your digital copies. Purchases that are not downloaded will not count toward Billboard.</li>
+                      <li>Do NOT gift purchases — gifted items do not count toward Billboard charts.</li>
                       <li>Do NOT use VPN to purchase. It will NOT count towards US Billboard Charts.</li>
-                      <li>NO weekly reset. You must create new accounts & use a completely different payment card in order to buy again after the 1st tracking week.</li>
-                      <li>NO gifting. Will not count towards Billboard Charts.</li>
-                      <li>AVOID preordering Albums on iTunes in order to purchase all tracks individually upon release for US iTunes Charting.</li>
+                      <li>NO weekly reset. Create new accounts & use a completely different payment card to buy again after the 1st tracking week.</li>
+                      <li>AVOID pre-ordering Deadline album on iTunes, as this prevents individual track purchases upon release (which affects US iTunes charting).</li>
                     </ol>
                   </div>
                 </div>
               )}
 
               {/* Stores Grid */}
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10 pb-32">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 lg:gap-10 pb-16 sm:pb-24 lg:pb-32">
                 {data[activeTab].map((item) => {
                   const isFlipped = flipped[item.name] || false;
 
                   return (
                     <div
                       key={item.name}
-                      className={`group relative h-[620px] transition-transform duration-700 transform-style-preserve-3d cursor-pointer ${isFlipped ? 'rotate-y-180' : ''}`}
+                      className={`group relative min-h-[480px] sm:min-h-[580px] lg:min-h-[620px] transition-transform duration-700 transform-style-preserve-3d cursor-pointer ${isFlipped ? 'rotate-y-180' : ''}`}
                       onClick={() => item.guide && toggleFlip(item.name)}
                     >
                       {/* Front face */}
-                      <div className="absolute inset-0 backface-hidden bg-gradient-to-br from-gray-900/90 via-purple-900/20 to-pink-900/30 backdrop-blur-xl rounded-3xl p-10 border border-pink-500/20 shadow-2xl flex flex-col">
-                        <div className="absolute -top-20 -right-20 w-64 h-64 bg-pink-600/20 rounded-full blur-3xl group-hover:bg-pink-500/30 transition-all duration-1000" />
+                      <div className="absolute inset-0 backface-hidden bg-gradient-to-br from-gray-900/90 via-purple-900/20 to-pink-900/30 backdrop-blur-xl rounded-3xl p-6 sm:p-8 lg:p-10 border border-pink-500/20 shadow-2xl flex flex-col">
+                        <div className="absolute -top-20 -right-20 w-48 sm:w-64 h-48 sm:h-64 bg-pink-600/20 rounded-full blur-3xl group-hover:bg-pink-500/30 transition-all duration-1000" />
 
-                        <div className="relative z-10 mb-8">
+                        <div className="relative z-10 mb-6 sm:mb-8">
                           {item.logo ? (
-                            <div className="w-32 h-32 mx-auto rounded-2xl overflow-hidden shadow-2xl border-4 border-pink-500/30">
+                            <div className="w-24 sm:w-32 h-24 sm:h-32 mx-auto rounded-2xl overflow-hidden shadow-xl border-4 border-pink-600/60 bg-[#F4679D]">
                               <img
                                 src={item.logo}
                                 alt={item.name}
-                                className="w-full h-full object-contain bg-black/50 p-4 group-hover:scale-110 transition-transform duration-700"
+                                className="w-full h-full object-contain p-3 sm:p-4 group-hover:scale-110 transition-transform duration-700"
                               />
                             </div>
                           ) : (
-                            <div className="w-32 h-32 mx-auto bg-gradient-to-br from-pink-900/60 to-purple-900/60 rounded-2xl border-4 border-dashed border-pink-500/40 flex items-center justify-center">
-                              <span className="text-5xl font-black text-pink-400">
+                            <div className="w-24 sm:w-32 h-24 sm:h-32 mx-auto bg-gradient-to-br from-pink-900/60 to-purple-900/60 rounded-2xl border-4 border-dashed border-pink-500/40 flex items-center justify-center">
+                              <span className="text-4xl sm:text-5xl font-black text-pink-400">
                                 {item.name.slice(0, 2).toUpperCase()}
                               </span>
                             </div>
                           )}
                         </div>
 
-                        <h3 className="text-3xl font-black text-center text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-purple-400 mb-6 group-hover:from-pink-300 group-hover:to-purple-300 transition-all duration-500">
+                        <h3 className="text-2xl sm:text-3xl font-black text-center text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-purple-400 mb-4 sm:mb-6 group-hover:from-pink-300 group-hover:to-purple-300 transition-all duration-500">
                           {item.name}
                         </h3>
 
                         {item.contributes && (
-                          <div className="text-center mb-6">
-                            <p className="text-sm uppercase tracking-wider text-pink-300 font-semibold">Contributes to</p>
-                            <p className="text-gray-300 text-sm mt-2">{item.contributes}</p>
+                          <div className="text-center mb-4 sm:mb-6">
+                            <p className="text-xs sm:text-sm uppercase tracking-wider text-pink-300 font-semibold">Contributes to</p>
+                            <p className="text-gray-300 text-xs sm:text-sm mt-1 sm:mt-2">{item.contributes}</p>
                           </div>
                         )}
 
-                        <p className="text-gray-300 text-center leading-relaxed mb-8 flex-1">
-                          {item.description}
+                        <p className="text-gray-300 text-center leading-relaxed mb-6 sm:mb-8 flex-1 text-sm sm:text-base">
+                          {Array.isArray(item.description) ? item.description.map((line, i) => <p key={i}>{line}</p>) : item.description}
                         </p>
 
                         {item.note && (
-                          <div className="bg-yellow-900/40 border border-yellow-600/60 rounded-2xl px-5 py-4 text-yellow-300 text-center font-bold mb-8 animate-pulse">
+                          <div className="bg-yellow-900/40 border border-yellow-600/60 rounded-2xl px-4 sm:px-5 py-3 sm:py-4 text-yellow-300 text-center font-bold mb-6 sm:mb-8 animate-pulse text-sm sm:text-base">
                             ⚠️ {item.note}
                           </div>
                         )}
@@ -565,7 +566,7 @@ export function DigitalBuying({ onBack, playSound }: Props) {
 
                       {/* Back face - Buying Guide */}
                       {item.guide && (
-                        <div className="absolute inset-0 backface-hidden rotate-y-180 bg-gradient-to-br from-gray-900/95 to-purple-950/80 backdrop-blur-xl rounded-3xl p-8 border border-pink-500/40 shadow-2xl flex flex-col overflow-y-auto">
+                        <div className="absolute inset-0 backface-hidden rotate-y-180 bg-gradient-to-br from-gray-900/95 to-purple-950/80 backdrop-blur-xl rounded-3xl p-6 sm:p-8 border border-pink-500/40 shadow-2xl flex flex-col overflow-y-auto">
                           <h4 className="text-2xl font-black text-center text-pink-300 mb-6">
                             {item.name} Buying Guide
                           </h4>
