@@ -21,7 +21,7 @@ interface DigitalStore {
   };
 }
 
-const tabs = ['Global', 'South Korea', 'USA', 'UK', 'Billboard 2026 Guide'] as const;
+const tabs = ['Global', 'USA', 'UK', 'Billboard 2026 Guide'] as const;
 type Tab = typeof tabs[number];
 
 const data: Record<Tab, DigitalStore[]> = {
@@ -108,71 +108,6 @@ const data: Record<Tab, DigitalStore[]> = {
           'HD/Ultra HD streams in some regions',
           'Purchases count toward sales charts',
           'Good alternative to Spotify/Apple',
-        ],
-      },
-    },
-  ],
-
-  'South Korea': [
-    {
-      name: 'Melon',
-      url: 'https://www.melon.com/artist/index.htm?artistId=780066',
-      region: 'South Korea',
-      contributes: 'Melon daily/weekly charts + Circle Chart streams',
-      description: 'Korea’s largest music platform — very important for domestic charting.',
-      note: 'Korean IP or VPN often required for full access',
-      guide: {
-        steps: [
-          'Access Melon (Korean IP/VPN recommended)',
-          'Create/log in to account',
-          'Stream BLACKPINK songs daily',
-          'Add to playlist & repeat',
-        ],
-        benefits: [
-          'Strongest impact on Korean domestic charts',
-          'High weight in Circle Chart (Gaon)',
-          'Essential for music show & award points',
-        ],
-      },
-    },
-    {
-      name: 'Genie',
-      url: 'https://www.genie.co.kr/detail/artistInfo?xgnm=80465066',
-      region: 'South Korea',
-      contributes: 'Genie charts + Circle Chart',
-      description: 'Popular Korean streaming service with strong fanbase.',
-      note: 'Korean account/payment usually required',
-      guide: {
-        steps: [
-          'Sign up/log in to Genie (Korean number helpful)',
-          'Search BLACKPINK',
-          'Stream full songs repeatedly',
-          'Use playlists for better counting',
-        ],
-        benefits: [
-          'Important for Circle digital charts',
-          'Good fanbase engagement',
-          'Complements Melon streaming',
-        ],
-      },
-    },
-    {
-      name: 'FLO',
-      url: 'https://www.music-flo.com/',
-      region: 'South Korea',
-      contributes: 'FLO charts + Circle Chart',
-      description: 'Modern Korean streaming platform — growing influence.',
-      guide: {
-        steps: [
-          'Access FLO app/site',
-          'Log in or create account',
-          'Stream BLACKPINK content daily',
-          'Create & share playlists',
-        ],
-        benefits: [
-          'Rising importance in Korean charts',
-          'Clean UI & good audio quality',
-          'Helps diversify Circle Chart points',
         ],
       },
     },
@@ -316,6 +251,48 @@ const data: Record<Tab, DigitalStore[]> = {
         ],
       },
     },
+    {
+      name: 'Qobuz (UK)',
+      url: 'https://www.qobuz.com/gb-en/search?q=blackpink',
+      region: 'UK',
+      logo: 'https://upload.wikimedia.org/wikipedia/commons/1/16/Qobuz_-_logo_%28France%2C_2007%29.svg',
+      contributes: 'UK Official Charts (high-res downloads)',
+      description: 'High-resolution audio downloads count toward OCC charts.',
+      guide: {
+        steps: [
+          'Sign in or create account on Qobuz UK site',
+          'Search for BLACKPINK album or title track',
+          'Add desired format (FLAC, Hi-Res) to cart',
+          'Complete purchase and download files',
+        ],
+        benefits: [
+          'Permanent downloads count as sales for Singles & Albums',
+          'High audio quality preferred by some fans',
+          'Eligible for OCC reporting',
+        ],
+      },
+    },
+    {
+      name: '7digital (UK)',
+      url: 'https://www.7digital.com/artist/blackpink',
+      region: 'UK',
+      logo: 'https://images.ctfassets.net/6pk8mg3yh2ee/4SyoUHdVJK4SaK8S0UIqq8/12b7e69967f6222d5a8c523aade98283/7digitallogo.png',
+      contributes: 'UK Official Charts (digital sales)',
+      description: 'Digital music downloads contribute to UK charts.',
+      guide: {
+        steps: [
+          'Go to 7digital UK website and sign in/create account',
+          'Search for BLACKPINK album or title track',
+          'Select format (MP3 or FLAC) and buy',
+          'Download purchased files immediately',
+        ],
+        benefits: [
+          'Each download counts toward OCC Singles/Albums',
+          'One purchase per account/version rule applies',
+          'Reliable OCC-reporting retailer',
+        ],
+      },
+    },
   ],
 
   'Billboard 2026 Guide': [],
@@ -330,6 +307,7 @@ export function DigitalBuying({ onBack, playSound }: Props) {
   };
 
   const isUSA = activeTab === 'USA';
+  const isUK = activeTab === 'UK';
 
   return (
     <>
@@ -405,57 +383,206 @@ export function DigitalBuying({ onBack, playSound }: Props) {
           </div>
 
           {activeTab === 'Billboard 2026 Guide' ? (
-            <div className="bg-black/60 backdrop-blur-xl rounded-3xl p-6 sm:p-10 border border-pink-500/30 text-gray-200 leading-relaxed max-w-4xl mx-auto">
-              <h2 className="text-3xl sm:text-4xl font-black text-center bg-gradient-to-r from-pink-500 to-purple-500 bg-clip-text text-transparent mb-8 sm:mb-10">
-                BILLBOARD 2026 GUIDE
-              </h2>
+            <div className="space-y-10 sm:space-y-16 pb-16 lg:pb-24 max-w-7xl mx-auto">
+              {/* Header */}
+              <div className="text-center">
+                <h2 className="text-5xl sm:text-6xl lg:text-7xl font-black bg-gradient-to-r from-pink-500 via-purple-500 to-pink-600 bg-clip-text text-transparent mb-6 tracking-tight animate-pulse">
+                  BILLBOARD 2026 GUIDE
+                </h2>
+                <p className="text-xl sm:text-2xl text-gray-300 font-medium max-w-4xl mx-auto">
+                  Updated rules • Streaming weights • YouTube change • How to maximize BLACKPINK chart impact
+                </p>
+              </div>
 
-              <div className="space-y-10">
-                <section>
-                  <h3 className="text-2xl font-bold text-pink-400 mb-4">Album Unit Equivalencies</h3>
-                  <p className="mb-4">Album Sale: 1 unit (physical or digital)</p>
+              {/* Key Charts Grid */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 lg:gap-8">
+                {[
+                  {
+                    title: "Hot 100",
+                    desc: "Top US singles — radio + official streams + digital/track sales",
+                    icon: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/Billboard_Hot_100_logo.svg/1200px-Billboard_Hot_100_logo.svg.png",
+                    color: "from-red-600/30 to-pink-600/20 border-red-500/40",
+                  },
+                  {
+                    title: "Billboard 200",
+                    desc: "Leading US albums chart — album sales + track equivalent albums (TEA) + streaming equivalent albums (SEA)",
+                    icon: "https://nos.jkt-1.neo.id/cdc-s3/image/2025/04/19/billboard200-2025_3_68031ea6ecfeb.jpg",
+                    color: "from-purple-600/30 to-pink-600/20 border-purple-500/40",
+                  },
+                  {
+                    title: "Global 200",
+                    desc: "Worldwide songs — combines sales & streams from all countries (no US exclusion)",
+                    icon: null,
+                    emoji: "🌍",
+                    color: "from-blue-600/30 to-purple-600/20 border-blue-500/40",
+                  },
+                  {
+                    title: "Global Excl. US",
+                    desc: "Global chart without US data — important for international strength",
+                    icon: null,
+                    emoji: "🌐",
+                    color: "from-green-600/30 to-teal-600/20 border-green-500/40",
+                  },
+                  {
+                    title: "Artist 100",
+                    desc: "Artist popularity — album sales + track sales + streams + radio + social/activity",
+                    icon: null,
+                    emoji: "🎤",
+                    color: "from-yellow-600/30 to-orange-600/20 border-yellow-500/40",
+                  },
+                  {
+                    title: "Digital Song Sales",
+                    desc: "Pure digital track downloads (US) — strong weight per purchase",
+                    icon: null,
+                    emoji: "💿",
+                    color: "from-cyan-600/30 to-blue-600/20 border-cyan-500/40",
+                  },
+                  {
+                    title: "World Digital Song Sales",
+                    desc: "International/world music digital track sales ranking",
+                    icon: null,
+                    emoji: "🌏💿",
+                    color: "from-rose-600/30 to-pink-600/20 border-rose-500/40",
+                  },
+                  {
+                    title: "World Albums",
+                    desc: "World music / non-mainstream albums chart (US)",
+                    icon: null,
+                    emoji: "🌍📀",
+                    color: "from-indigo-600/30 to-purple-600/20 border-indigo-500/40",
+                  },
+                ].map((chart, idx) => (
+                  <div
+                    key={idx}
+                    className={`bg-gradient-to-br ${chart.color} backdrop-blur-xl rounded-3xl p-6 border hover:border-opacity-70 hover:scale-[1.03] transition-all duration-300 shadow-xl flex flex-col items-center text-center`}
+                  >
+                    <div className="w-20 h-20 sm:w-24 sm:h-24 mb-5 rounded-2xl overflow-hidden bg-black/30 border-2 border-white/10 flex items-center justify-center shadow-lg">
+                      {chart.icon ? (
+                        <img src={chart.icon} alt={chart.title} className="w-5/6 h-5/6 object-contain p-2" />
+                      ) : (
+                        <span className="text-4xl sm:text-5xl font-black">{chart.emoji}</span>
+                      )}
+                    </div>
+                    <h3 className="text-2xl sm:text-3xl font-black text-white mb-3 tracking-tight">
+                      {chart.title}
+                    </h3>
+                    <p className="text-gray-200 text-sm sm:text-base leading-relaxed">
+                      {chart.desc}
+                    </p>
+                  </div>
+                ))}
+              </div>
 
-                  <p className="font-semibold text-yellow-300 mb-2">PREMIUM STREAMS</p>
-                  <p>1,000 on-demand audio/video streams from paid subscription services or premium plan trials.</p>
-                  <p className="text-sm mt-2 text-gray-300">
-                    (Spotify Premium, Apple Music, Tidal, Qobuz, Amazon Prime/Unlimited, Pandora Premium, Deezer, AudioMack Plus, SoundCloud Go/Go+, etc.)
+              {/* Album Unit Equivalencies - 2026 Rules */}
+              <div className="bg-gradient-to-br from-black/70 via-purple-950/60 to-pink-950/50 backdrop-blur-2xl rounded-3xl p-8 lg:p-12 border border-pink-500/30 shadow-2xl">
+                <h3 className="text-4xl sm:text-5xl font-black text-center bg-gradient-to-r from-pink-400 via-purple-400 to-pink-400 bg-clip-text text-transparent mb-10">
+                  2026 Album Unit Equivalencies
+                </h3>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
+                  <div className="bg-gradient-to-br from-pink-900/60 to-purple-900/50 rounded-2xl p-7 border border-pink-400/30 text-center hover:scale-105 transition-transform">
+                    <p className="text-3xl font-black text-yellow-300 mb-4">1×</p>
+                    <p className="text-xl font-bold text-white mb-2">Album Sale</p>
+                    <p className="text-gray-200">1 full digital or physical album purchase = 1 unit</p>
+                  </div>
+
+                  <div className="bg-gradient-to-br from-purple-900/60 to-indigo-900/50 rounded-2xl p-7 border border-purple-400/30 text-center hover:scale-105 transition-transform">
+                    <p className="text-3xl font-black text-yellow-300 mb-4">1,000</p>
+                    <p className="text-xl font-bold text-white mb-2">Paid / Premium Streams (SEA)</p>
+                    <p className="text-gray-200 text-sm mt-2">
+                      1,000 on-demand streams from paid subscriptions (Spotify Premium, Apple Music, Amazon Unlimited, Tidal, Qobuz, etc.)
+                    </p>
+                  </div>
+
+                  <div className="bg-gradient-to-br from-blue-900/60 to-teal-900/50 rounded-2xl p-7 border border-blue-400/30 text-center hover:scale-105 transition-transform">
+                    <p className="text-3xl font-black text-yellow-300 mb-4">2,500</p>
+                    <p className="text-xl font-bold text-white mb-2">Ad-Supported / Free Streams (SEA)</p>
+                    <p className="text-gray-200 text-sm mt-2">
+                      2,500 on-demand streams from free/ad-supported tiers = 1 album unit
+                    </p>
+                  </div>
+
+                  <div className="bg-gradient-to-br from-green-900/60 to-emerald-900/50 rounded-2xl p-7 border border-green-400/30 text-center hover:scale-105 transition-transform">
+                    <p className="text-3xl font-black text-yellow-300 mb-4">10×</p>
+                    <p className="text-xl font-bold text-white mb-2">Track Equivalent Albums (TEA)</p>
+                    <p className="text-gray-200">10 individual digital track sales = 1 album unit</p>
+                  </div>
+                </div>
+
+                <p className="text-center text-gray-300 italic mt-10 text-lg">
+                  Source: Billboard 2026 methodology update (effective January 2026 charts)
+                </p>
+              </div>
+
+              {/* YouTube 2026 Update - Alert Box */}
+              <div className="bg-gradient-to-br from-red-950/70 via-orange-950/50 to-yellow-950/40 backdrop-blur-xl rounded-3xl p-8 lg:p-12 border-2 border-red-500/60 shadow-2xl relative overflow-hidden">
+                <div className="absolute -top-10 -right-10 w-64 h-64 bg-red-600/20 rounded-full blur-3xl animate-pulse" />
+
+                <div className="flex items-center justify-center gap-4 mb-8">
+                  <span className="text-5xl animate-bounce">🚨</span>
+                  <h3 className="text-4xl sm:text-5xl font-black text-red-300 text-center tracking-tight">
+                    YouTube & Billboard Split – 2026
+                  </h3>
+                  <span className="text-5xl animate-bounce">🚨</span>
+                </div>
+
+                <div className="bg-black/50 rounded-2xl p-6 mb-8 border border-red-400/30">
+                  <p className="text-xl sm:text-2xl font-bold text-white mb-6 text-center leading-relaxed">
+                    Starting January 16, 2026 — YouTube (including YouTube Music) data no longer counts toward any U.S. Billboard charts
                   </p>
 
-                  <p className="font-semibold text-yellow-300 mt-6 mb-2">FREE / AD-SUPPORTED STREAMS</p>
-                  <p>2,500 on-demand audio/video streams from ad-supported services</p>
-                  <p className="text-sm mt-2 text-gray-300">
-                    (Spotify Free, Pandora Free & Plus, etc.)
+                  <p className="text-lg text-gray-200 mb-6 text-center">
+                    Reason: Disagreement over weighting paid vs. ad-supported streams.<br />
+                    Billboard kept higher value for paid streams → YouTube withdrew data submission.
                   </p>
-                  <p className="text-sm italic mt-2">
-                    *Note: Streaming Pandora Radio stations, regardless of subscription tier, are Programmed Streams & count less than Free/Plus.
-                  </p>
-                </section>
 
-                <section>
-                  <h3 className="text-2xl font-bold text-pink-400 mb-4">Track Equivalencies</h3>
-                  <p className="mb-2">Track Sales (TEA): 10 digital track sales = 1 album unit</p>
-                  <p>Track Streams (SEA): Calculated from album track streams</p>
-                </section>
+                  <div className="grid sm:grid-cols-2 gap-6 text-gray-100">
+                    <div>
+                      <p className="font-semibold text-pink-300 mb-3 text-xl">Still worth streaming on YouTube for:</p>
+                      <ul className="space-y-3 text-base">
+                        <li className="flex items-start gap-3">
+                          <span className="text-green-400 text-2xl">✓</span>
+                          <span>Music show wins (M Countdown, Inkigayo, Show Champion…)</span>
+                        </li>
+                        <li className="flex items-start gap-3">
+                          <span className="text-green-400 text-2xl">✓</span>
+                          <span>Korean awards (MAMA, MMA, Golden Disc…)</span>
+                        </li>
+                        <li className="flex items-start gap-3">
+                          <span className="text-green-400 text-2xl">✓</span>
+                          <span>IFPI global rankings</span>
+                        </li>
+                      </ul>
+                    </div>
 
-                <section className="bg-red-900/30 p-6 rounded-2xl border border-red-500/40">
-                  <h3 className="text-2xl font-bold text-red-300 mb-4">YouTube Update – IMPORTANT</h3>
-                  <p className="font-semibold mb-3">
-                    YouTube (including YouTube Music) will be removed from Billboard tracking effective January 16, 2026.
-                  </p>
-                  <p className="mb-3">Continue streaming on YouTube for:</p>
-                  <ul className="list-disc pl-6 space-y-1 mb-4">
-                    <li>Music Shows wins</li>
-                    <li>K-Awards</li>
-                    <li>IFPI Global Artist / Song / Album rankings</li>
-                    <li>RIAA song/album unit sales certifications</li>
-                  </ul>
-                  <p className="italic">
-                    Please continue to stream on YouTube Music for Music Shows wins, K-Awards, IFPI Global rankings, and RIAA certifications.
-                  </p>
-                </section>
+                    <div>
+                      <p className="font-semibold text-pink-300 mb-3 text-xl">Also still counts for:</p>
+                      <ul className="space-y-3 text-base">
+                        <li className="flex items-start gap-3">
+                          <span className="text-green-400 text-2xl">✓</span>
+                          <span>RIAA certifications (US sales + equivalent units)</span>
+                        </li>
+                        <li className="flex items-start gap-3">
+                          <span className="text-green-400 text-2xl">✓</span>
+                          <span>Fan visibility • algorithm push • MV views</span>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
 
-                <p className="text-center text-gray-400 italic mt-8">
-                  All data (digital & physical sales, streams, radio play) are compiled and reported to Billboard by Luminate.
+                <p className="text-center text-gray-200 font-medium text-lg italic">
+                  Focus digital purchases + premium streams (Spotify, Apple, Amazon, Tidal, Qobuz…) for Billboard impact in 2026
+                </p>
+              </div>
+
+              {/* Final Note */}
+              <div className="text-center text-gray-400 text-lg sm:text-xl max-w-4xl mx-auto pt-8 border-t border-pink-500/20">
+                <p className="mb-4">
+                  All chart data compiled by <strong>Luminate</strong> • Rules can evolve — always check latest Billboard announcements
+                </p>
+                <p className="font-medium text-pink-300">
+                  Let's push <span className="italic font-black">DEADLINE</span> as high as possible — BLINK power! 💖
                 </p>
               </div>
             </div>
@@ -479,12 +606,64 @@ export function DigitalBuying({ onBack, playSound }: Props) {
                   <div className="space-y-4">
                     <p className="font-semibold text-base sm:text-lg">𝗜𝗺𝗽𝗼𝗿𝘁𝗮𝗻𝘁 𝗥𝗲𝗺𝗶𝗻𝗱𝗲𝗿𝘀: 🚨</p>
                     <ol className="list-decimal pl-5 sm:pl-6 space-y-3 text-sm sm:text-base">
-                      <li>Purchase ALL tracks individually & NOT as an album (Do NOT click on “Complete Album”) so we can accomplish our goals for both BBH100 & BB200.</li>
+                      <li>Purchase ALL tracks individually & NOT as an album (Do NOT click on "Complete Album") so we can accomplish our goals for both BBH100 & BB200.</li>
                       <li>After purchasing, DOWNLOAD your digital copies. Purchases that are not downloaded will not count toward Billboard.</li>
                       <li>Do NOT gift purchases — gifted items do not count toward Billboard charts.</li>
                       <li>Do NOT use VPN to purchase. It will NOT count towards US Billboard Charts.</li>
                       <li>NO weekly reset. Create new accounts & use a completely different payment card to buy again after the 1st tracking week.</li>
                       <li>AVOID pre-ordering Deadline album on iTunes, as this prevents individual track purchases upon release (which affects US iTunes charting).</li>
+                    </ol>
+                  </div>
+                </div>
+              )}
+
+              {/* UK Reminder Block */}
+              {isUK && (
+                <div className="bg-gradient-to-br from-blue-900/40 via-indigo-900/30 to-purple-900/20 backdrop-blur-xl rounded-3xl p-6 sm:p-8 mb-8 sm:mb-12 border border-indigo-500/40 text-gray-200">
+                  <h3 className="text-2xl sm:text-3xl font-black text-center bg-gradient-to-r from-indigo-400 via-blue-400 to-indigo-300 bg-clip-text text-transparent mb-6">
+                    UK DIGITAL BUYING
+                  </h3>
+                  <p className="text-base sm:text-lg mb-6 text-center font-medium">
+                    Create accounts for UK chart-eligible digital music platforms in preparation for digital buying during release week.
+                  </p>
+                  <p className="text-center font-bold text-yellow-300 mb-6 text-base sm:text-lg">
+                    ⇢ This is crucial for maximizing chart impact for the TITLE TRACK (Singles Chart) and the ALBUM (Official Albums Chart) <br/> under the UK Official Charts Company (OCC).
+                  </p>
+
+                  <div className="space-y-4">
+                    <p className="font-semibold text-base sm:text-lg flex items-center gap-2">
+                      <p className="font-semibold text-base sm:text-lg">𝗜𝗺𝗽𝗼𝗿𝘁𝗮𝗻𝘁 𝗥𝗲𝗺𝗶𝗻𝗱𝗲𝗿𝘀: 🚨</p>
+                    </p>
+                    <ol className="list-decimal pl-5 sm:pl-6 space-y-3 text-sm sm:text-base">
+                      <li>
+                        Digital downloads count for BOTH Singles and Albums Charts when purchased from UK OCC-reporting retailers and downloaded permanently.
+                      </li>
+                      <li>
+                        <span className="font-semibold">Best strategy for chart impact:</span><br />
+                        Buy the TITLE TRACK (lead single) first → boosts the UK Singles Chart<br />
+                        Then buy the FULL ALBUM download → counts toward the UK Albums Chart<br />
+                        Avoid buying all album tracks individually. Buying the full album download is more efficient and properly counted for Albums Chart impact.
+                      </li>
+                      <li>
+                        Downloads must be completed and saved to your device (You must own the files — streaming access does NOT count).
+                      </li>
+                      <li>
+                        Chart week timing matters: Purchases and downloads must occur within the UK chart week (Friday 00:01 – Thursday 00:00 UK time).
+                      </li>
+                      <li>
+                        Purchase limit: Only 1 digital copy per version per account (e.g., standard or deluxe). Multiple purchases from the same account may be filtered out.
+                      </li>
+                      <li>
+                        Only buy from UK chart-eligible retailers:<br />
+                        • Apple Music / iTunes UK (digital downloads)<br />
+                        • Amazon Music UK (Digital Music)<br />
+                        • Qobuz (UK)<br />
+                        • 7digital (UK)<br />
+                        Avoid non-reporting stores (K-pop-exclusive shops, fan-targeted sites, or unverified retailers often do NOT report to the OCC).
+                      </li>
+                      <li>
+                        If unsure about a store’s eligibility, verify that it’s a major UK digital retailer that reports sales via Kantar / OCC.
+                      </li>
                     </ol>
                   </div>
                 </div>
