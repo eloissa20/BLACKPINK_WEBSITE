@@ -1,5 +1,6 @@
 // src/components/SpotifyDetails.tsx
 import { ArrowLeft, Check, X, ChevronDown, Info } from 'lucide-react';
+import { useEffect } from 'react'; 
 
 // ✅ Correct way: Import the image just like in Header.tsx
 import spotifyLogo from '../assets/logos/spotify.png';
@@ -10,6 +11,23 @@ interface Props {
 }
 
 export function SpotifyDetails({ onBack, playSound }: Props) {
+    useEffect(() => {
+          // Most reliable method: scroll the window
+          window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+      
+          // Also reset the document root (sometimes needed)
+          document.documentElement.scrollTop = 0;
+          document.body.scrollTop = 0;
+      
+          // Optional: if your layout has a specific scrollable container (e.g. main content div)
+          // Uncomment and adjust selector if needed:
+          // const scrollContainer = document.querySelector('main, .content-wrapper, .overflow-y-auto');
+          // if (scrollContainer) {
+          //   scrollContainer.scrollTop = 0;
+          // }
+        }, []); // empty deps → runs only once when component mounts
+  
+
   const platform = {
     name: 'Spotify',
     logo: spotifyLogo, // ✅ Use the imported variable (not a string path)

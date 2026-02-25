@@ -1,5 +1,6 @@
 import { ArrowLeft } from 'lucide-react';
 import amazonMusicLogo from '../assets/logos/amazon-music.png';
+import { useEffect } from 'react'; // ← Add this import
 
 interface Props {
   onBack: () => void;
@@ -7,6 +8,24 @@ interface Props {
 }
 
 export function AmazonMusicDetails({ onBack, playSound }: Props) {
+
+  // Force scroll to top when this page loads
+    useEffect(() => {
+      // Most reliable method: scroll the window
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+  
+      // Also reset the document root (sometimes needed)
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+  
+      // Optional: if your layout has a specific scrollable container (e.g. main content div)
+      // Uncomment and adjust selector if needed:
+      // const scrollContainer = document.querySelector('main, .content-wrapper, .overflow-y-auto');
+      // if (scrollContainer) {
+      //   scrollContainer.scrollTop = 0;
+      // }
+    }, []); // empty deps → runs only once when component mounts
+
   const platform = {
     name: 'Amazon Music',
     logo: amazonMusicLogo,

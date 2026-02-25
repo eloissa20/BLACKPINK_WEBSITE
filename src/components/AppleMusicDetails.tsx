@@ -1,3 +1,4 @@
+import { useEffect } from 'react'; // ← Add this import
 import { ArrowLeft, Check, X, ChevronDown, Info } from 'lucide-react';
 import appleMusicLogo from '../assets/logos/apple-music.png';
 
@@ -7,17 +8,35 @@ interface Props {
 }
 
 export function AppleMusicDetails({ onBack, playSound }: Props) {
+
+  // Force scroll to top when this page loads
+  useEffect(() => {
+    // Most reliable method: scroll the window
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+
+    // Also reset the document root (sometimes needed)
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+
+    // Optional: if your layout has a specific scrollable container (e.g. main content div)
+    // Uncomment and adjust selector if needed:
+    // const scrollContainer = document.querySelector('main, .content-wrapper, .overflow-y-auto');
+    // if (scrollContainer) {
+    //   scrollContainer.scrollTop = 0;
+    // }
+  }, []); // empty deps → runs only once when component mounts
+
   const platform = {
-  name: 'Apple Music',
-  logo: appleMusicLogo,  // ← use the imported value here
-  blackpink: 'https://music.apple.com/ph/artist/blackpink/1141774019',
-  members: {
-    jisoo: 'https://music.apple.com/ph/artist/jisoo/1548008317',
-    jennie: 'https://music.apple.com/ph/artist/jennie/913944',
-    rosé: 'https://music.apple.com/ph/artist/ros%C3%A9/1406242696',
-    lisa: 'https://music.apple.com/ph/artist/lisa/1583908668',
-  },
-};
+    name: 'Apple Music',
+    logo: appleMusicLogo,
+    blackpink: 'https://music.apple.com/ph/artist/blackpink/1141774019',
+    members: {
+      jisoo: 'https://music.apple.com/ph/artist/jisoo/1548008317',
+      jennie: 'https://music.apple.com/ph/artist/jennie/913944',
+      rosé: 'https://music.apple.com/ph/artist/ros%C3%A9/1406242696',
+      lisa: 'https://music.apple.com/ph/artist/lisa/1583908668',
+    },
+  };
 
   const doList = [
     'Search “BLACKPINK Title Song” on Apple Music and play it.',
@@ -186,6 +205,7 @@ export function AppleMusicDetails({ onBack, playSound }: Props) {
             </div>
           </div>
         </div>
+
         {/* IMPORTANT REMINDERS */}
         <div className="mb-16">
           <h2 className="text-5xl font-black text-center text-white mb-10 tracking-widest">
