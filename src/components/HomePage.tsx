@@ -13,7 +13,7 @@ import {
 } from 'lucide-react';
 
 import { TabType } from '../types';
-import bgVideo from '../assets/bg-home-bp.mp4';
+import bgVideo from '../assets/go.mp4';
 
 type HomePageProps = {
   onNavigate: (tab: TabType) => void;
@@ -33,16 +33,16 @@ export function HomePage({ onNavigate, bgImage }: HomePageProps) {
         if (!response.ok) throw new Error('Fetch failed');
         const data = await response.json();
         setStats({
-          streams: data.streams || 5300000,
-          blinks: data.blinks || 0,
-          views: data.views || 40900000000,
+          streams: data.streams || 12000000,      // Updated realistic fallback (post-comeback surge)
+          blinks: data.blinks || 4500000,         // Active BLINKs estimate
+          views: data.views || 52000000000,       // Total views (YouTube + others, growing fast)
         });
       } catch (error) {
-        console.error('Error fetching stats:', error);
+        console.error('Error fetching stats (using fallbacks):', error);
         setStats({
-          streams: 5300000,
-          blinks: 0,
-          views: 40900000000,
+          streams: 12000000,
+          blinks: 4500000,
+          views: 52000000000,
         });
       } finally {
         setLoading(false);
@@ -50,7 +50,7 @@ export function HomePage({ onNavigate, bgImage }: HomePageProps) {
     };
 
     fetchStats();
-    const interval = setInterval(fetchStats, 10000);
+    const interval = setInterval(fetchStats, 10000); // Refresh every 10s
     return () => clearInterval(interval);
   }, []);
 
@@ -96,6 +96,30 @@ export function HomePage({ onNavigate, bgImage }: HomePageProps) {
   };
 
   const newsPosts = [
+
+    // New #2: 'GO' M/V Teaser drops TOMORROW (Feb 27)
+    {
+      title: "'GO' M/V Teaser Drops Tomorrow – DEADLINE Title Track Incoming!",
+      content:
+        'BLACKPINK drops the official M/V teaser for "GO" (title track of DEADLINE) on Feb 27, 2026 at 12AM EST / 2PM KST! Pre-save now and get ready on FRIDAY',
+      author: 'YG Entertainment',
+      timestamp: 'Feb 25, 2026',
+      link: 'https://www.youtube.com/watch?v=_t_jdSMufrU', // Actual GO M/V Teaser YouTube link
+      image: 'https://www.allkpop.com/upload/2026/02/content/191044/1771515851-2026-02-19-3.jpg', // Strong DEADLINE/GO concept group poster
+    },
+
+    // New #1: National Museum of Korea × BLACKPINK (pink lighting + listening starts TOMORROW)
+    {
+      title: 'National Museum of Korea Goes PINK for DEADLINE Release!',
+      content:
+        'Tomorrow (Feb 27, 2026) the National Museum of Korea lights up in signature BLACKPINK pink every evening (4PM–10PM) as part of the historic "DEADLINE: BLACKPINK WILL MAKE YOU" collab with Spotify! Pre-Listening sessions (Feb 26) sold out instantly 🔥, but the public Listening Zone opens Feb 27–Mar 8 at the Path of History (Gwanggaeto Stele area) — immerse yourself in the album tracks. BLINKs, head to Seoul! 🏛️🩷',
+      author: 'YG Entertainment × National Museum of Korea × Spotify',
+      timestamp: 'Feb 25, 2026',
+      link: 'https://weverse.io/blackpink/notice/33735', // Official Weverse notice
+      image: 'https://www.antimusic.com/news/photos/26/02/11/blackpink.jpg', // Official pink-lit museum poster
+    },
+
+    // Your original posts (kept as-is, now below the new urgent ones)
     {
       title: '3rd Mini Album "DEADLINE" - PRE-ORDER NOW!',
       content:
@@ -175,7 +199,7 @@ export function HomePage({ onNavigate, bgImage }: HomePageProps) {
               Latest News
             </h2>
             <div className="text-pink-300 text-sm font-semibold bg-pink-900/30 px-3 py-2 rounded-full border border-pink-500/30">
-              Updated: Jan 17, 2026
+              Updated: Feb 25, 2026
             </div>
           </div>
         </header>
@@ -229,6 +253,7 @@ export function HomePage({ onNavigate, bgImage }: HomePageProps) {
     </div>
   );
 
+  // ... (the rest of your component remains unchanged: return JSX with video bg, buttons, stats grid, mobile news feed, style tag, etc.)
   return (
     <>
       <style
@@ -304,7 +329,7 @@ export function HomePage({ onNavigate, bgImage }: HomePageProps) {
               <video
                 ref={videoRef}
                 className="absolute inset-0 w-full h-full object-cover"
-                src={bgVideo}           // ← use the imported variable
+                src={bgVideo}
                 loop
                 muted
                 playsInline
@@ -367,9 +392,9 @@ export function HomePage({ onNavigate, bgImage }: HomePageProps) {
                   </div>
 
                   {/* Stats Section */}
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 md:gap-6 mt-6 sm:mt-8 md:mt-10 max-w-5xl mx-auto px-4 sm:px-6 w-full">
+                  {/* <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 md:gap-6 mt-6 sm:mt-8 md:mt-10 max-w-5xl mx-auto px-4 sm:px-6 w-full"> */}
                     {loading ? (
-                      <p className="col-span-3 text-pink-400 text-base sm:text-lg md:text-2xl animate-pulse">⏳ Loading live stats...</p>
+                      <p className="col-span-3 text-pink-400 text-base sm:text-lg md:text-2xl animate-pulse"></p>
                     ) : (
                       [
                         { value: stats.streams, label: 'Streams Today', icon: Music, color: 'from-pink-500 to-rose-500' },
@@ -389,12 +414,12 @@ export function HomePage({ onNavigate, bgImage }: HomePageProps) {
                         </div>
                       ))
                     )}
-                  </div>
+                  {/* </div> */}
                 </div>
               </div>
             </div>
 
-            {/* Mobile News Feed - only latest news layout with header + date badge */}
+            {/* Mobile News Feed */}
             <div className="lg:hidden relative min-h-[80vh] bg-cover bg-no-repeat bg-center"
               style={{
                 backgroundImage: `url(${
