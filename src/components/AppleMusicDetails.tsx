@@ -1,4 +1,5 @@
 import { ArrowLeft, Check, X, ChevronDown, Info } from 'lucide-react';
+import appleMusicLogo from '../assets/logos/apple-music.png';
 
 interface Props {
   onBack: () => void;
@@ -8,7 +9,7 @@ interface Props {
 export function AppleMusicDetails({ onBack, playSound }: Props) {
   const platform = {
     name: 'Apple Music',
-    logo: '/src/assets/logos/apple-music.png',
+    logo: appleMusicLogo,  // ← use the imported value here
     blackpink: 'https://music.apple.com/ph/artist/blackpink/1141774019',
     members: {
       jisoo: 'https://music.apple.com/ph/artist/jisoo/1548008317',
