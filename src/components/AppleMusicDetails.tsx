@@ -1,4 +1,5 @@
 import { ArrowLeft, Check, X, ChevronDown, Info } from 'lucide-react';
+import appleMusicLogo from '../assets/logos/apple-music.png';
 
 interface Props {
   onBack: () => void;
@@ -7,16 +8,16 @@ interface Props {
 
 export function AppleMusicDetails({ onBack, playSound }: Props) {
   const platform = {
-    name: 'Apple Music',
-    logo: '/assets/logos/apple-music.png',
-    blackpink: 'https://music.apple.com/ph/artist/blackpink/1141774019',
-    members: {
-      jisoo: 'https://music.apple.com/ph/artist/jisoo/1548008317',
-      jennie: 'https://music.apple.com/ph/artist/jennie/913944',
-      rosé: 'https://music.apple.com/ph/artist/ros%C3%A9/1406242696',
-      lisa: 'https://music.apple.com/ph/artist/lisa/1583908668',
-    },
-  };
+  name: 'Apple Music',
+  logo: appleMusicLogo,  // ← use the imported value here
+  blackpink: 'https://music.apple.com/ph/artist/blackpink/1141774019',
+  members: {
+    jisoo: 'https://music.apple.com/ph/artist/jisoo/1548008317',
+    jennie: 'https://music.apple.com/ph/artist/jennie/913944',
+    rosé: 'https://music.apple.com/ph/artist/ros%C3%A9/1406242696',
+    lisa: 'https://music.apple.com/ph/artist/lisa/1583908668',
+  },
+};
 
   const doList = [
     'Search “BLACKPINK Title Song” on Apple Music and play it.',
