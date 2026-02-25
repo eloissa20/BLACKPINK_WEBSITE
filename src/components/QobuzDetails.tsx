@@ -1,4 +1,5 @@
 import { ArrowLeft } from 'lucide-react';
+import qobuzLogo from '../assets/logos/qobuz.png';
 
 interface Props {
   onBack: () => void;
@@ -8,7 +9,7 @@ interface Props {
 export function QobuzDetails({ onBack, playSound }: Props) {
   const platform = {
     name: 'Qobuz',
-    logo: '/src/assets/logos/qobuz.png',
+    logo: qobuzLogo,
     blackpink: 'https://www.qobuz.com/us-en/performer/blackpink/141939',
     members: { jisoo: '', jennie: '', rosé: '', lisa: '' },
     freeRules: ['No free tier'],

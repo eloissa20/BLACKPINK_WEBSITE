@@ -1,4 +1,5 @@
 import { ArrowLeft, ChevronDown, Heart } from 'lucide-react';
+import tidalLogo from '../assets/logos/tidal.png';
 
 interface Props {
   onBack: () => void;
@@ -8,7 +9,7 @@ interface Props {
 export function TidalDetails({ onBack, playSound }: Props) {
   const platform = {
     name: 'TIDAL',
-    logo: '/src/assets/logos/tidal.png',
+    logo: tidalLogo,
     blackpink: 'https://tidal.com/browse/artist/8036491',
     members: {
       jisoo: 'https://tidal.com/browse/artist/20206117',

@@ -29,7 +29,7 @@ interface GuidelinesPageProps {
   onSelectChart: (region: ContinentType) => void;
 }
 
-// Import all detail components
+// Import all detail components 
 import { DigitalBuying } from './DigitalBuying';
 import { PhysicalBuying } from './PhysicalBuying';
 import { AppleMusicDetails } from './AppleMusicDetails';

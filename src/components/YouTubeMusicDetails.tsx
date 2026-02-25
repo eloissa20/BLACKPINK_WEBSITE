@@ -1,4 +1,5 @@
 import { ArrowLeft } from 'lucide-react';
+import youtubeMusicLogo from '../assets/logos/youtube-music.png';
 
 interface Props {
   onBack: () => void;
@@ -8,7 +9,7 @@ interface Props {
 export function YouTubeMusicDetails({ onBack, playSound }: Props) {
   const platform = {
     name: 'YouTube Music',
-    logo: '/src/assets/logos/youtube-music.png',
+    logo: youtubeMusicLogo,
     blackpink: 'https://music.youtube.com/channel/UCOmHUn--16B90oW2L6FRR3A',
     members: { jisoo: '', jennie: '', rosé: '', lisa: '' },
     freeRules: ['Free with ads counts'],

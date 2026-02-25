@@ -1,4 +1,5 @@
 import { ArrowLeft } from 'lucide-react';
+import pandoraLogo from '../assets/logos/pandora.png';
 
 interface Props {
   onBack: () => void;
@@ -8,7 +9,7 @@ interface Props {
 export function PandoraDetails({ onBack, playSound }: Props) {
   const platform = {
     name: 'Pandora',
-    logo: '/src/assets/logos/pandora.png',
+    logo: pandoraLogo,
     blackpink: 'https://www.pandora.com/artist/blackpink',
     members: { jisoo: '', jennie: '', rosé: '', lisa: '' },
     freeRules: ['USA only'],

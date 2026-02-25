@@ -1,4 +1,5 @@
 import { ArrowLeft } from 'lucide-react';
+import stationheadLogo from '../assets/logos/stationhead.png';
 
 interface Props {
   onBack: () => void;
@@ -8,7 +9,7 @@ interface Props {
 export function StationheadDetails({ onBack, playSound }: Props) {
   const platform = {
     name: 'Stationhead',
-    logo: '/src/assets/logos/stationhead.png',
+    logo: stationheadLogo,
     blackpink: 'https://app.stationhead.com/blackpink',
     members: { jisoo: '', jennie: '', rosé: '', lisa: '' },
     freeRules: ['100% counts'],

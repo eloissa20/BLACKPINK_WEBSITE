@@ -1,4 +1,5 @@
 import { ArrowLeft } from 'lucide-react';
+import amazonMusicLogo from '../assets/logos/amazon-music.png';
 
 interface Props {
   onBack: () => void;
@@ -8,7 +9,7 @@ interface Props {
 export function AmazonMusicDetails({ onBack, playSound }: Props) {
   const platform = {
     name: 'Amazon Music',
-    logo: '/src/assets/logos/amazon-music.png',
+    logo: amazonMusicLogo,
     blackpink: 'https://music.amazon.com/artists/B01LWZY8S7/blackpink',
     members: { jisoo: '', jennie: '', rosé: '', lisa: '' },
     freeRules: ['Shuffled free doesn’t count'],

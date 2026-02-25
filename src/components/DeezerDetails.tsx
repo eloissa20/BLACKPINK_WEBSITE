@@ -1,4 +1,5 @@
 import { ArrowLeft, ChevronDown, Heart } from 'lucide-react';
+import deezerLogo from '../assets/logos/deezer.png';
 
 interface Props {
   onBack: () => void;
@@ -8,7 +9,7 @@ interface Props {
 export function DeezerDetails({ onBack, playSound }: Props) {
   const platform = {
     name: 'Deezer',
-    logo: '/src/assets/logos/deezer.png',
+    logo: deezerLogo,
     blackpink: 'https://link.deezer.com/s/31SvpKQUA8g2oEm2fTK5p',
     members: {
       jisoo: 'https://link.deezer.com/s/31SvqcR8anNePcDAB8CFm',
