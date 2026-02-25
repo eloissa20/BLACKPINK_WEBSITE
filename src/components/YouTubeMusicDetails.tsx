@@ -24,7 +24,7 @@ export function YouTubeMusicDetails({ onBack, playSound }: Props) {
         </button>
 
         <div className="text-center mb-12">
-          <img src={platform.logo} alt={platform.name} className="w-32 h-32 mx-auto mb-6 rounded-2xl shadow-2xl border-2 border-pink-500" onMouseEnter={playSound} />
+          <img src={platform.logo} alt={platform.name} className="w-32 h-32 mx-auto mb-6 rounded-2xl shadow-2xl" onMouseEnter={playSound} />
           <h1 className="text-5xl font-black text-white">{platform.name}</h1>
           <p className="text-xl text-gray-400 mt-2">Streaming Guide for BLINKs</p>
         </div>
