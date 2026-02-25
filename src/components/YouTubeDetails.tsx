@@ -1,4 +1,5 @@
 import { ArrowLeft, Check, X, ChevronDown, Info } from 'lucide-react';
+import youtubeLogo from '../assets/logos/youtube.png';
 
 interface Props {
   onBack: () => void;
@@ -8,7 +9,7 @@ interface Props {
 export function YouTubeDetails({ onBack, playSound }: Props) {
   const platform = {
     name: 'YouTube',
-    logo: '/src/assets/logos/youtube.png',
+    logo: youtubeLogo,
     blackpink: 'https://www.youtube.com/@BLACKPINK',
     members: {
       jisoo: 'https://www.youtube.com/@sooyaaa__',
