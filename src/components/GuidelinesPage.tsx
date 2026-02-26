@@ -10,6 +10,7 @@ import {
   Heart, 
   Star 
 } from 'lucide-react';
+import DeadlineCover from '../assets/Deadline_(EP).png';  // Adjust path if needed
 
 // Import local logo assets
 import appleMusicLogo from '../assets/logos/apple-music.png';
@@ -344,8 +345,8 @@ export function GuidelinesPage({ onSelectChart }: GuidelinesPageProps) {
                   <div className="relative">
                     <div className="w-40 h-40 mx-auto mb-8 rounded-3xl overflow-hidden shadow-2xl border-4 border-purple-500/50 group-hover:border-purple-500 transition-all duration-500 group-hover:scale-110">
                       <img 
-                        src="src/assets/Deadline_(EP).png" 
-                        alt="Physical Albums" 
+                        src={DeadlineCover}
+                        alt="BLACKPINK DEADLINE Physical Album Cover"
                         className="w-full h-full object-cover"
                       />
                     </div>
