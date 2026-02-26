@@ -20,7 +20,7 @@ import youtubeMusicLogo from '../assets/logos/youtube-music.png';
 import deezerLogo from '../assets/logos/deezer.png';
 import pandoraLogo from '../assets/logos/pandora.png';
 import stationheadLogo from '../assets/logos/stationhead.png';
-import qobuzLogo from '../assets/logos/qobuz.png';
+// import qobuzLogo from '../assets/logos/qobuz.png';
 import amazonMusicLogo from '../assets/logos/amazon-music.png';
 import tidalLogo from '../assets/logos/tidal.png';
 
@@ -62,7 +62,7 @@ const useSound = () => {
 
 export function GuidelinesPage({ onSelectChart }: GuidelinesPageProps) {
   const [activeSection, setActiveSection] = useState<'streaming' | 'buying' | 'payment' | 'charts'>('streaming');
-  const [selectedPlatform, setSelectedPlatform] = useState<'apple' | 'spotify' | 'youtube' | 'ytmusic' | 'deezer' | 'pandora' | 'stationhead' | 'qobuz' | 'amazon' | 'tidal' | 'digital' | 'physical' | null>(null);
+  const [selectedPlatform, setSelectedPlatform] = useState<'apple' | 'spotify' | 'youtube' | 'ytmusic' | 'deezer' | 'pandora' | 'stationhead' | 'amazon' | 'tidal' | 'digital' | 'physical' | null>(null);
   const playSound = useSound();
 
   const detailProps = {
@@ -92,7 +92,7 @@ export function GuidelinesPage({ onSelectChart }: GuidelinesPageProps) {
     deezer: { name: 'Deezer', logo: deezerLogo },
     pandora: { name: 'Pandora', logo: pandoraLogo },
     stationhead: { name: 'Stationhead', logo: stationheadLogo },
-    qobuz: { name: 'Qobuz', logo: qobuzLogo },
+    // qobuz: { name: 'Qobuz', logo: qobuzLogo },
     amazon: { name: 'Amazon Music', logo: amazonMusicLogo },
     tidal: { name: 'Tidal', logo: tidalLogo },
   };
@@ -114,8 +114,8 @@ export function GuidelinesPage({ onSelectChart }: GuidelinesPageProps) {
         return <PandoraDetails {...detailProps} />;
       case 'stationhead':
         return <StationheadDetails {...detailProps} />;
-      case 'qobuz':
-        return <QobuzDetails {...detailProps} />;
+      // case 'qobuz':
+      //   return <QobuzDetails {...detailProps} />;
       case 'amazon':
         return <AmazonMusicDetails {...detailProps} />;
       case 'tidal':
