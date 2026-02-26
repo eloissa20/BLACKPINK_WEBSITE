@@ -1,6 +1,7 @@
 // src/components/PhysicalBuying.tsx
 import { ArrowLeft } from 'lucide-react';
 import { useState } from 'react';
+import DeadlinessImage from '../assets/deadliness.png';  
 
 interface Props {
   onBack: () => void;
@@ -246,8 +247,8 @@ export function PhysicalBuying({ onBack, playSound }: Props) {
           <div className="relative text-center mb-20">
             <div className="relative overflow-hidden rounded-3xl shadow-2xl">
               <img
-                src="src/assets/deadliness.png"
-                alt="BLACKPINK Physical Albums"
+                src={DeadlinessImage}
+                alt="BLACKPINK Physical Albums - DEADLINE"
                 className="w-full h-96 md:h-[40rem] object-cover brightness-75"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
