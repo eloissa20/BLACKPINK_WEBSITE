@@ -202,7 +202,15 @@ export function GuidelinesPage({ onSelectChart }: GuidelinesPageProps) {
           {activeSection === 'streaming' && (
             <div className="space-y-16 animate-slide-in">
               <div className="text-center mb-12">
-                <h2 className="text-4xl md:text-5xl font-black bg-gradient-to-r from-pink-400 to-purple-400 bg-clip-text text-transparent mb-4">
+                <h2 className="
+                  text-4xl md:text-5xl lg:text-5xl 
+                  font-black 
+                  bg-gradient-to-r from-pink-400 to-purple-400 
+                  bg-clip-text text-transparent 
+                  leading-tight md:leading-snug 
+                  pb-3 md:pb-4 lg:pb-6 
+                  mb-4 md:mb-6
+                ">
                   ✨ Streaming Platforms ✨
                 </h2>
                 <p className="text-lg text-gray-300">Click any platform to see detailed streaming guides!</p>
@@ -272,8 +280,15 @@ export function GuidelinesPage({ onSelectChart }: GuidelinesPageProps) {
           {activeSection === 'buying' && (
             <div className="space-y-16 animate-slide-in">
               <div className="text-center mb-12">
-                <h2 className="text-4xl md:text-5xl font-black bg-gradient-to-r from-pink-400 to-purple-400 bg-clip-text text-transparent mb-4">
-                  💳 Buying Guidelines 💳
+                <h2 className="
+                  text-4xl md:text-5xl lg:text-5xl 
+                  font-black 
+                  bg-gradient-to-r from-pink-400 to-purple-400 
+                  bg-clip-text text-transparent 
+                  leading-tight md:leading-snug 
+                  pb-3 md:pb-4 lg:pb-6 
+                  mb-4 md:mb-6
+                ">🛍 Buying Guidelines 🛍
                 </h2>
               </div>
 
@@ -357,8 +372,15 @@ export function GuidelinesPage({ onSelectChart }: GuidelinesPageProps) {
           {activeSection === 'payment' && (
             <div className="max-w-5xl mx-auto animate-slide-in">
               <div className="text-center mb-12">
-                <h2 className="text-4xl md:text-5xl font-black bg-gradient-to-r from-pink-400 to-purple-400 bg-clip-text text-transparent mb-4">
-                  💳 Payment Methods 💳
+                <h2 className="
+                  text-4xl md:text-5xl lg:text-5xl 
+                  font-black 
+                  bg-gradient-to-r from-pink-400 to-purple-400 
+                  bg-clip-text text-transparent 
+                  leading-tight md:leading-snug 
+                  pb-3 md:pb-4 lg:pb-6 
+                  mb-4 md:mb-6
+                ">💸 Payment Methods 💸
                 </h2>
                 <p className="text-lg text-gray-300">Multiple ways to support BLACKPINK!</p>
               </div>
@@ -417,8 +439,15 @@ export function GuidelinesPage({ onSelectChart }: GuidelinesPageProps) {
           {activeSection === 'charts' && (
             <div className="space-y-12 animate-slide-in">
               <div className="text-center mb-12">
-                <h2 className="text-4xl md:text-5xl font-black bg-gradient-to-r from-pink-400 to-purple-400 bg-clip-text text-transparent mb-4">
-                  📊 Choose Your Chart 📊
+                <h2 className="
+                  text-4xl md:text-5xl lg:text-5xl 
+                  font-black 
+                  bg-gradient-to-r from-pink-400 to-purple-400 
+                  bg-clip-text text-transparent 
+                  leading-tight md:leading-snug 
+                  pb-3 md:pb-4 lg:pb-6 
+                  mb-4 md:mb-6
+                "> 📊 Choose Your Chart 📊
                 </h2>
                 <p className="text-lg text-gray-300">Track BLACKPINK's success around the world!</p>
               </div>
