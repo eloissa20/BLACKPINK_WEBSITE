@@ -22,8 +22,8 @@ export function Header({
     { id: 'home', label: 'HOME' },
     { id: 'album', label: 'ALBUM' },
     { id: 'guidelines', label: 'GUIDELINES' },
-    { id: 'medias', label: 'MEDIAS' },
-    { id: 'blink-hub', label: 'BLINK HUB' },
+    // { id: 'medias', label: 'MEDIAS' },      // commented out - not available yet
+    // { id: 'blink-hub', label: 'BLINK HUB' }, // commented out - not available yet
     { id: 'music-shows', label: 'MUSIC SHOWS' },
   ];
 
