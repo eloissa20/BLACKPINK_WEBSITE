@@ -344,7 +344,7 @@ export function DigitalBuying({ onBack, playSound }: Props) {
           <div className="relative text-center mb-12 sm:mb-20">
             <div className="relative overflow-hidden rounded-2xl sm:rounded-3xl shadow-2xl">
               <img
-                src="https://6.soompi.io/wp-content/uploads/image/20260114150718_BLACKPINK.jpg?s=900x600&e=t"
+                src="src/assets/logos/deadline.png"
                 alt="Digital Music"
                 className="w-full h-64 sm:h-80 lg:h-[40rem] object-cover brightness-75 object-top"
               />
@@ -400,7 +400,7 @@ export function DigitalBuying({ onBack, playSound }: Props) {
                   {
                     title: "Hot 100",
                     desc: "Top US singles — radio + official streams + digital/track sales",
-                    icon: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/Billboard_Hot_100_logo.svg/1200px-Billboard_Hot_100_logo.svg.png",
+                    icon: "https://upload.wikimedia.org/wikipedia/commons/a/a5/Billboard_Hot_100_logo_%282025_March_design%29.png",
                     color: "from-red-600/30 to-pink-600/20 border-red-500/40",
                   },
                   {
@@ -578,9 +578,6 @@ export function DigitalBuying({ onBack, playSound }: Props) {
 
               {/* Final Note */}
               <div className="text-center text-gray-400 text-lg sm:text-xl max-w-4xl mx-auto pt-8 border-t border-pink-500/20">
-                <p className="mb-4">
-                  All chart data compiled by <strong>Luminate</strong> • Rules can evolve — always check latest Billboard announcements
-                </p>
                 <p className="font-medium text-pink-300">
                   Let's push <span className="italic font-black">DEADLINE</span> as high as possible — BLINK power! 💖
                 </p>

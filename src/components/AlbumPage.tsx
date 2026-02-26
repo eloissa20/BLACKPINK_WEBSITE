@@ -185,7 +185,7 @@ export default function AlbumPage({ onSelectContinent }: AlbumPageProps) {
                   <ul className="space-y-3 text-gray-200">
                     {[
                       '✅ Purchase from official digital stores',
-                      '✅ Multiple copies per account allowed',
+                      '✅ Multiple versions per account allowed',
                       '✅ Counts toward Billboard & global charts',
                       '✅ Instant delivery, no shipping costs',
                       '✅ Support global chart performance'

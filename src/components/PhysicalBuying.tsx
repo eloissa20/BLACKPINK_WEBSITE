@@ -75,44 +75,6 @@ const data: Record<Tab, StoreItem[]> = {
       },
     },
     {
-      store: 'ALADIN',
-      contributes: 'Hanteo, Gaon',
-      description: 'Korean bookstore & music retailer with worldwide shipping.',
-      url: 'https://www.aladin.co.kr/search/wsearchresult.aspx?SearchTarget=All&SearchWord=BLACKPINK',
-      tips: {
-        steps: [
-          'Use global version of site if available',
-          'Search and select album',
-          'Proceed to international checkout',
-        ],
-      },
-    },
-    {
-      store: 'HOTTRACKS',
-      contributes: 'Hanteo',
-      description: 'Domestic shipping only.',
-      url: 'https://www.hottracks.co.kr/',
-      note: 'Korean address or forwarding service required',
-      tips: {
-        steps: [
-          'Use Korean address or forwarding service',
-          'Purchase during release week for best chart impact',
-        ],
-      },
-    },
-    {
-      store: 'INTERPARK',
-      contributes: 'Hanteo, Gaon',
-      description: 'Major Korean ticketing & shopping site with worldwide shipping.',
-      url: 'https://global.interpark.com/',
-      tips: {
-        steps: [
-          'Use global shipping option',
-          'Complete purchase early in tracking week',
-        ],
-      },
-    },
-    {
       store: 'KPOPMART',
       contributes: 'Hanteo',
       description: 'Dedicated K-pop store with worldwide shipping.',
@@ -284,7 +246,7 @@ export function PhysicalBuying({ onBack, playSound }: Props) {
           <div className="relative text-center mb-20">
             <div className="relative overflow-hidden rounded-3xl shadow-2xl">
               <img
-                src="https://phinf.wevpstatic.net/MjAyNTA3MTFfMjk0/MDAxNzUyMjA1NzA5NjAw.OgupiTBrwDfDuMc-Y_az-M0Jt3sDxnIUHOozxtG4kw4g.2Th_wRKOE4HSn9cj_zAEGDyfYQp_ppXacIKZ7ZF_-OYg.JPEG/5b224ece-a958-49cf-b1c8-694d430e9885.jpeg?type=w1414"
+                src="src/assets/deadliness.png"
                 alt="BLACKPINK Physical Albums"
                 className="w-full h-96 md:h-[40rem] object-cover brightness-75"
               />
