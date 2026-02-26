@@ -1,6 +1,7 @@
 // src/components/DigitalBuying.tsx
 import { ArrowLeft } from 'lucide-react';
 import { useState } from 'react';
+import DeadlineLogo from '../assets/logos/deadline.png'; 
 
 interface Props {
   onBack: () => void;
@@ -344,8 +345,8 @@ export function DigitalBuying({ onBack, playSound }: Props) {
           <div className="relative text-center mb-12 sm:mb-20">
             <div className="relative overflow-hidden rounded-2xl sm:rounded-3xl shadow-2xl">
               <img
-                src="src/assets/logos/deadline.png"
-                alt="Digital Music"
+                src={DeadlineLogo}
+                alt="BLACKPINK DEADLINE Album Logo / Digital Cover"
                 className="w-full h-64 sm:h-80 lg:h-[40rem] object-cover brightness-75 object-top"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
